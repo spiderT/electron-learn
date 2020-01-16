@@ -163,4 +163,11 @@ https://electronjs.org/docs/api/accelerator
 
 https://electron.org.cn/builder/index.html
 
+https://juejin.im/post/5ba3372be51d450ea1322d49
+
+## 6. 脚手架 electron-forge 
+
+https://juejin.im/post/5c46ab47e51d45522b4f55b1
+
+
 
