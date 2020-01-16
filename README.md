@@ -161,9 +161,51 @@ https://electronjs.org/docs/api/accelerator
 
 ## 5. 打包
 
-https://electron.org.cn/builder/index.html
+### 5.1. ![electron-builder](https://github.com/electron-userland/electron-builder)
 
-https://juejin.im/post/5ba3372be51d450ea1322d49
+1. 在package.json应用程序中指定的标准字段 — name, description, version and author.
+
+2. 在package.json 添加build配置:
+
+```json
+"build": {
+  "appId": "your.id",
+  "mac": {
+    "category": "your.app.category.type"
+  }
+}
+```
+See all options. Option files to indicate which files should be packed in the final application, including the entry file, maybe required.
+
+3. 添加icons.
+
+制作icns图标
+
+1.brew install makeicns
+
+2.makeicns -in input.jpg -output out.icns
+
+4. 在 package.json添加scripts命令:
+
+```json
+"scripts": {
+  "pack": "electron-builder --dir",
+  "dist": "electron-builder"
+}
+```
+
+
+Then you can run yarn dist (to package in a distributable format (e.g. dmg, windows installer, deb package)) or yarn pack (only generates the package directory without really packaging it. This is useful for testing purposes).
+
+To ensure your native dependencies are always matched electron version, simply add script "postinstall": "electron-builder install-app-deps" to your package.json.
+
+If you have native addons of your own that are part of the application (not as a dependency), set nodeGypRebuild to true.
+
+
+
+1.brew install makeicns
+
+2.makeicns -in input.jpg -output out.icns
 
 ## 6. 脚手架 electron-forge 
 

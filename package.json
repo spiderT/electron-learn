@@ -1,7 +1,7 @@
 {
-  "name": "demo1_helloworld",
+  "name": "music",
   "version": "1.0.0",
-  "description": "",
+  "description": "music",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,7 +18,14 @@
   "build": {
     "appId": "1234",
     "mac": {
-      "category": "music"
+      "category": "music",
+      "icon": "icon"
+    },
+    "dmg": {
+      "title": "music",
+      "artifactName": "music",
+      "icon": "./resources/images/spider.icns",
+      "iconSize": 150
     }
   }
 }
