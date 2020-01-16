@@ -1,4 +1,4 @@
-const fileMenu = require('./file-menu');
+const controlMenu = require('./control-menu');
 const macAppMenu = require('./mac-app-menu');
 const toolsMenu = require('./tools-menu');
 
@@ -23,7 +23,7 @@ function createMenuTemplate(settings) {
   return [
     macAppMenu,
     windowMenu,
-    fileMenu,
+    controlMenu,
     toolsMenu
   ].filter(menu => menu !== null)
 
