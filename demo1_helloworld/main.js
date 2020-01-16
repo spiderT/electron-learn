@@ -1,4 +1,11 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
+const createMenuTemplate = require('./desktop/menus');
+
+const menuTemplate = createMenuTemplate();
+const appMenu = Menu.buildFromTemplate(menuTemplate);
+Menu.setApplicationMenu(appMenu);
+
+
 
 function createWindow () {   
   // 创建浏览器窗口

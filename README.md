@@ -139,9 +139,15 @@ const S3 = require('aws-sdk/clients/s3')
 绝大多数的Node.js模块都不是原生的， 在650000个模块中只有400是原生的。
 
 
-
-
-
 ## 3. electron常用api
 
-### 3.1. 
+
+## 4. 测试和调试
+
+
+
+## 5. 打包
+
+https://electron.org.cn/builder/index.html
+
+
