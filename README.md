@@ -142,6 +142,19 @@ const S3 = require('aws-sdk/clients/s3')
 ## 3. electron常用api
 
 
+### 3.1. app
+
+### 3.2. menu
+
+#### accelerator 快捷键
+
+https://electronjs.org/docs/api/accelerator
+
+1. 快捷键可以包含多个功能键和一个键码的字符串，由符号+结合，用来定义你应用中的键盘快捷键
+
+
+
+
 ## 4. 测试和调试
 
 
