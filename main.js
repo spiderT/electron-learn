@@ -18,7 +18,8 @@ function createWindow () {
   })
 
   // 加载index.html文件
-  win.loadFile('index.html')
+  // win.loadFile('index.html')
+  win.loadFile('http://localhost:9200/')
 }
 
 app.on('ready', createWindow)

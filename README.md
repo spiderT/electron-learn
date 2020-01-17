@@ -275,6 +275,13 @@ electron_mirror=http://npm.taobao.org/mirrors/electron/
 
 
 
+###  热重载
+
+https://codeday.me/bug/20190129/597088.html
+
+
+### 热更新
+
 ## 6. 脚手架 electron-forge 
 
 https://juejin.im/post/5c46ab47e51d45522b4f55b1

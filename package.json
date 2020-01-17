@@ -8,7 +8,9 @@
     "start": "webpack-dev-server --open && electron .",
     "electron": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder --mac --ia32"
+    "dist": "electron-builder --mac --ia32",
+    "build:dev": "webpack --env dev",
+    "build": "webpack --env prod"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +27,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",
     "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.4.2",
     "electron": "^7.1.8",
     "electron-builder": "^22.2.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
