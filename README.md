@@ -181,9 +181,9 @@ See all options. Option files to indicate which files should be packed in the fi
 
 制作icns图标
 
-1.brew install makeicns
+- brew install makeicns
 
-2.makeicns -in input.jpg -output out.icns
+- makeicns -in input.jpg -output out.icns
 
 4. 在 package.json添加scripts命令:
 
@@ -194,18 +194,86 @@ See all options. Option files to indicate which files should be packed in the fi
 }
 ```
 
+#### 命令行参数（CLI）
 
-Then you can run yarn dist (to package in a distributable format (e.g. dmg, windows installer, deb package)) or yarn pack (only generates the package directory without really packaging it. This is useful for testing purposes).
+- Commands(命令):
 
-To ensure your native dependencies are always matched electron version, simply add script "postinstall": "electron-builder install-app-deps" to your package.json.
+```text
+  electron-builder build                    构建命名                      [default]
+  electron-builder install-app-deps         下载app依赖
+  electron-builder node-gyp-rebuild         重建自己的本机代码
+  electron-builder create-self-signed-cert  为Windows应用程序创建自签名代码签名证书
+  electron-builder start                    使用electronic-webpack在开发模式下运行应用程序(须臾要electron-webpack模块支持)
 
-If you have native addons of your own that are part of the application (not as a dependency), set nodeGypRebuild to true.
+```
+
+- Building(构建参数):
+
+```text
+  --mac, -m, -o, --macos   Build for macOS,                              [array]
+  --linux, -l              Build for Linux                               [array]
+  --win, -w, --windows     Build for Windows                             [array]
+  --x64                    Build for x64 (64位安装包)                     [boolean]
+  --ia32                   Build for ia32(32位安装包)                     [boolean]
+  --armv7l                 Build for armv7l                              [boolean]
+  --arm64                  Build for arm64                               [boolean]
+  --dir                    Build unpacked dir. Useful to test.           [boolean]
+  --prepackaged, --pd      预打包应用程序的路径（以可分发的格式打包）
+  --projectDir, --project  项目目录的路径。 默认为当前工作目录。
+  --config, -c             配置文件路径。 默认为`electron-builder.yml`（或`js`，或`js5`)
+
+```
+
+- Publishing(发布):
+
+```text
+  --publish, -p  发布到GitHub Releases [choices: "onTag", "onTagOrDraft", "always", "never", undefined]
+
+```
+
+- Other(其他):
+
+```text
+  --help     Show help                                                 [boolean]
+  --version  Show version number                                       [boolean]
+```
+
+- Examples(例子):
+
+```text
+  electron-builder -mwl                        为macOS，Windows和Linux构建（同时构建）
+  electron-builder --linux deb tar.xz          为Linux构建deb和tar.xz
+  electron-builder -c.extraMetadata.foo=bar    将package.js属性`foo`设置为`bar`
+  electron-builder --config.nsis.unicode=false 为NSIS配置unicode选项
+    
+```
+
+- TargetConfiguration(构建目标配置):
+
+```js
+target:  String - 目标名称，例如snap.
+arch “x64” | “ia32” | “armv7l” | “arm64”> | “x64” | “ia32” | “armv7l” | “arm64”  -arch支持列表
+
+```
 
 
+#### 常见错误
 
-1.brew install makeicns
+##### NPM下载的问题
 
-2.makeicns -in input.jpg -output out.icns
+因为NPM在国内比较慢。导致electron-V.xxxx.zip下载失败。这些东西如果是第一次打包的话是需要下载对应electron版本的支持文件。解决办法有两个
+
+1. 设置镜像：在.npmrc文件。然后加入下面这句代码
+
+```text
+electron_mirror=http://npm.taobao.org/mirrors/electron/
+```
+
+2. 直接去淘宝镜像文件库找到对应的文件并下载，放到指定的目录下，electron的淘宝镜像地址。下载完之后放到指定的文件。
+
+##### NSIS下载问题
+
+
 
 ## 6. 脚手架 electron-forge 
 
