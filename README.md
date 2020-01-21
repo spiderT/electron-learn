@@ -147,6 +147,25 @@ const S3 = require('aws-sdk/clients/s3');
 
 ### 3.1. app
 
+主进程
+
+```js
+const { app } = require('electron')
+app.on('window-all-closed', () => {
+  app.quit()
+})
+```
+
+#### 3.1.1. 事件
+
+https://electronjs.org/docs/api/app#%E4%BA%8B%E4%BB%B6
+
+
+
+
+
+
+
 ### 3.2. menu
 
 #### accelerator 快捷键
