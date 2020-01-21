@@ -279,7 +279,7 @@ crypto 进行加解密
 
 ## 6. 打包
 
-### 6.1. ![electron-builder](https://github.com/electron-userland/electron-builder)
+### 6.1. [electron-builder](https://github.com/electron-userland/electron-builder)
 
 1. 在 package.json 应用程序中指定的标准字段 — name, description, version and author.
 
