@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --open && electron .",
+    "start": "webpack-dev-server --open",
     "electron": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder --mac --ia32",
