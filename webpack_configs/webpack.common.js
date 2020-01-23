@@ -40,7 +40,7 @@ var appConfig = {
   },
   output: {
     filename: 'scripts/[name].[hash:8].js',
-    path: AbsulotePath.dist
+    path: AbsulotePath.filedist
   },
   module: {
     rules:[ {
