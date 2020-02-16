@@ -420,6 +420,97 @@ https://codeday.me/bug/20190129/597088.html
 
 https://juejin.im/post/5c46ab47e51d45522b4f55b1
 
+## 8. 关于窗口
+
+1. 禁止多开  
+
+```js
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) { app.quit()
+} else {
+app.on('second-instance', (event, commandLine, workingDirectory) => {
+// 当运行第二个实例时,将会聚焦到myWindow这个窗口
+showMainWindow() })
+app.on('ready', () => {...
+}) }
+```
+
+2. 窗口假关闭  
+
+- 用户点击窗口关闭按钮时候，应用只是隐藏   
+- 点击「退出应用」时才真正关闭窗口  
+
+## 9. 原生 GUI
+
+### 9.1. Menu/MenuItem(菜单/菜单项)
+
+1. 新建菜单
+
+```js
+const menu = new Menu()
+```
+
+2. 新建菜单项  
+
+```js
+const menuItem1 = new MenuItem({ label: '复制', role: 'copy' })
+const menuItem2 = new MenuItem({ label: '菜单项名', click: handler, enabled, visible,
+type: normal | separator | submenu | checkbox | radio,
+role: copy | paste | cut | quit | ... 
+})
+```
+
+3. 添加菜单项
+
+```js
+menu.append(menuItem1)
+menu.append(new MenuItem({ type: 'separator' })) 
+menu.append(menuItem2)
+```
+
+4. 弹出右键菜单
+
+```js
+menu.popup({ window: remote.getCurrentWindow() })
+```
+
+5. 设置应用菜单栏
+
+```js
+app.applicationMenu = appMenu;
+```
+
+### 9.2. Tray(托盘)
+
+1. 方法  
+
+- 创建托盘  
+
+```js
+tray = new Tray('/path/to/my/icon')
+```
+Mac图片建议保留 1倍图(32 * 32)，2倍图@2x(64 * 64)   
+Windows使用ico格式   
+大部分Mac托盘都是偏黑色的、Windows则是彩色的 Mac  
+
+- 弹出托盘菜单
+
+```js
+const contextMenu = Menu.buildFromTemplate([ 
+  { label: '显示', click: () => {showMainWindow()}}, 
+  { label: '退出', role: 'quit'}}
+]) 
+tray.popUpContextMenu(contextMenu)
+```
+2. 事件  
+'click':点击托盘  
+'right-click':右击托盘   
+'drop-files':文件拖拽。类似的还有drop-text   
+'balloon-click':托盘气泡被点击(Windows特性)
+
+
+
+
 
 ## Electron 开发过程中可能会遇到的几个问题和场景。
 
