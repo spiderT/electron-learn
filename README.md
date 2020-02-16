@@ -503,6 +503,7 @@ const contextMenu = Menu.buildFromTemplate([
 tray.popUpContextMenu(contextMenu)
 ```
 2. 事件  
+
 'click':点击托盘  
 'right-click':右击托盘   
 'drop-files':文件拖拽。类似的还有drop-text   
