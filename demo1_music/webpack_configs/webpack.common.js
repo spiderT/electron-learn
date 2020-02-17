@@ -1,14 +1,14 @@
-const path = require( 'path' );
-const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
-const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
-const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
-const AbsulotePath = require( './absulotePath' );
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const AbsulotePath = require('./absulotePath');
 
 var appConfig = {
   entry: {
-    app: [ 
+    app: [
       'babel-polyfill',
-      './src/index.js' 
+      './src/index.js'
     ]
   },
   plugins: [
@@ -18,17 +18,17 @@ var appConfig = {
     //   verbose: true,
     //   dry: false
     // } ),
-    new HtmlWebpackPlugin( {
+    new HtmlWebpackPlugin({
       template: 'index.html',
-    } ),
-    new MiniCssExtractPlugin( {
+    }),
+    new MiniCssExtractPlugin({
       filename: "styles/[name].[hash:8].css"
-    } )
+    })
   ],
   optimization: {
     splitChunks: {
       cacheGroups: {
-        
+
         commons: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
@@ -43,28 +43,28 @@ var appConfig = {
     path: AbsulotePath.filedist
   },
   module: {
-    rules:[ {
+    rules: [{
       test: /.js$/,
       exclude: /node_modules/,
       loader: 'babel-loader',
       options: {
         presets: [
-          [ 'env', {"modules": false} ],
+          ['env', { "modules": false }],
           "stage-2",
           'react'
         ],
         plugins: [
           "transform-decorators-legacy",
-          ["import", { "libraryName": "antd", "style": "css" }] 
+          ["import", { "libraryName": "antd", "style": "css" }]
         ]
       }
-    },{
+    }, {
       test: /.css$/,
       use: [
         MiniCssExtractPlugin.loader,
         {
           loader: 'css-loader',
-          options: { importLoaders: 1 } 
+          options: { importLoaders: 1 }
         },
         'postcss-loader'
       ]
@@ -76,7 +76,16 @@ var appConfig = {
         publicPath: '/images/',
         outputPath: 'images/'
       }
-    }, {
+    },
+    {
+      test: /\.(mp3)(\?.*)?$/,
+      loader: 'url-loader',
+      options: {
+        name: 'musics/[name].[ext]',
+        limit: 10
+      }
+    },
+    {
       test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
       loader: 'file-loader',
       options: {
@@ -84,7 +93,7 @@ var appConfig = {
         publicPath: '../iconfont/',
         outputPath: 'iconfont/'
       }
-    } ]
+    }]
   }
 };
 
