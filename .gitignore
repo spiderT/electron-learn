@@ -1,5 +1,6 @@
 node_modules
 dist
+filedist
 npm-debug.log
 .idea
 .git
