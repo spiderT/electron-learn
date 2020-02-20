@@ -1,8 +1,9 @@
+const {Menu, app} = require('electron');
 const controlMenu = require('./control-menu');
 const macAppMenu = require('./mac-app-menu');
 const toolsMenu = require('./tools-menu');
 
-function createMenuTemplate(settings) {
+function createMenuTemplate() {
   const windowMenu = {
     role: 'window',
     submenu: [{
@@ -29,4 +30,10 @@ function createMenuTemplate(settings) {
 
 }
 
-module.exports = createMenuTemplate;
+function setAppMenu(){
+  const menuTemplate = createMenuTemplate();
+  const appMenu = Menu.buildFromTemplate(menuTemplate);
+  app.applicationMenu = appMenu;
+}
+
+module.exports = setAppMenu;

@@ -1,24 +1,28 @@
-const { app, BrowserWindow, Menu } = require('electron')
-const createMenuTemplate = require('./desktop/menus');
+const {
+  app
+} = require('electron');
+const setAppMenu = require('./desktop/menus');
+const setTray = require('./desktop/tray');
+const {
+  createWindow,
+  show,
+  close
+} = require('./desktop/windows');
+const path = require('path');
 
-const menuTemplate = createMenuTemplate();
-const appMenu = Menu.buildFromTemplate(menuTemplate);
-Menu.setApplicationMenu(appMenu);
+app.whenReady().then(() => {
+  setTray()
+  setAppMenu()
+  app.dock.setIcon(path.join(__dirname, './resources/images/zhizhuxia_2_big.png'));
+})
 
+const gotTheLock = app.requestSingleInstanceLock();
 
-
-function createWindow () {   
-  // 创建浏览器窗口
-  let win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: true
-    }
-  })
-
-  // 加载index.html文件
-  win.loadFile('./dist/index.html')
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', show)
+  app.on('ready', createWindow)
+  app.on('before-quit', close)
+  app.on('activate', show)
 }
-
-app.on('ready', createWindow)
