@@ -1,3 +1,4 @@
+
 function click(num) {
   console.log(num)
 }

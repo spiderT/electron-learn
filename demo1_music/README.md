@@ -1,7 +1,10 @@
 # 功能点
 
 1. 包含菜单栏控制——播放上一首，下一首  
-2. 数据通信——收藏音乐  
+2. main process和web page 通信  https://www.electronjs.org/docs/api/ipc-main    
+https://blog.csdn.net/weixin_42762089/article/details/87912222  
+https://blog.csdn.net/weixin_42762089/article/details/88532572  
+https://blog.csdn.net/weixin_34356555/article/details/92283856  
 3. 关闭按钮——托盘隐藏  
 4. 在已打开应用的时候，点击时，应用获得焦点  
  
