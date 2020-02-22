@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
 import './index.css';
 import musics from './music.data';
-
-//在渲染器进程 (网页) 中。
-const { ipcRenderer } = require('electron')
-
-ipcRenderer.on('asynchronous-reply', (event, arg) => {
-  console.log(arg) 
-})
-
-
+import { ipcRenderer } from 'electron';
 
 export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
     }
+  }
+
+  componentDidMount() {
+    ipcRenderer.on('change-music', this.handlePlayMusic)
   }
 
   handlePlayMusic = item => {

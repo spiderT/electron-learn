@@ -41,8 +41,13 @@ function close() {
   win.close()
 }
 
+function send(channel, ...args) {
+  win.webContents.send(channel, ...args)
+}
+
 module.exports = {
   createWindow,
   show,
-  close
+  close,
+  send
 }

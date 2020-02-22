@@ -1,7 +1,11 @@
 
+const {send} = require('../windows');
+
+
 function click(num) {
-  console.log(num)
+  send('change-music', num)
 }
+
 
 const submenu = [{
     label: '播放',

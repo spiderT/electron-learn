@@ -26,3 +26,6 @@ shell
 macos-dock： https://www.electronjs.org/docs/tutorial/macos-dock  
 https://segmentfault.com/a/1190000020593227  
 touch-bar： mac的touch-bar功能暂且不做 https://www.electronjs.org/docs/api/touch-bar
+
+8. 分享到微信
+
