@@ -548,3 +548,121 @@ Electron在DevTools中的探索与实践
 对于 Electron 应用打包，首先会使用 webpack 分别对主进程和渲染进程代码进行处理优化，和 web 应用一样。有点区别的地方是配置中主进程的 target 是 electron-main, 渲染进程的 target 是 electron-renderer。除此之外，还要对 node 做一些配置，我们是不需要 webpack 来 polyfill 或者 mocknode 的全局变量和模块的，所以设为 false。  
 
 之后，在基于 electron-builder 将应用 build 成不同平台的安装包，需要注意的是，对于 package.json，尽可能地把可以打包到 bundle 的依赖模块，从 dependencies 移到 devDependencies，因为所有 dependencies 中的模块都会被打到安装包中，会严重增大安装包体积。  
+
+## Electron无边框窗口（最小化、最大化、关闭、拖动）以及动态改变窗口大小
+
+1. 要创建无边框窗口，只需在BrowserWindow的options中将frame设置为 false.  
+
+2. 可拖拽区  
+
+应用程序需要在 CSS 中指定 -webkit-app-region: drag 来告诉 Electron 哪些区域是可拖拽的  
+在可拖拽区域内部使用 -webkit-app-region: no-drag 则可以将其中部分区域排除  
+拖动行为可能与选择文本冲突。 例如, 当您拖动标题栏时, 您可能会意外地选择标题栏上的文本。 为防止此操作, 您需要在可区域中禁用文本选择  
+
+```css
+.titlebar {
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+}
+```
+
+在某些平台上，可拖拽区域不被视为窗口的实际内容，而是作为窗口边框处理，因此在右键单击时会弹出系统菜单。 要使上下文菜单在所有平台上都正确运行, 您永远也不要在可拖拽区域上使用自定义上下文菜单。  
+
+### 最小化、最大化、关闭
+
+1. render 进程通过 ipcRenderer 与 ipcMain 进行通讯，以通知 main 进程操作窗体。  
+
+2. 在renderer.js中添加click事件，发送操作命令给主进程
+
+```js
+let ipcRenderer = require('electron').ipcRenderer;
+
+var max = document.getElementById('max');
+if (max) {
+    max.addEventListener('click', () => {
+        //发送最大化命令
+        ipcRenderer.send('window-max');
+        //最大化图形切换
+        if (max.getAttribute('src') == 'images/max.png') {
+            max.setAttribute('src', 'images/maxed.png');
+        } else {
+            max.setAttribute('src', 'images/max.png');
+        }
+    })
+}
+
+var min = document.getElementById('min');
+if (min) {
+    min.addEventListener('click', () => {
+        //发送最小化命令
+        ipcRenderer.send('window-min');
+    })
+}
+
+var close = document.getElementById('close');
+if (close) {
+    close.addEventListener('click', () => {
+        //发送关闭命令
+        ipcRenderer.send('window-close');
+    })
+}
+```
+
+3. 在main.js中接收操作命令，做出相应处理
+
+```js
+let ipcMain = require('electron').ipcMain;
+//接收最小化命令
+ipcMain.on('window-min', function() {
+    mainWindow.minimize();
+})
+//接收最大化命令
+ipcMain.on('window-max', function() {
+    if (mainWindow.isMaximized()) {
+        mainWindow.restore();
+    } else {
+        mainWindow.maximize();
+    }
+})
+//接收关闭命令
+ipcMain.on('window-close', function() {
+    mainWindow.close();
+})
+```
+
+这里最大化和取消最大化时，修改图标的方法不合适，因为通过双击drag-area或者拉动窗口到屏幕边缘等操作，也可能修改窗口的状态。
+因此，应该在主进程中监听窗口的最大化操作，然后发送命令给渲染进程：
+
+```js
+mainWindow.on('maximize', function () {
+ mainWindow.webContents.send('main-window-max');
+})
+mainWindow.on('unmaximize', function () {
+  mainWindow.webContents.send('main-window-unmax');
+})
+```
+在渲染进程中接收到相应命令，再进行处理：
+
+```js
+ipcRenderer.on('main-window-max', (event) => {
+	max.classList.remove('icon-max');
+	max.classList.add('icon-maxed');
+});
+ipcRenderer.on('main-window-unmax', (event) => {
+	max.classList.remove('icon-maxed');
+	max.classList.add('icon-max');
+});
+```
+
+发送最大化给主进程
+
+```js
+var loginbtn = document.getElementById('login');
+if (loginbtn) {
+    loginbtn.addEventListener('click', () => {
+        ipcRenderer.send('window-max');
+        location.href = "index.html";
+    })
+}
+```
+
