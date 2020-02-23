@@ -1,0 +1,165 @@
+.right-wrap{
+    float: left;
+    width: calc(100% - 70px);
+    height: 100%;
+}
+.list-wrap{
+    margin-top: 40px;
+    border-right: 1px solid #eee;
+}
+.chat-wrap{
+    width: 260px;
+    float: left;
+    height: 100%;
+    overflow: scroll;
+    padding: 10px 0;
+    box-sizing: border-box;
+    .search{
+        margin-bottom: 14px;
+        width: 250px;
+        height: 100px;
+        position: fixed;
+        background-color: #fff;
+        margin-left: 10px;
+        input{
+            width: calc(100% - 84px);
+            background-color: #eee;
+            border: none;
+            height: 22px;
+            line-height: 22px;
+            font-size: 12px;
+            border-radius: 4px;
+            padding-left: 26px;
+        }
+        .icon{
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: url('../../../resources/images/icons/sousuo.png') no-repeat;
+            position: absolute;
+            top: 6px;
+            left: 4px;
+        }
+        .plus{
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+            border-radius: 2px;
+            width: 24px;
+            height: 20px;
+            border: 1px solid #ddd;
+            color: #999;
+            font-size: 20px;
+            line-height: 16px;
+            text-align: center;
+        }
+    }
+    .list-item{
+        height: 66px;
+        padding: 8px 0;
+        box-sizing: border-box;
+        border-bottom: 1px solid #ddd;
+        position: relative;
+        &:first-child{
+            background-color: #ddd;
+        }
+        padding-left: 10px;
+    }
+    .avatar{
+        float: left;
+        border: 1px solid #ddd;
+        width: 44px;
+        height: 44px;
+        overflow: hidden;
+        img{
+            width: 44px;
+            height: 44px;
+        }
+    }
+    .info{
+        float: left;
+        margin-left: 10px;
+        line-height: 22px;
+        .name{
+           font-weight: 500;
+           font-size: 14px; 
+           margin: 0;    
+           width: 160px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .message{
+            font-size: 12px;
+            color: #888;
+            margin: 0;
+            width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+    .time{
+        position: absolute;
+        right: 10px;
+        top: 8px;
+        color: #888;
+        font-size: 12px;
+    }
+}
+
+.chat-container{
+    background-color:rgb(243, 243, 243);
+    float: left;
+    width: calc(100% - 260px);
+    height: 100%;
+    .head{
+        height: 50px;
+        margin-left: 20px;
+        line-height: 50px;
+        
+    }
+    .message{
+        height: calc(100% - 250px);
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+    }
+    .edit-wrap{
+        padding: 6px 8px;
+        box-sizing: border-box;
+        .edit-tool{
+            height: 40px;
+            .face, .file, .screenshot, .messages, .phone, .video{
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                background: url('../../../resources/images/icons/xiaolian.png');
+                margin-right: 6px;
+            }
+            .file{
+                background: url('../../../resources/images/icons/file.png');
+            }
+            .screenshot{
+                background: url('../../../resources/images/icons/jianqie.png');
+            }
+            .messages{
+                background: url('../../../resources/images/icons/xiaoxi.png');
+            }
+            .phone{
+                background: url('../../../resources/images/icons/dianhua.png');
+                float: right;
+            }
+            .video{
+                background: url('../../../resources/images/icons/shipin.png');
+                float: right;
+            }
+        }
+        textarea{
+            resize: none;
+            border: none;
+            width: 100%;
+            height: 160px;
+            background-color:rgb(243, 243, 243);
+        }
+    }
+}
