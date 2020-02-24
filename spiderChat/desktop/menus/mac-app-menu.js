@@ -1,11 +1,11 @@
-const {app} = require('electron');
+const { app } = require('electron');
 const aboutWindow = require('./about');
 
 const macAppMenu = {
   label: app.name,
   submenu: [
     {
-      label: 'about',
+      label: '关于' + app.name,
       click: aboutWindow
     },
     { type: 'separator' },

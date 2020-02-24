@@ -10,7 +10,7 @@
   margin: 10px 0;
   .msg-text{
     vertical-align: top;
-    padding: 4px;
+    padding: 8px;
     display: inline-block;
     max-width: 300px;
   }
@@ -38,6 +38,7 @@
       position: relative;
     }
     .msg-text{
+      background-color: rgb(158, 231, 101);
       &::before{
         display: block;
         content: '';
@@ -45,7 +46,7 @@
         height: 0;
         border-style:solid;
         border-width: 6px;
-        border-color: transparent transparent transparent #fff; 
+        border-color: transparent transparent transparent rgb(158, 231, 101); 
         position: absolute;
         right: -12px;
         top: 6px;
