@@ -38,7 +38,7 @@ var appConfig = {
       }
     }
   },
-  // target: 'electron-renderer',
+  target: 'electron-renderer',
   output: {
     filename: 'scripts/[name].[hash:8].js',
     path: AbsulotePath.filedist

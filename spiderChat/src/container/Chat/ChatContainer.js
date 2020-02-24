@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.scss';
+import Messages from './Messages';
 
 
 export default function ChatContainer() {
@@ -8,7 +9,7 @@ export default function ChatContainer() {
     return (
         <div className="chat-container">
             <div className="head">蜘蛛侠</div>
-            <div className="message"></div>
+            <div className="message"><Messages /></div>
             <div className="edit-wrap">
                 <div className="edit-tool">
                     <span className="face"></span>

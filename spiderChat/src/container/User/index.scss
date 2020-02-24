@@ -1,6 +1,33 @@
 .wrap{
     height: 100%;
 }
+.window-icon{
+    height: 20px;
+    margin-top: 10px;
+    padding-left: 8px;
+    span{
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+    .close{
+        background-color: rgb(238, 108, 97);
+    }
+    .min{
+        background-color: rgb(247, 197, 82);
+    }
+    .max{
+        background-color: rgb(37, 199, 58);
+    }
+    .icon-max{
+        background-color: red;
+    }
+    .icon-maxed{
+        background-color: orchid;
+    }
+}
 .user-wrap{
     background-color: #000;
     width: 70px;

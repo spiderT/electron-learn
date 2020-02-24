@@ -29,3 +29,6 @@ touch-bar： mac的touch-bar功能暂且不做 https://www.electronjs.org/docs/a
 
 8. Electron无边框窗口（最小化、最大化、关闭、拖动）以及动态改变窗口大小  https://blog.csdn.net/fukaiit/article/details/91351448  
 
+9. electron 优化 https://juejin.im/post/5e0010866fb9a015fd69c645  
+
+10. electron截屏 https://juejin.im/post/5bcedc98f265da0abc2ba45d

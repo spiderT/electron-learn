@@ -123,6 +123,8 @@
         height: calc(100% - 250px);
         border-top: 1px solid #ddd;
         border-bottom: 1px solid #ddd;
+        padding: 20px;
+        box-sizing: border-box;
     }
     .edit-wrap{
         padding: 6px 8px;
@@ -131,26 +133,27 @@
             height: 40px;
             .face, .file, .screenshot, .messages, .phone, .video{
                 display: inline-block;
-                width: 20px;
-                height: 20px;
-                background: url('../../../resources/images/icons/xiaolian.png');
+                width: 24px;
+                height: 24px;
+                background-image: url('../../../resources/images/icons/xiaolian.png');
+                background-size: 100% 100%;
                 margin-right: 6px;
             }
             .file{
-                background: url('../../../resources/images/icons/file.png');
+                background-image: url('../../../resources/images/icons/wenjian.png');
             }
             .screenshot{
-                background: url('../../../resources/images/icons/jianqie.png');
+                background-image: url('../../../resources/images/icons/jianqie.png');
             }
             .messages{
-                background: url('../../../resources/images/icons/xiaoxi.png');
+                background-image: url('../../../resources/images/icons/xiaoxi.png');
             }
             .phone{
-                background: url('../../../resources/images/icons/dianhua.png');
+                background-image: url('../../../resources/images/icons/dianhua.png');
                 float: right;
             }
             .video{
-                background: url('../../../resources/images/icons/shipin.png');
+                background-image: url('../../../resources/images/icons/shipin.png');
                 float: right;
             }
         }
