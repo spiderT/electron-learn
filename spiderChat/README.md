@@ -33,4 +33,10 @@ touch-bar： mac的touch-bar功能暂且不做 https://www.electronjs.org/docs/a
 
 10. electron截屏 https://juejin.im/post/5bcedc98f265da0abc2ba45d
 
-textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/details/72864917
+textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/details/72864917  
+
+11. vscode-electron-debug  
+
+12. 功能：切下个会话，类似小红点  
+
+13. 开机自启动 node-auto-launch  https://github.com/Teamwork/node-auto-launch  
