@@ -10,11 +10,13 @@ let willQuiteApp = false;
 function createWindow() {
   // 创建浏览器窗口
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 900,
+    height: 700,
     webPreferences: {
       nodeIntegration: true
     },
+    minWidth: 800,
+    minHeight: 600,
     frame: false,
     show: false // 先隐藏
   })

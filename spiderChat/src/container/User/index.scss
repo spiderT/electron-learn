@@ -46,11 +46,11 @@
     }
     .chat, .contacts, .collect, .phone, .setting{
         display: block;
-        width: 32px;
-        height: 32px;
+        width: 26px;
+        height: 26px;
         margin-left: 18px;
         background-image: url('../../../resources/images/icons/bubble.png');
-        background-size: contain;
+        background-size: 100% 100%;
         margin-top: 30px;
         &.active{
             background-image: url('../../../resources/images/icons/bubble_green.png');
@@ -76,10 +76,12 @@
         margin-left: -18px;
     }
     .setting{
+        width: 20px;
+        height: 20px;
         background-image: url('../../../resources/images/icons/santiaogang.png');
         position: absolute;
         bottom: 30px;
         left: 50%;
-        margin-left: -18px;
+        margin-left: -14px;
     }
 }
