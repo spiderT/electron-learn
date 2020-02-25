@@ -6,8 +6,12 @@ let ipcMain = require('electron').ipcMain;
 
 let win;
 let willQuiteApp = false;
+const { useCapture } = require('../../lib/capture/capture-main');
 
 function createWindow() {
+  // 初始化截图
+  useCapture()
+
   // 创建浏览器窗口
   win = new BrowserWindow({
     width: 900,

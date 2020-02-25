@@ -1,10 +1,13 @@
 import React from 'react';
 import './index.scss';
 import Messages from './Messages';
-
+const ipcRenderer = require('electron').ipcRenderer;
 
 export default function ChatContainer() {
 
+    function captureScreen(){
+        ipcRenderer.send('capture-screen')
+    }
 
     return (
         <div className="chat-container">
@@ -14,7 +17,7 @@ export default function ChatContainer() {
                 <div className="edit-tool">
                     <span className="face"></span>
                     <span className="file"></span>
-                    <span className="screenshot"></span>
+                    <span className="screenshot" onClick={captureScreen}></span>
                     <span className="messages"></span>
                     <span className="video"></span>
                     <span className="phone"></span>

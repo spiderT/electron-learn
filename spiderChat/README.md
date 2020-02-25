@@ -32,3 +32,5 @@ touch-bar： mac的touch-bar功能暂且不做 https://www.electronjs.org/docs/a
 9. electron 优化 https://juejin.im/post/5e0010866fb9a015fd69c645  
 
 10. electron截屏 https://juejin.im/post/5bcedc98f265da0abc2ba45d
+
+textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/details/72864917
