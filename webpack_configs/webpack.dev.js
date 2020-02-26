@@ -8,7 +8,7 @@ module.exports = [ merge( commons, {
     mode: 'development',
     devtool: 'inline-source-map',
     devServer: {
-      contentBase: './filedist',
+      contentBase: './build',
       disableHostCheck: true,
       port: 9200
     }

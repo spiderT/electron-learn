@@ -1,19 +1,19 @@
 const {
   app
 } = require('electron');
-const setAppMenu = require('./desktop/menus');
-const setTray = require('./desktop/tray');
+const setAppMenu = require('./src/main/menus');
+const setTray = require('./src/main/tray');
 const {
   createWindow,
   show,
   close
-} = require('./desktop/windows');
+} = require('./src/main/windows');
 const path = require('path');
 
 app.whenReady().then(() => {
   // setTray()
   setAppMenu()
-  app.dock.setIcon(path.join(__dirname, './resources/images/zhizhuxia_big.png'));
+  app.dock.setIcon(path.join(__dirname, './src/resources/images/zhizhuxia_big.png'));
 })
 
 const gotTheLock = app.requestSingleInstanceLock();

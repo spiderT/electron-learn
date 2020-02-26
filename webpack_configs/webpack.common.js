@@ -8,7 +8,7 @@ var appConfig = {
   entry: {
     app: [
       'babel-polyfill',
-      './src/index.js'
+      './src/renderer/index.js'
     ]
   },
   plugins: [
@@ -41,7 +41,7 @@ var appConfig = {
   target: 'electron-renderer',
   output: {
     filename: 'scripts/[name].[hash:8].js',
-    path: AbsulotePath.filedist
+    path: AbsulotePath.build
   },
   module: {
     rules: [{
