@@ -5,7 +5,6 @@ import ChatContainer from './ChatContainer';
 
 function Chat() {
 
-
     return (
         <div className="right-wrap">
             <div className="chat-wrap">

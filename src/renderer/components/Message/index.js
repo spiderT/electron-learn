@@ -19,7 +19,7 @@ const MsgRender = (msg) => {
     }
 
     return (
-      <div key={msg.id} className={`msg-item ${msg.subType === 1 ?(msg.fromId === 'me' ? 'right' : 'left'):''}`}>
+      <div key={msg.id} className={`msg-item clearfix ${msg.subType === 1 ?(msg.fromId === 'me' ? 'right' : 'left'):''}`}>
         {msg.subType === 1 ? AvatarRender(msg) : null}
         {content}
       </div>
