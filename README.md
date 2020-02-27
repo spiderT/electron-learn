@@ -13,7 +13,7 @@ https://blog.csdn.net/weixin_34356555/article/details/92283856
 4. 聊天和输入界面可拖动切换大小
  
 5. Main Process 模块
-通知
+通知——收到消息，在窗口最小化的时候通知显示。
 
 6. Renderer Process 模块  
 desktopCapturer  

@@ -43,50 +43,54 @@ const originData = [{
     id: 4,
 }
 ];
+let socket = new WebSocket("ws://localhost:8080/ws");
+socket.onopen = function (event) {
+    console.log('onopen')
+};
+socket.onclose = function (event) {
+    console.log('onclose')
+};
 
 export default function Messages() {
     const [inputValue, setValue] = useState('');
     const [msgData, setMsgData] = useState(originData);
     const msgBox = React.createRef();
 
-    let socket;
-    if (!window.WebSocket) {
-        window.WebSocket = window.MozWebSocket;
-    }
-    if (window.WebSocket) {
-        socket = new WebSocket("ws://localhost:8080/ws");
-        socket.onmessage = function (event) {
-            const data = event.data;
-            console.log('onmessage', data);
-            if(!data || !data.startsWith('spider->')){
-                return;
-            }
-           
-            const value = data.split('->')[1];
-            if(!value){
-                return;
-            }
+    socket.onmessage = function (event) {
+        const data = event.data;
+        console.log('onmessage', data);
+        if(!data || !data.startsWith('spider->')){
+            return;
+        }
+        
+        const value = data.split('->')[1];
+        if(!value){
+            return;
+        }
 
-            msgData.push({
-                type: 'text',
-                subType: 1,
-                content: value,
-                fromId: 'zhizhuxia',
-                toId: 'me',
-                id: new Date().getTime(),
-            })
-            setMsgData(msgData);
+        const option = {
+            title: "spider",
+            body: value,
+            icon: "../../../resources/images/zhizhuxia.png",
         };
-        socket.onopen = function (event) {
-            console.log('onopen')
-        };
-        socket.onclose = function (event) {
-            console.log('onclose')
-        };
-    } else {
-        console.log("你的浏览器不支持 WebSocket！");
-    }
 
+        const chatNotication = new window.Notification(option.title, option);
+
+        chatNotication.onClick = function () {
+            console.log('chatNotication.onClick');
+        }
+
+        msgData.push({
+            type: 'text',
+            subType: 1,
+            content: value,
+            fromId: 'zhizhuxia',
+            toId: 'me',
+            id: new Date().getTime(),
+        })
+        setMsgData(msgData);
+    };
+    
     function captureScreen(){
         ipcRenderer.send('capture-screen')
     }
@@ -118,9 +122,9 @@ export default function Messages() {
                 if(msgBox && msgBox.current){
                     const ele = msgBox.current;
                     const scrollHeight = ele.scrollHeight;
-                    console.log('ele', ele);
-                    console.log('scrollHeight', scrollHeight);
-                    ele.scrollTo(0, scrollHeight);  
+                    // todo ?? 未生效
+                    ele.scrollTo(scrollHeight, scrollHeight);
+                    console.log('scrollHeight',scrollHeight)
                 }
             } else {
                 console.log("连接没有开启.");
