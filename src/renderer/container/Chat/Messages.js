@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './index.scss';
 import MsgRender from '../../components/Message';
 const ipcRenderer = require('electron').ipcRenderer;
+const path = require('path');
 
 function render(msgData) {
     const container = [];
@@ -71,7 +72,7 @@ export default function Messages() {
         const option = {
             title: "spider",
             body: value,
-            icon: "../../../resources/images/zhizhuxia.png",
+            icon: path.resolve(__dirname,"/images/favicon.ico"),
         };
 
         const chatNotication = new window.Notification(option.title, option);

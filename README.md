@@ -45,7 +45,7 @@ textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/det
 
 13. 开机自启动 node-auto-launch  https://github.com/Teamwork/node-auto-launch 
 
-14. 坑https://www.jianshu.com/p/9c8f7223ccbb
+14. 坑https://www.jianshu.com/p/9c8f7223ccbb  
 
 ## 1. 安装
 
@@ -592,11 +592,17 @@ Electron在DevTools中的探索与实践
 - 应用体积优化  
 对于 Electron 应用打包，首先会使用 webpack 分别对主进程和渲染进程代码进行处理优化，和 web 应用一样。有点区别的地方是配置中主进程的 target 是 electron-main, 渲染进程的 target 是 electron-renderer。除此之外，还要对 node 做一些配置，我们是不需要 webpack 来 polyfill 或者 mocknode 的全局变量和模块的，所以设为 false。  
 
-之后，在基于 electron-builder 将应用 build 成不同平台的安装包，需要注意的是，对于 package.json，尽可能地把可以打包到 bundle 的依赖模块，从 dependencies 移到 devDependencies，因为所有 dependencies 中的模块都会被打到安装包中，会严重增大安装包体积。  
+之后，在基于 electron-builder 将应用 build 成不同平台的安装包，需要注意的是，对于 package.json，尽可能地把可以打包到 bundle 的依赖模块，从 dependencies 移到 devDependencies，因为所有 dependencies 中的模块都会被打到安装包中，会严重增大安装包体积。
+
+
+## 10. Electron客户端的安全：从xss到rce
+
+
 
 ## Electron无边框窗口（最小化、最大化、关闭、拖动）以及动态改变窗口大小
 
 1. 要创建无边框窗口，只需在BrowserWindow的options中将frame设置为 false.  
+
 
 2. 可拖拽区  
 
