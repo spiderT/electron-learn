@@ -47,6 +47,9 @@ textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/det
 
 14. 坑https://www.jianshu.com/p/9c8f7223ccbb  
 
+15. Electron选择文件、文件夹对话框  https://www.jianshu.com/p/e71e16a374b1
+
+
 ## 1. 安装
 
 ### nvm 安装

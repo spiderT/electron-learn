@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import './index.scss';
 import MsgRender from '../../components/Message';
+import EmojiPackage from '../../components/EmojiPackage';
 const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
 
@@ -133,15 +134,30 @@ export default function Messages() {
         }
     }
 
+    // 上传文件
+    function uploadFile(){
+        ipcRenderer.send('open-directory-dialog', 'openDirectory');
+    }
+
+    // 获取选中的文件
+    ipcRenderer.on('read-file',(e, {data})=>{
+        console.log('data', data)
+        let file = new File([data], 'test.jpg', {type:'image/jpg'})
+        console.log('file', file)
+    })
+        
+
     return (
         <div>
             <div className="message-wrap"><div className="msg-box" ref={msgBox}>{ render(msgData)}</div></div>
             <div className="edit-wrap">
+                <EmojiPackage />
                 <div className="edit-tool">
                     <span className="face"></span>
-                    <span className="file"></span>
+                    <span className="file" onClick={uploadFile}></span>
                     <span className="screenshot" onClick={captureScreen}></span>
-                    <span className="messages"></span>
+                    {/* // 功能暂时不开发 */}
+                    {/* <span className="messages"></span> */}
                     <span className="video"></span>
                     <span className="phone"></span>
                 </div>

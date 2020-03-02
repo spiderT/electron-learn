@@ -142,6 +142,7 @@
     .edit-wrap{
         padding: 6px 8px;
         box-sizing: border-box;
+        position: relative;
         .edit-tool{
             height: 40px;
             .face, .file, .screenshot, .messages, .phone, .video{

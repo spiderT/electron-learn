@@ -1,0 +1,35 @@
+.emoji-wrap{
+  position: absolute;
+  background-color: #fff;
+  top: -100px;
+  left: -79px;
+  width: 200px;
+  height: 100px;
+  border-radius: 6px;
+  box-shadow: 2px 2px 8px #ccc;
+  padding: 10px;
+  box-sizing: border-box;
+  &::before{
+    position: absolute;
+    display: inline-block;
+    top: 90px;
+    left: 90px;
+    width: 0;
+    height: 0px;
+    content: '';
+    border-style: solid;
+    border-width: 8px;
+    border-color: #fff #fff transparent transparent;
+    transform: rotate(135deg);
+    box-shadow: 2px -2px 2px #ccc;
+  }
+  .emoji-item{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+    &:hover{
+      font-size: 20px;
+    }
+  }
+}
