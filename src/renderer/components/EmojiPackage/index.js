@@ -1,12 +1,19 @@
 import React from 'react';
 import './index.scss';
 
-export default function EmojiPackage(){
+export default function EmojiPackage(props){
 
-  const emojiArr = ['😊', '😢', '😄', '🔥', '👌', '👀', '🐦', '😯', '👎', '🤮', '🀄️', '😔'];
+  const emojiArr = ['😊', '😢', '😄', '🔥', '👌', '👀', '🐦', '😯', '👎', '🤮', '🀄️', '😔', 
+  '😁', '👿', '🐢', '🐑', '🐎','🐷', '😍', '❤️', '🌹', '💩', '👼', '🍦', '🍰', '🐻', '🍞', 
+  '🐼', '🐟', '🐬', '⛽️', '🏠', '🚗', '😼', '🚴‍', '🏃‍', '😯', '🐶', '👸', '🧙‍', '🌧️', '🌞'];
+
+  function sendEmoji(e, item){
+    e.stopPropagation();
+    props.sendEmoji(item)
+  }
 
   return <div className="emoji-wrap">
-    {emojiArr.map(item=><span className="emoji-item">{item}</span>)}
+    {emojiArr.map((item, index)=><span className="emoji-item" key={index} onClick={(e)=>sendEmoji(e, item)}>{item}</span>)}
   </div>
 }
 

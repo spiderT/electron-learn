@@ -47,14 +47,15 @@ textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/det
 
 14. 坑https://www.jianshu.com/p/9c8f7223ccbb  
 
-15. Electron选择文件、文件夹对话框  https://www.jianshu.com/p/e71e16a374b1
+15. Electron选择文件、文件夹对话框  https://www.jianshu.com/p/e71e16a374b1  
 
+16. 集成c++  https://www.jianshu.com/p/93ffa05f028f   https://blog.csdn.net/wang839305939/article/details/83780789  
 
 ## 1. 安装
 
 ### nvm 安装
 
-```
+```text
 Mac/Linux: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
 Windows: https://github.com/coreybutler/nvm-windows/releasesa
 验证nvm: nvm --versiona
@@ -62,7 +63,7 @@ Windows: https://github.com/coreybutler/nvm-windows/releasesa
 
 ### Node.js/NPM 安装
 
-```
+```text
 安装 Node.js: nvm install 12.14.0
 切换 Node.js 版本:nvm use 12.14.0
 验证 npm -v
@@ -71,7 +72,7 @@ Windows: https://github.com/coreybutler/nvm-windows/releasesa
 
 ### node 安装加速机器
 
-```
+```text
 // mac 在 .bashrc 或者 .zshrc 加入
 export NVM_NODEJS_ORG_MIRROR=http://npm.taobao.org/mirrors/node
 
@@ -81,7 +82,7 @@ node_mirror: https://npm.taobao.org/mirrors/node/ npm_mirror: https://npm.taobao
 
 ### Electron 安装
 
-```
+```text
 npm install electron --save-dev
 npm install --arch=ia32 --platform=win32 electron
 
@@ -92,7 +93,7 @@ npx electron -v (npm > 5.2)
 
 ### Electron 加速技巧
 
-```
+```text
 # 设置ELECTRON_MIRROR
 ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install electron --save- dev
 ```
@@ -469,7 +470,13 @@ https://codeday.me/bug/20190129/597088.html
 
 https://juejin.im/post/5c46ab47e51d45522b4f55b1
 
-## 8. 关于窗口
+## 8. 集成c++
+
+
+
+## 9. 原生 GUI
+
+### 关于窗口
 
 1. 禁止多开  
 
@@ -488,8 +495,6 @@ app.on('ready', () => {...
 
 - 用户点击窗口关闭按钮时候，应用只是隐藏   
 - 点击「退出应用」时才真正关闭窗口  
-
-## 9. 原生 GUI
 
 ### 9.1. Menu/MenuItem(菜单/菜单项)
 

@@ -56,6 +56,7 @@ socket.onclose = function (event) {
 export default function Messages() {
     const [inputValue, setValue] = useState('');
     const [msgData, setMsgData] = useState(originData);
+    const [isShowEmoji, toggleShowEmoji] = useState(false);
     const msgBox = React.createRef();
 
     socket.onmessage = function (event) {
@@ -147,13 +148,33 @@ export default function Messages() {
     })
         
 
+    function showEmoji(){
+        toggleShowEmoji(!isShowEmoji)
+    }
+
+    function sendEmoji(item){
+        console.log('item', item);
+        socket.send(item);
+        // todo msgData增加, 不用在 发送的时候增加，应该在socket里监听增加 filter fromid 和 toid
+        msgData.push({
+            type: 'text',
+            subType: 1,
+            content: item,
+            fromId: 'me',
+            toId: 'zhizhuxia',
+            id: new Date().getTime(),
+        })
+        setMsgData(msgData);
+        showEmoji();
+    }
+
     return (
         <div>
             <div className="message-wrap"><div className="msg-box" ref={msgBox}>{ render(msgData)}</div></div>
             <div className="edit-wrap">
-                <EmojiPackage />
+                {isShowEmoji && <EmojiPackage sendEmoji={sendEmoji}/>}
                 <div className="edit-tool">
-                    <span className="face"></span>
+                    <span className="face" onClick={showEmoji}></span>
                     <span className="file" onClick={uploadFile}></span>
                     <span className="screenshot" onClick={captureScreen}></span>
                     {/* // 功能暂时不开发 */}

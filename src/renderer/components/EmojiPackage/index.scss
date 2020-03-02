@@ -1,10 +1,10 @@
 .emoji-wrap{
   position: absolute;
   background-color: #fff;
-  top: -100px;
-  left: -79px;
-  width: 200px;
-  height: 100px;
+  top: -260px;
+  left: -82px;
+  width: 224px;
+  height: 256px;
   border-radius: 6px;
   box-shadow: 2px 2px 8px #ccc;
   padding: 10px;
@@ -12,8 +12,8 @@
   &::before{
     position: absolute;
     display: inline-block;
-    top: 90px;
-    left: 90px;
+    top: 246px;
+    left: 92px;
     width: 0;
     height: 0px;
     content: '';
@@ -25,11 +25,13 @@
   }
   .emoji-item{
     display: inline-block;
-    width: 30px;
-    height: 30px;
-    font-size: 12px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    font-size: 14px;
     &:hover{
-      font-size: 20px;
+      font-size: 22px;
     }
   }
 }
