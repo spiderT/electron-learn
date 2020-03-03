@@ -49,7 +49,10 @@ textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/det
 
 15. Electron选择文件、文件夹对话框  https://www.jianshu.com/p/e71e16a374b1  
 
-16. 集成c++  https://www.jianshu.com/p/93ffa05f028f   https://blog.csdn.net/wang839305939/article/details/83780789  
+16. 集成c++ 
+ https://www.jianshu.com/p/93ffa05f028f   
+ https://blog.csdn.net/wang839305939/article/details/83780789    
+ https://www.jianshu.com/p/5a4c7ce2be54  
 
 ## 1. 安装
 
@@ -472,6 +475,80 @@ https://juejin.im/post/5c46ab47e51d45522b4f55b1
 
 ## 8. 集成c++
 
+安装  
+
+```js
+
+npm install -g --production windows-build-tools
+
+npm install -g node-gyp
+
+```
+
+写c++, 来自 node 官网文档   
+
+```c
+
+#include <node.h>
+
+namespace demo {
+
+using v8::FunctionCallbackInfo;
+
+using v8::Isolate;
+
+using v8::Local;
+
+using v8::Object;
+
+using v8::String;
+
+using v8::Value;
+
+void Method(const FunctionCallbackInfo& args) {  
+
+    Isolate* isolate = args.GetIsolate();  
+
+    args.GetReturnValue().Set(String::NewFromUtf8(isolate, "world"));
+
+}
+
+void init(Localexports) {
+
+    NODE_SET_METHOD(exports, "hello", Method);
+
+}
+
+NODE_MODULE(addon, init)
+
+}  // namespace demo
+
+```
+
+加个配置文件binding.gyp  
+
+```json
+{
+  "targets": [{
+    "target_name": "addon",
+    "sources": [ "hello.cc"]
+  }]
+}
+```
+
+然后  
+
+```js
+node-gyp configure
+npm install
+```
+
+在js里使用  
+
+```js
+var addon = require("./build/Release/addon");
+console.log(addon.hello());
+```
 
 
 ## 9. 原生 GUI
@@ -724,4 +801,3 @@ if (loginbtn) {
     })
 }
 ```
-
