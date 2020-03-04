@@ -53,6 +53,15 @@ textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/det
  https://www.jianshu.com/p/93ffa05f028f   
  https://blog.csdn.net/wang839305939/article/details/83780789    
  https://www.jianshu.com/p/5a4c7ce2be54  
+ https://www.dazhuanlan.com/2019/09/23/5d88a0bc8ec13/  
+ https://stackoverflow.com/questions/32986826/calling-node-native-addons-c-in-electron  
+
+ 17. 监听网络情况，显示网络待连接，或者图标上显示个x    
+ https://www.electronjs.org/docs/tutorial/online-offline-events  
+
+ 18. 发生图片的时候，fs在本地写选择的图片，然后本地路径，显示图片，upload文件夹吧  
+
+ 19. 奔溃报告上传  
 
 ## 1. 安装
 
