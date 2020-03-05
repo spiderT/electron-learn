@@ -5,6 +5,7 @@ const isDev = require('electron-is-dev');
 const ipcMain = require('electron').ipcMain;
 const dialog = require('electron').dialog;
 const fs = require('fs');
+const path = require('path');
 
 let win;
 let willQuiteApp = false;
@@ -89,15 +90,22 @@ function createWindow() {
         return
       }
       const filePath = filePaths[0];
-      fs.readFile(filePath,(err, data)=>{
-        if(err) throw err;
-        console.log('data', data)
-        event.sender.send('read-file', {data})
+      console.log('filePath', filePath);
+      event.sender.send('read-file', {data: filePath})
+      // 原本打算把选中的图片写一遍到指定位置读入，但是会触发webpack的重新编译
+      // fs.readFile(filePath,(err, data)=>{
+      //   if(err) throw err;
+      //   const fileName = `upload${(Math.random()*10000).toFixed(0)}.png`;
+      //   const pathName = path.join('./upload', fileName);
+        // fs.writeFile(pathName, data, (err) => {
+        //   if (err) throw err;
+        //   event.sender.send('read-file', {data: fileName})
+        //   console.log('文件已被保存',pathName);
+        // });
       })  
     }).catch(err => {
       console.log(err)
     })
-  });
 }
 
 function show() {

@@ -2,6 +2,7 @@
 import React from 'react';
 import Text from './Text';
 import Tip from './Tip';
+import Image from './Image';
 import './index.scss';
 
 const AvatarRender = (msg) => {
@@ -11,16 +12,18 @@ const AvatarRender = (msg) => {
 
 const MsgRender = (msg) => {
     let content;
-    switch (msg.subType) {
+    switch (msg.type) {
       // 文本
       case 1: content = <Text content={msg.content} />; break;
       // 系统
       case 2: content = <Tip content={msg.content} />; break;
+      // 图片
+      case 3: content = <Image content={msg.content} />; break;
     }
 
     return (
-      <div key={msg.id} className={`msg-item clearfix ${msg.subType === 1 ?(msg.fromId === 'me' ? 'right' : 'left'):''}`}>
-        {msg.subType === 1 ? AvatarRender(msg) : null}
+      <div key={msg.id} className={`msg-item clearfix ${msg.type !== 2 ?(msg.fromId === 'me' ? 'right' : 'left'):''}`}>
+        {msg.type !== 2 ? AvatarRender(msg) : null}
         {content}
       </div>
     );

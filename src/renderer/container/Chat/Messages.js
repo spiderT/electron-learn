@@ -16,30 +16,26 @@ function render(msgData) {
 }
 
 const originData = [{
-    type: 'tip',
-    subType: 2,
+    type: 2,
     content: '10:29',
     fromId: 'zhizhuxia',
     toId: 'me',
     id: 1,
 }, {
-    type: 'text',
-    subType: 1,
+    type: 1,
     content: '你好，我是蜘蛛侠，很高兴认识你。你好，我是蜘蛛侠，很高兴认识你。你好，我是蜘蛛侠，很高兴认识你。',
     fromId: 'zhizhuxia',
     toId: 'me',
     id: 2,
 }, {
-    type: 'text',
-    subType: 1,
+    type: 1,
     content: '我也很高兴认识你',
     fromId: 'me',
     toId: 'zhizhuxia',
     id: 3,
 }, {
-    type: 'text',
-    subType: 1,
-    content: '嘿嘿😁',
+    type: 3,
+    content: '../../../../upload/default.png',
     fromId: 'me',
     toId: 'zhizhuxia',
     id: 4,
@@ -84,8 +80,7 @@ export default function Messages() {
         }
 
         msgData.push({
-            type: 'text',
-            subType: 1,
+            type: 1,
             content: value,
             fromId: 'zhizhuxia',
             toId: 'me',
@@ -112,8 +107,7 @@ export default function Messages() {
             if (socket.readyState === WebSocket.OPEN) {
                 socket.send(inputValue);
                 msgData.push({
-                    type: 'text',
-                    subType: 1,
+                    type: 1,
                     content: inputValue,
                     fromId: 'me',
                     toId: 'zhizhuxia',
@@ -142,9 +136,17 @@ export default function Messages() {
 
     // 获取选中的文件
     ipcRenderer.on('read-file',(e, {data})=>{
-        console.log('data', data)
-        let file = new File([data], 'test.jpg', {type:'image/jpg'})
-        console.log('file', file)
+        console.log('read-filedata', data);
+        // todo 发送出去
+        socket.send(data);
+        msgData.push({
+            type: 3,
+            content: data,
+            fromId: 'me',
+            toId: 'zhizhuxia',
+            id: new Date().getTime(),
+        })
+        setMsgData(msgData);
     })
         
 
@@ -157,8 +159,7 @@ export default function Messages() {
         socket.send(item);
         // todo msgData增加, 不用在 发送的时候增加，应该在socket里监听增加 filter fromid 和 toid
         msgData.push({
-            type: 'text',
-            subType: 1,
+            type: 1,
             content: item,
             fromId: 'me',
             toId: 'zhizhuxia',
