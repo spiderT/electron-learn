@@ -33,13 +33,14 @@ const originData = [{
     fromId: 'me',
     toId: 'zhizhuxia',
     id: 3,
-}, {
-    type: 3,
-    content: '../../../../upload/default.png',
-    fromId: 'me',
-    toId: 'zhizhuxia',
-    id: 4,
-}
+},
+//  {
+//     type: 3,
+//     content: '../../../../upload/default.png',
+//     fromId: 'me',
+//     toId: 'zhizhuxia',
+//     id: 4,
+// }
 ];
 let socket = new WebSocket("ws://localhost:8080/ws");
 socket.onopen = function (event) {
@@ -70,10 +71,10 @@ export default function Messages() {
         const option = {
             title: "spider",
             body: value,
-            icon: path.resolve(__dirname,"/images/favicon.ico"),
+            icon: path.resolve(__dirname,"../../../resources/images/zhizhuxia.png"),
         };
 
-        const chatNotication = new window.Notification(option.title, option);
+        const chatNotication = new Notification(option.title, option);
 
         chatNotication.onClick = function () {
             console.log('chatNotication.onClick');

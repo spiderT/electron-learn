@@ -35,7 +35,8 @@ touch-bar： mac的touch-bar功能暂且不做 https://www.electronjs.org/docs/a
 
 9. electron 优化 https://juejin.im/post/5e0010866fb9a015fd69c645  
 
-10. electron截屏 https://juejin.im/post/5bcedc98f265da0abc2ba45d
+10. electron截屏 https://juejin.im/post/5bcedc98f265da0abc2ba45d  **
+electron的版本原因导致不能用，原3.0.2**
 
 textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/details/72864917  
 
@@ -58,10 +59,16 @@ textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/det
 
  17. 监听网络情况，显示网络待连接，或者图标上显示个x    
  https://www.electronjs.org/docs/tutorial/online-offline-events  
+ https://cloud.tencent.com/developer/section/1115770  
 
  18. 发生图片的时候，fs在本地写选择的图片，然后本地路径，显示图片，upload文件夹吧  
 
- 19. 奔溃报告上传  
+ 19. 奔溃报告上传  https://juejin.im/post/5c5ee47be51d457f95354c82  
+ https://cloud.tencent.com/developer/section/1116135  
+ https://www.electronjs.org/docs/api/crash-reporter  
+ https://www.bookstack.cn/read/electron-v5/61.md  
+
+ 20. debugger https://cloud.tencent.com/developer/section/1116142  
 
 ## 1. 安装
 
@@ -695,6 +702,8 @@ Electron在DevTools中的探索与实践
 
 ## Electron无边框窗口（最小化、最大化、关闭、拖动）以及动态改变窗口大小
 
+### 方法1
+
 1. 要创建无边框窗口，只需在BrowserWindow的options中将frame设置为 false.  
 
 
@@ -713,7 +722,7 @@ Electron在DevTools中的探索与实践
 
 在某些平台上，可拖拽区域不被视为窗口的实际内容，而是作为窗口边框处理，因此在右键单击时会弹出系统菜单。 要使上下文菜单在所有平台上都正确运行, 您永远也不要在可拖拽区域上使用自定义上下文菜单。  
 
-### 最小化、最大化、关闭
+#### 最小化、最大化、关闭
 
 1. render 进程通过 ipcRenderer 与 ipcMain 进行通讯，以通知 main 进程操作窗体。  
 
@@ -809,4 +818,25 @@ if (loginbtn) {
         location.href = "index.html";
     })
 }
+```
+
+### 方法2
+
+结果在一个隐藏的标题栏中，另一种方式是交通灯按钮从窗口边缘稍微嵌入。
+
+```js
+const {BrowserWindow} = require('electron')
+let win = new BrowserWindow({titleBarStyle: 'hiddenInset'})
+win.show()
+```
+
+默认情况下, 无边框窗口是不可拖拽的。 应用程序需要在 CSS 中指定 -webkit-app-region: drag 来告诉 Electron 哪些区域是可拖拽的（如操作系统的标准标题栏），在可拖拽区域内部使用 -webkit-app-region: no-drag 则可以将其中部分区域排除。 请注意, 当前只支持矩形形状。  
+
+注意: -webkit-app-region: drag 在开发人员工具打开时会出现问题。 查看更多信息 (包括变通方法), 请参见此 [GitHub 问题](https://github.com/electron/electron/issues/3647) 。  
+
+要使整个窗口可拖拽, 您可以添加 -webkit-app-region: drag 作为 body 的样式:  
+
+```html
+<body style="-webkit-app-region: drag">
+</body>
 ```

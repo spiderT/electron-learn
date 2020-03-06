@@ -7,7 +7,6 @@ import './index.scss';
 
 const AvatarRender = (msg) => {
   return <img className="chat-avatar" src={require(`../../../resources/images/users/${msg.fromId === 'me' ? 'user': msg.fromId}.png`)} />
-  // return <div>123</div>
 }
 
 const MsgRender = (msg) => {

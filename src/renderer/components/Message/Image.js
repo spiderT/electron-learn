@@ -6,8 +6,7 @@ const Image = (props) => {
   return (
           <span className='msg-text' >
              {/* <img src={require(`${content ? content : '../../../../upload/default.png'}`)} /> */}
-             {/* <img src={require(`${content}`)} /> */}
-             <img src={require(`/Users/tangting006/Desktop/11.jpg`)} />
+             <img src={require(`../../../../upload/default.png`)} />
           </span>
   );
 };

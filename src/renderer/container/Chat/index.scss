@@ -128,7 +128,8 @@
         height: 50px;
         margin-left: 20px;
         line-height: 50px;
-        
+        -webkit-app-region: drag;
+        -webkit-user-select: none;
     }
     .message-wrap{
         height: 400px;
