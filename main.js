@@ -11,7 +11,6 @@ const {
 const path = require('path');
 
 app.whenReady().then(() => {
-  // setTray()
   setAppMenu()
   app.dock.setIcon(path.join(__dirname, './src/resources/images/zhizhuxia_big.png'));
 })
@@ -22,7 +21,7 @@ if (!gotTheLock) {
   app.quit()
 } else {
   app.on('second-instance', show)
-  app.on('ready', createWindow)
+  app.on('ready', setTray)
   app.on('before-quit', close)
-  app.on('activate', show)
+  app.on('activate', createWindow)
 }

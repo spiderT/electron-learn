@@ -7,12 +7,12 @@ const path = require('path');
 let win;
 let willQuiteApp = false;
 const {
-  useCapture
-} = require('../../lib/capture/capture-main');
+  createShortcut
+} = require('../../lib/capture/main');
 
 function createWindow() {
   // 初始化截图
-  useCapture()
+  createShortcut()
 
   // 创建浏览器窗口
   win = new BrowserWindow({
