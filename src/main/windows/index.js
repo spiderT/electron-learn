@@ -69,7 +69,7 @@ function createWindow() {
       ]
     }).then(result=>{
       // console.log('result', result)
-      // result { canceled: false, filePaths: [ '/Users/tangting006/Desktop/11.jpg' ] }
+      // result { canceled: false, filePaths: [ '/Users/Desktop/11.jpg' ] }
       const {canceled, filePaths} = result;
       if(canceled){
         return
