@@ -78,6 +78,11 @@ ipcMain.on('clip-page', (event, {
             capWin.close()
             capWin = null
         }
+    }else if(type === 'paste'){
+        console.log('paste22')
+        // 访问win直接卡死了
+        // console.log('win', win);
+        // win && win.webContents.send('paste-from-clipboard', {data: msg})
     }
 })
 

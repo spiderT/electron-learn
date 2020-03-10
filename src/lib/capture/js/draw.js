@@ -184,28 +184,34 @@ class Draw {
     //check按钮的动作
     done(e) {
         //写入图片到剪贴板
-        clipboard.writeImage(nativeImage.createFromDataURL(this.selectRectMeta.base64Data));
+        const dataUrl = this.selectRectMeta.base64Data;
+        clipboard.writeImage(nativeImage.createFromDataURL(dataUrl));
+
+        // todo 成功后，粘贴到输入框
+        this.sendMsg('paste', dataUrl)
+        console.log('paste11')
+
         this.destroy({
-            base64: this.selectRectMeta.base64Data
+            base64: dataUrl
         });
     }
 
     sendMsg(type, msg) {
         ipcRenderer.send('clip-page', {
-            type: type,
+            type,
             message: msg
         })
     }
 
     // 矩阵图转base64格式,原理是插入canvas里面，通过canvas转成图片
     RGBA2ImageData(RGBAImg) {
-        let width = RGBAImg.width
-        let height = RGBAImg.height;
-        let canvas = document.createElement('canvas');
+        const width = RGBAImg.width
+        const height = RGBAImg.height;
+        const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
-        let ctx = canvas.getContext('2d');
-        let imgData = ctx.createImageData(width, height);
+        const ctx = canvas.getContext('2d');
+        const imgData = ctx.createImageData(width, height);
         imgData.data.set(RGBAImg.data);
         ctx.putImageData(imgData, 0, 0);
         return canvas.toDataURL();

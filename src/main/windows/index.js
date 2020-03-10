@@ -45,6 +45,9 @@ function createWindow() {
     win.loadFile(path.resolve('./dist/index.html'))
   }
 
+  // 打开开发者工具
+  win.webContents.openDevTools()
+
 
   // 打开对话框事件dialog
   ipcMain.on('open-directory-dialog', function (event) {

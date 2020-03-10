@@ -21,13 +21,13 @@ desktopCapturer.getSources({
     }
 }, async (error, sources) => {
     if (error) return console.log(error)
-    let screenImgUrl = sources[0].thumbnail.toDataURL()
+    const screenImgUrl = sources[0].thumbnail.toDataURL()
 
-    let bg = document.querySelector('.bg')
-    let rect = document.querySelector('.rect')
-    let sizeInfo = document.querySelector('.size-info')
-    let toolbar = document.querySelector('.toolbar')
-    let draw = new Draw(screenImgUrl, bg, width, height, rect, sizeInfo, toolbar)
+    const bg = document.querySelector('.bg')
+    const rect = document.querySelector('.rect')
+    const sizeInfo = document.querySelector('.size-info')
+    const toolbar = document.querySelector('.toolbar')
+    const draw = new Draw(screenImgUrl, bg, width, height, rect, sizeInfo, toolbar)
     document.addEventListener('mousedown', draw.startRect.bind(draw))
     document.addEventListener('mousemove', draw.drawingRect.bind(draw))
     document.addEventListener('mouseup', draw.endRect.bind(draw))
