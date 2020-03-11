@@ -9,6 +9,7 @@
 https://blog.csdn.net/weixin_42762089/article/details/87912222  
 https://blog.csdn.net/weixin_42762089/article/details/88532572  
 https://blog.csdn.net/weixin_34356555/article/details/92283856  
+
 3. 列表
 4. 聊天和输入界面可拖动切换大小
  
@@ -47,6 +48,7 @@ textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/det
 13. 开机自启动 node-auto-launch  https://github.com/Teamwork/node-auto-launch 
 
 14. 坑https://www.jianshu.com/p/9c8f7223ccbb  
+remote https://juejin.im/post/5d4b79a3e51d4561b072dcb0
 
 15. Electron选择文件、文件夹对话框  https://www.jianshu.com/p/e71e16a374b1  
 
@@ -69,6 +71,8 @@ textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/det
  https://www.bookstack.cn/read/electron-v5/61.md  
 
  20. debugger https://cloud.tencent.com/developer/section/1116142  
+
+ github gif图  https://www.zhihu.com/question/28183634  
 
 ## 1. 安装
 
