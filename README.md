@@ -34,7 +34,7 @@ node index.js
 
 ```
 
-## 3. 参考资料  
+### 参考资料  
 
 1. electron 优化 https://juejin.im/post/5e0010866fb9a015fd69c645  
 
