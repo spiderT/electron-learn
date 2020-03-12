@@ -2,79 +2,62 @@
 
 官网：https://electronjs.org/
 
-## 本次项目功能点
+## 1. 本次项目功能点
 
-1. 登陆跳转
-2. main process和web page 通信  https://www.electronjs.org/docs/api/ipc-main    
-https://blog.csdn.net/weixin_42762089/article/details/87912222  
-https://blog.csdn.net/weixin_42762089/article/details/88532572  
-https://blog.csdn.net/weixin_34356555/article/details/92283856  
+模仿微信，做了一个单机版的聊天，因为只有mac，没有Windows机器，以下仅根据mac来开发。  
 
-3. 列表
-4. 聊天和输入界面可拖动切换大小
- 
-5. Main Process 模块
-通知——收到消息，在窗口最小化的时候通知显示。
+### 目前支持的功能点
 
-6. Renderer Process 模块  
-desktopCapturer  
-ipcRenderer  
-remote  
-webFrame  
+1. 聊天  
+2. 发送表情  
+3. 选择文件（只支持选择图片）发送  
+4. 截图发送  
+5. 粘贴图片（只支持截图后的剪切板上粘贴图片）发送  
 
-7. 两种进程都可用的模块  
-clipboard  
-crashReporter  
-nativeImage  
-shell  
+### 使用方式  
 
-macos-dock： https://www.electronjs.org/docs/tutorial/macos-dock  
-https://segmentfault.com/a/1190000020593227  
-touch-bar： mac的touch-bar功能暂且不做 https://www.electronjs.org/docs/api/touch-bar
+```text
+git clone https://github.com/spiderT/electron-learn.git
+cd electron-learn
+npm install
 
-8. Electron无边框窗口（最小化、最大化、关闭、拖动）以及动态改变窗口大小  https://blog.csdn.net/fukaiit/article/details/91351448  
+// 启动react，webpack打包
+npm start
 
-9. electron 优化 https://juejin.im/post/5e0010866fb9a015fd69c645  
+// 启动electron
+npm run electron
 
-10. electron截屏 https://juejin.im/post/5bcedc98f265da0abc2ba45d  **
-electron的版本原因导致不能用，原3.0.2**
+// 启动websocket模拟聊天
+cd server
+node index.js
+// 以live server的方式打开client.html，就可以愉快的聊天了
 
-textarea改成div，可粘贴图片 https://blog.csdn.net/miss_liang/article/details/72864917  
+```
 
-11. vscode-electron-debug  
+## 3. 参考资料  
 
-12. 功能：切下个会话，类似小红点  
+1. electron 优化 https://juejin.im/post/5e0010866fb9a015fd69c645  
 
-13. 开机自启动 node-auto-launch  https://github.com/Teamwork/node-auto-launch 
-
-14. 坑https://www.jianshu.com/p/9c8f7223ccbb  
+2. 坑https://www.jianshu.com/p/9c8f7223ccbb  
 remote https://juejin.im/post/5d4b79a3e51d4561b072dcb0
 
-15. Electron选择文件、文件夹对话框  https://www.jianshu.com/p/e71e16a374b1  
-
-16. 集成c++ 
- https://www.jianshu.com/p/93ffa05f028f   
- https://blog.csdn.net/wang839305939/article/details/83780789    
+3. 集成c++  
+ https://www.jianshu.com/p/93ffa05f028f  
+ https://blog.csdn.net/wang839305939/article/details/83780789  
  https://www.jianshu.com/p/5a4c7ce2be54  
  https://www.dazhuanlan.com/2019/09/23/5d88a0bc8ec13/  
  https://stackoverflow.com/questions/32986826/calling-node-native-addons-c-in-electron  
 
- 17. 监听网络情况，显示网络待连接，或者图标上显示个x    
- https://www.electronjs.org/docs/tutorial/online-offline-events  
- https://cloud.tencent.com/developer/section/1115770  
-
- 18. 发生图片的时候，fs在本地写选择的图片，然后本地路径，显示图片，upload文件夹吧  
-
- 19. 奔溃报告上传  https://juejin.im/post/5c5ee47be51d457f95354c82  
+4. 奔溃报告上传  https://juejin.im/post/5c5ee47be51d457f95354c82  
  https://cloud.tencent.com/developer/section/1116135  
  https://www.electronjs.org/docs/api/crash-reporter  
  https://www.bookstack.cn/read/electron-v5/61.md  
 
- 20. debugger https://cloud.tencent.com/developer/section/1116142  
+5. debugger https://cloud.tencent.com/developer/section/1116142  
 
- github gif图  https://www.zhihu.com/question/28183634  
+6. 测试和调试 https://www.bookstack.cn/read/electron-v6.0-zh/dda8a7a000404b49.md
 
-## 1. 安装
+## 2. electron相关软件安装
 
 ### nvm 安装
 
@@ -121,7 +104,7 @@ npx electron -v (npm > 5.2)
 ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install electron --save- dev
 ```
 
-## 2. electron 原理
+## 3. electron 原理
 
 Node.js 和 Chromiums 整合
 
@@ -133,7 +116,6 @@ Node.js 集成到 Chromium
 
 ![chromium](images/chromium.png)
 ![electron](images/electron.png)
-
 
 
 ### 2.1. 使用 Electron 的 API
@@ -165,7 +147,7 @@ const { BrowserWindow } = remote;
 const win = new BrowserWindow();
 ```
 
-### 2.2. 使用 Node.js 的 API
+### 3.2. 使用 Node.js 的 API
 
 Electron 同时对主进程和渲染进程暴露了 Node.js 所有的接口。 这里有两个重要的定义：
 
@@ -199,9 +181,9 @@ const S3 = require('aws-sdk/clients/s3');
 
 绝大多数的 Node.js 模块都不是原生的， 在 650000 个模块中只有 400 是原生的。
 
-## 3. electron 常用 api
+## 4. electron 常用 api
 
-### 3.1. app
+### 4.1. app
 
 主进程
 
@@ -212,17 +194,11 @@ app.on('window-all-closed', () => {
 })
 ```
 
-#### 3.1.1. 事件
+#### 4.1.1. 事件
 
 https://electronjs.org/docs/api/app#%E4%BA%8B%E4%BB%B6
 
-
-
-
-
-
-
-### 3.2. menu
+### 4.2. menu
 
 #### accelerator 快捷键
 
@@ -230,8 +206,7 @@ https://electronjs.org/docs/api/accelerator
 
 1. 快捷键可以包含多个功能键和一个键码的字符串，由符号+结合，用来定义你应用中的键盘快捷键
 
-
-## 4. 渲染进程和主进程
+## 5. 渲染进程和主进程
 
 Electron 运行 package.json 的 main 脚本的进程被称为主进程。 在主进程中运行的脚本通过创建 web 页面来展示用户界面。 一个 Electron 应用总是有且只有一个主进程。
 
@@ -248,7 +223,6 @@ Electron 运行 package.json 的 main 脚本的进程被称为主进程。 在�
 在页面中调用与 GUI 相关的原生 API 是不被允许的，因为在 web 页面里操作原生的 GUI 资源是非常危险的，而且容易造成资源泄露。 如果你想在 web 页面里使用 GUI 操作，其对应的渲染进程必须与主进程进行通讯，请求主进程进行相关的 GUI 操作。
 
 Electron 为主进程（ main process）和渲染器进程（renderer processes）通信提供了多种实现方式，如可以使用 ipcRenderer 和 ipcMain 模块发送消息，使用 remote 模块进行 RPC 方式通信
-
 
 ![渲染进程和主进程](images/ipcRenderer.png)
 
@@ -314,12 +288,36 @@ webContents.send
 通过主进程转发(Electron 5之前)  
 ipcRenderer.sendTo (Electron 5之后) 数据共享  
 
+窗口A的渲染进程发消息给主进程  
+
+```js
+ipcRenderer.send('imgUploadMain', {
+                id: dom.id,
+                siteId: this.siteId,
+                url: dom.src
+            });
+```
+
+主进程收到消息后，再发消息给窗口B的渲染进程  
+
+```js
+ipcMain.on('imgUploadMain', (event, message) => {
+  mainWindow.webContents.send('imgUploadMsgFromMain', message);
+});
+```
+
+窗口B渲染进程接收主进程消息的代码：  
+
+```js
+ipcRenderer.on('imgUploadMsgFromMain', (e, message) => this.imgUploadCb(message));
+```
+
 - 数据共享  
 
 Web 技术(localStorage、sessionStorage、indexedDB)  
 使用 remote  
 
-**注意**    
+**注意**  
 
 - 少用 remote 模块  
 - 不要用 sync 模式  
@@ -335,6 +333,94 @@ Web 技术(localStorage、sessionStorage、indexedDB)
 - Menu
 - dialog 
 - TouchBar
+
+#### 5.1.1. 关于窗口
+
+1. 禁止多开  
+
+```js
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) { app.quit()
+} else {
+app.on('second-instance', (event, commandLine, workingDirectory) => {
+// 当运行第二个实例时,将会聚焦到myWindow这个窗口
+showMainWindow() })
+app.on('ready', () => {...
+}) }
+```
+
+2. 窗口假关闭  
+
+- 用户点击窗口关闭按钮时候，应用只是隐藏   
+- 点击「退出应用」时才真正关闭窗口  
+
+#### 5.1.2. Menu/MenuItem(菜单/菜单项)
+
+1. 新建菜单
+
+```js
+const menu = new Menu()
+```
+
+2. 新建菜单项  
+
+```js
+const menuItem1 = new MenuItem({ label: '复制', role: 'copy' })
+const menuItem2 = new MenuItem({ label: '菜单项名', click: handler, enabled, visible,
+type: normal | separator | submenu | checkbox | radio,
+role: copy | paste | cut | quit | ... 
+})
+```
+
+3. 添加菜单项
+
+```js
+menu.append(menuItem1)
+menu.append(new MenuItem({ type: 'separator' })) 
+menu.append(menuItem2)
+```
+
+4. 弹出右键菜单
+
+```js
+menu.popup({ window: remote.getCurrentWindow() })
+```
+
+5. 设置应用菜单栏
+
+```js
+app.applicationMenu = appMenu;
+```
+
+#### 5.1.3. Tray(托盘)
+
+1. 方法  
+
+- 创建托盘  
+
+```js
+tray = new Tray('/path/to/my/icon')
+```
+Mac图片建议保留 1倍图(32 * 32)，2倍图@2x(64 * 64)   
+Windows使用ico格式   
+大部分Mac托盘都是偏黑色的、Windows则是彩色的 Mac  
+
+- 弹出托盘菜单
+
+```js
+const contextMenu = Menu.buildFromTemplate([ 
+  { label: '显示', click: () => {showMainWindow()}}, 
+  { label: '退出', role: 'quit'}}
+]) 
+tray.popUpContextMenu(contextMenu)
+```
+
+2. 事件  
+
+'click':点击托盘  
+'right-click':右击托盘  
+'drop-files':文件拖拽。类似的还有drop-text  
+'balloon-click':托盘气泡被点击(Windows特性)
 
 ### 5.2. 使用 Electron API 获得底层能力
 
@@ -356,8 +442,8 @@ crypto 进行加解密
 
 ### 5.4. 使用 Node.js 调用原生模块
 
-- node.js add-on 
-- node-ffi
+- node.js add-on  
+- node-ffi  
 
 ### 5.5. 调用 OS 能力
 
@@ -367,11 +453,49 @@ crypto 进行加解密
 
 ![Electron 的能力](images/ability.png)
 
+## 6. 开机自启动 [node-auto-launch](https://github.com/Teamwork/node-auto-launch)
 
+主进程main.js：  
 
-## 6. 打包
+```js
+const AutoLaunch = require('auto-launch');
+const demo = new AutoLaunch({
+    name: 'demo',
+    //path: '/Applications/Minecraft.app',
+});
+```
 
-### 6.1. [electron-builder](https://github.com/electron-userland/electron-builder)
+官方的范例里面写上了这个path。不写的话，是自动获取。写上的话，就是个固定的字符串。这个路径值很显然并不是固定的。
+
+加入开机启动项  
+
+```js
+demo.enable();
+```
+
+移除开机启动项  
+
+```js
+demo.disable();
+```
+
+检测开机启动项状态  
+
+```js
+demo.isEnabled().then(function(isEnabled){
+  if(isEnabled){
+    return;
+  }
+  //demo.enable();
+})
+.catch(function(err){
+  // handle error
+});
+```
+
+## 7. 打包
+
+### 7.1. [electron-builder](https://github.com/electron-userland/electron-builder)
 
 1. 在 package.json 应用程序中指定的标准字段 — name, description, version and author.
 
@@ -489,11 +613,11 @@ https://codeday.me/bug/20190129/597088.html
 
 ### 热更新
 
-## 7. 脚手架 electron-forge
+## 8. 脚手架 electron-forge
 
 https://juejin.im/post/5c46ab47e51d45522b4f55b1
 
-## 8. 集成c++
+## 9. 集成c++
 
 安装  
 
@@ -570,101 +694,70 @@ var addon = require("./build/Release/addon");
 console.log(addon.hello());
 ```
 
+## 10. 测试和调试
 
-## 9. 原生 GUI
-
-### 关于窗口
-
-1. 禁止多开  
+1. [spectron](https://www.electronjs.org/spectron)  
 
 ```js
-const gotTheLock = app.requestSingleInstanceLock()
-if (!gotTheLock) { app.quit()
-} else {
-app.on('second-instance', (event, commandLine, workingDirectory) => {
-// 当运行第二个实例时,将会聚焦到myWindow这个窗口
-showMainWindow() })
-app.on('ready', () => {...
-}) }
-```
+# Install Spectron
+$ npm install --save-dev spectron
 
-2. 窗口假关闭  
+// A simple test to verify a visible window is opened with a title
+var Application = require('spectron').Application
+var assert = require('assert')
 
-- 用户点击窗口关闭按钮时候，应用只是隐藏   
-- 点击「退出应用」时才真正关闭窗口  
+var app = new Application({
+  path: '/Applications/MyApp.app/Contents/MacOS/MyApp'
+})
 
-### 9.1. Menu/MenuItem(菜单/菜单项)
-
-1. 新建菜单
-
-```js
-const menu = new Menu()
-```
-
-2. 新建菜单项  
-
-```js
-const menuItem1 = new MenuItem({ label: '复制', role: 'copy' })
-const menuItem2 = new MenuItem({ label: '菜单项名', click: handler, enabled, visible,
-type: normal | separator | submenu | checkbox | radio,
-role: copy | paste | cut | quit | ... 
+app.start().then(function () {
+  // Check if the window is visible
+  return app.browserWindow.isVisible()
+}).then(function (isVisible) {
+  // Verify the window is visible
+  assert.equal(isVisible, true)
+}).then(function () {
+  // Get the window's title
+  return app.client.getTitle()
+}).then(function (title) {
+  // Verify the window's title
+  assert.equal(title, 'My App')
+}).then(function () {
+  // Stop the application
+  return app.stop()
+}).catch(function (error) {
+  // Log any failures
+  console.error('Test failed', error.message)
 })
 ```
 
-3. 添加菜单项
+2. [WebDriverJs](https://code.google.com/p/selenium/wiki/WebDriverJs)
 
 ```js
-menu.append(menuItem1)
-menu.append(new MenuItem({ type: 'separator' })) 
-menu.append(menuItem2)
+const webdriver = require('selenium-webdriver')
+const driver = new webdriver.Builder()
+  // "9515" 是ChromeDriver使用的端口
+  .usingServer('http://localhost:9515')
+  .withCapabilities({
+    chromeOptions: {
+      // 这里设置Electron的路径
+      binary: '/Path-to-Your-App.app/Contents/MacOS/Electron'
+    }
+  })
+  .forBrowser('electron')
+  .build()
+driver.get('http://www.google.com')
+driver.findElement(webdriver.By.name('q')).sendKeys('webdriver')
+driver.findElement(webdriver.By.name('btnG')).click()
+driver.wait(() => {
+  return driver.getTitle().then((title) => {
+    return title === 'webdriver - Google Search'
+  })
+}, 1000)
+driver.quit()
 ```
 
-4. 弹出右键菜单
-
-```js
-menu.popup({ window: remote.getCurrentWindow() })
-```
-
-5. 设置应用菜单栏
-
-```js
-app.applicationMenu = appMenu;
-```
-
-### 9.2. Tray(托盘)
-
-1. 方法  
-
-- 创建托盘  
-
-```js
-tray = new Tray('/path/to/my/icon')
-```
-Mac图片建议保留 1倍图(32 * 32)，2倍图@2x(64 * 64)   
-Windows使用ico格式   
-大部分Mac托盘都是偏黑色的、Windows则是彩色的 Mac  
-
-- 弹出托盘菜单
-
-```js
-const contextMenu = Menu.buildFromTemplate([ 
-  { label: '显示', click: () => {showMainWindow()}}, 
-  { label: '退出', role: 'quit'}}
-]) 
-tray.popUpContextMenu(contextMenu)
-```
-2. 事件  
-
-'click':点击托盘  
-'right-click':右击托盘   
-'drop-files':文件拖拽。类似的还有drop-text   
-'balloon-click':托盘气泡被点击(Windows特性)
-
-
-## 9. 测试和调试
-
-
-## Electron 开发过程中可能会遇到的几个问题和场景。
+## 11. Electron 开发过程中可能会遇到的几个问题和场景。
 
 - 启动时间优化  
 Electron 应用创建窗口之后，由于需要初始化窗口，加载 html，js 以及各种依赖，会出现一个短暂的白屏。除了传统的，比如说延迟 js 加载等 web 性能优化的方法，在 Electron 中还可以使用一种方式，就是在 close 窗口之前缓存 index 页面，下次再打开窗口的时候直接加载缓存好的页面，这样就会提前页面渲染的时间，缩短白屏时间。  
@@ -700,11 +793,10 @@ Electron在DevTools中的探索与实践
 之后，在基于 electron-builder 将应用 build 成不同平台的安装包，需要注意的是，对于 package.json，尽可能地把可以打包到 bundle 的依赖模块，从 dependencies 移到 devDependencies，因为所有 dependencies 中的模块都会被打到安装包中，会严重增大安装包体积。
 
 
-## 10. Electron客户端的安全：从xss到rce
+## 12. Electron客户端的安全：从xss到rce
 
 
-
-## Electron无边框窗口（最小化、最大化、关闭、拖动）以及动态改变窗口大小
+## 13. Electron无边框窗口（最小化、最大化、关闭、拖动）以及动态改变窗口大小
 
 ### 方法1
 

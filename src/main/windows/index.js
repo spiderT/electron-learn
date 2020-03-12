@@ -45,8 +45,8 @@ function createWindow() {
     win.loadFile(path.resolve('./dist/index.html'))
   }
 
-  // 打开开发者工具
-  win.webContents.openDevTools()
+  // // 打开开发者工具
+  // win.webContents.openDevTools()
 
 
   // 打开对话框事件dialog
@@ -78,8 +78,6 @@ function createWindow() {
       console.log('filePath', filePath);
       event.sender.send('read-file', {data: filePath})
       })
-    }).catch(err => {
-      console.log(err)
     })
 }
 

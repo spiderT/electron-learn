@@ -49,6 +49,7 @@
     "ws": "^7.2.1"
   },
   "dependencies": {
+    "auto-launch": "^5.0.5",
     "file-loader": "^5.0.2",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",

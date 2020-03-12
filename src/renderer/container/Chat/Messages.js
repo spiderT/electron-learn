@@ -8,6 +8,9 @@ import {msgBody} from '../../utils';
 const { ipcRenderer, clipboard }= require('electron');
 const path = require('path');
 
+// fix warning: possible EventEmitter memory leak detected. 11 request listeners added. Use emitter.setMaxListeners() to increase limit.
+ipcRenderer.setMaxListeners(100);
+
 function render(msgData) {
     const container = [];
     if(msgData && msgData.length){

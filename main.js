@@ -10,6 +10,33 @@ const {
 } = require('./src/main/windows');
 const path = require('path');
 
+// 开机自启动
+const AutoLaunch = require('auto-launch');
+ 
+const minecraftAutoLauncher = new AutoLaunch({
+    name: 'spiderChat',
+    // path: '/Applications/spiderChat.app',
+});
+ 
+// 加入开机启动项
+minecraftAutoLauncher.enable();
+ 
+// 移除开机启动项
+//minecraftAutoLauncher.disable();
+ 
+// 检测开机启动项状态
+minecraftAutoLauncher.isEnabled()
+.then(function(isEnabled){
+    if(isEnabled){
+        return;
+    }
+    minecraftAutoLauncher.enable();
+})
+.catch(function(err){
+    // handle error
+});
+
+
 app.whenReady().then(() => {
   setAppMenu()
   app.dock.setIcon(path.join(__dirname, './src/resources/images/zhizhuxia_big.png'));
@@ -21,7 +48,8 @@ if (!gotTheLock) {
   app.quit()
 } else {
   app.on('second-instance', show)
-  app.on('ready', setTray)
+  // app.on('ready', setTray)
+  app.on('ready', createWindow)
   app.on('before-quit', close)
-  app.on('activate', createWindow)
+  // app.on('activate', createWindow)
 }
