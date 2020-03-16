@@ -3,6 +3,11 @@ const {
     clipboard,
     nativeImage
 } = require('electron');
+
+ipcRenderer.on('paste-from-clipboard', (e)=>{
+    console.log('paste-form-clipboard');
+    ipcRenderer.send('paste-from-clipboard-capwin')
+})
 class Draw {
     constructor(screenImgUrl, bg, screenWidth, screenHeight, rect, sizeInfo, toolbar) {
         this.screenImgUrl = screenImgUrl
@@ -188,7 +193,7 @@ class Draw {
         clipboard.writeImage(nativeImage.createFromDataURL(dataUrl));
 
         // todo 成功后，粘贴到输入框
-        this.sendMsg('paste', dataUrl)
+        this.sendMsg('paste')
         console.log('paste11')
 
         this.destroy({

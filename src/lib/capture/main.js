@@ -57,8 +57,8 @@ function createCaptureWindow() {
 
     capWin.loadFile(path.join(__dirname, './index.html'))
 
-    // // 打开开发者工具
-    // capWin.webContents.openDevTools()
+    // 打开开发者工具
+    capWin.webContents.openDevTools()
 
     capWin.on('closed', () => {
         capWin = null
@@ -80,8 +80,7 @@ ipcMain.on('clip-page', (event, {
         }
     }else if(type === 'paste'){
         console.log('paste22')
-        // todo 没有生效
-        event.sender.send('paste-from-clipboard', {data: msg});
+        event.sender.send('paste-from-clipboard');
     }
 })
 

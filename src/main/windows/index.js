@@ -11,8 +11,7 @@ const {
 } = require('../../lib/capture/main');
 
 function createWindow() {
-  // 初始化截图
-  createShortcut()
+ 
 
   // 创建浏览器窗口
   win = new BrowserWindow({
@@ -26,6 +25,9 @@ function createWindow() {
     titleBarStyle: 'hiddenInset',
     show: false // 先隐藏
   })
+
+   // 初始化截图
+   createShortcut()
   
 
   win.on('ready-to-show', () => win.show()) // 初始化后显示
@@ -50,7 +52,7 @@ function createWindow() {
 
 
   // 打开对话框事件dialog
-  ipcMain.on('open-directory-dialog', function (event) {
+  ipcMain.on('open-directory-dialog',  (event) => {
     dialog.showOpenDialog({
       // properties String -包含对话框应用的功能。支持以下值:
       // openFile - 允许选择文件
@@ -79,7 +81,14 @@ function createWindow() {
       event.sender.send('read-file', {data: filePath})
       })
     })
+
+    ipcMain.on('paste-from-clipboard-capwin', (event) => {
+      console.log('paste-from-clipboard-capwin')
+      event.sender.send('paste-from-clipboard-mainwin')
+    })
 }
+
+
 
 function show() {
   win.show()

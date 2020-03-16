@@ -173,8 +173,9 @@ export default function Messages() {
 	    }
     }
 
-    ipcRenderer.on('paste-from-clipboard', (e, {data})=>{
-        console.log('paste-form-clipboard', data);
+    ipcRenderer.on('paste-from-clipboard-mainwin', (e)=>{
+        console.log('paste-from-clipboard-mainwin');
+        handlePaste(e);
     })
 
     return (
