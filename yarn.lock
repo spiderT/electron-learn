@@ -329,9 +329,9 @@ acorn-walk@^6.1.1:
   integrity sha1-Ejy487hMIXHx9/slJhWxx4prGow=
 
 acorn@^6.0.7, acorn@^6.2.1:
-  version "6.4.0"
-  resolved "https://registry.npm.taobao.org/acorn/download/acorn-6.4.0.tgz#b659d2ffbafa24baf5db1cdbb2c94a983ecd2784"
-  integrity sha1-tlnS/7r6JLr12xzbsslKmD7NJ4Q=
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.1.tgz#531e58ba3f51b9dacb9a6646ca4debf5b14ca474"
+  integrity sha512-ZVA9k326Nwrj3Cj9jlh3wGFutC2ZornPNARZwsNYqQYgN0EsV2d53w5RN/co65Ohn4sUAUtb1rSUAOD6XN9idA==
 
 ajv-errors@^1.0.0:
   version "1.0.1"
@@ -484,6 +484,11 @@ app-builder-lib@~22.3.2:
     semver "^7.1.3"
     temp-file "^3.3.6"
 
+applescript@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/applescript/download/applescript-1.0.0.tgz#bb87af568cad034a4e48c4bdaf6067a3a2701317"
+  integrity sha1-u4evVoytA0pOSMS9r2Bno6JwExc=
+
 aproba@^1.0.3, aproba@^1.1.1:
   version "1.2.0"
   resolved "https://registry.npm.taobao.org/aproba/download/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
@@ -631,6 +636,17 @@ atob@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
+
+auto-launch@^5.0.5:
+  version "5.0.5"
+  resolved "https://registry.npm.taobao.org/auto-launch/download/auto-launch-5.0.5.tgz#d14bd002b1ef642f85e991a6195ff5300c8ad3c0"
+  integrity sha1-0UvQArHvZC+F6ZGmGV/1MAyK08A=
+  dependencies:
+    applescript "^1.0.0"
+    mkdirp "^0.5.1"
+    path-is-absolute "^1.0.0"
+    untildify "^3.0.2"
+    winreg "1.2.4"
 
 autoprefixer@^9.6.1:
   version "9.7.4"
@@ -2888,10 +2904,10 @@ electron-to-chromium@^1.3.349, electron-to-chromium@^1.3.47:
   resolved "https://registry.npm.taobao.org/electron-to-chromium/download/electron-to-chromium-1.3.361.tgz#a820bf52da171c0024314745462cfe0dc944373e"
   integrity sha1-qCC/UtoXHAAkMUdFRiz+DclENz4=
 
-electron@6:
-  version "6.1.8"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-6.1.8.tgz?cache=0&sync_timestamp=1582718112392&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron%2Fdownload%2Felectron-6.1.8.tgz#5bc8e4db4f860526f9a98db00597a6fc7c57ecea"
-  integrity sha1-W8jk20+GBSb5qY2wBZem/HxX7Oo=
+electron@^6.1.9:
+  version "6.1.9"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-6.1.9.tgz#4f28c4bdd0cdfd427ea98ce6ad02f303638f7b1f"
+  integrity sha1-TyjEvdDN/UJ+qYzmrQLzA2OPex8=
   dependencies:
     "@types/node" "^10.12.18"
     electron-download "^4.1.0"
@@ -3235,6 +3251,11 @@ extsprintf@^1.2.0:
   version "1.4.0"
   resolved "https://registry.npm.taobao.org/extsprintf/download/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
+
+fast-deep-equal@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.npm.taobao.org/fast-deep-equal/download/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
+  integrity sha1-ewUhjd+WZ79/Nwv3/bLLFf3Qqkk=
 
 fast-deep-equal@^3.1.1:
   version "3.1.1"
@@ -6319,7 +6340,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.6.2:
+prop-types@^15.6.2, prop-types@^15.7.1:
   version "15.7.2"
   resolved "https://registry.npm.taobao.org/prop-types/download/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha1-UsQedbjIfnK52TYOAga5ncv/psU=
@@ -6482,6 +6503,14 @@ rc@^1.2.1, rc@^1.2.8:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-contenteditable@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.npm.taobao.org/react-contenteditable/download/react-contenteditable-3.3.3.tgz#73ea271a0e84d54516e6075c318d4372e5b95c70"
+  integrity sha1-c+onGg6E1UUW5gdcMY1DcuW5XHA=
+  dependencies:
+    fast-deep-equal "^2.0.1"
+    prop-types "^15.7.1"
 
 react-dom@^16.12.0:
   version "16.12.0"
@@ -7890,6 +7919,11 @@ unset-value@^1.0.0:
     has-value "^0.3.1"
     isobject "^3.0.0"
 
+untildify@^3.0.2:
+  version "3.0.3"
+  resolved "https://registry.npm.taobao.org/untildify/download/untildify-3.0.3.tgz#1e7b42b140bcfd922b22e70ca1265bfe3634c7c9"
+  integrity sha1-HntCsUC8/ZIrIucMoSZb/jY0x8k=
+
 upath@^1.1.1:
   version "1.2.0"
   resolved "https://registry.npm.taobao.org/upath/download/upath-1.2.0.tgz#8f66dbcd55a883acdae4408af8b035a5044c1894"
@@ -8258,6 +8292,11 @@ widest-line@^3.1.0:
   dependencies:
     string-width "^4.0.0"
 
+winreg@1.2.4:
+  version "1.2.4"
+  resolved "https://registry.npm.taobao.org/winreg/download/winreg-1.2.4.tgz#ba065629b7a925130e15779108cf540990e98d1b"
+  integrity sha1-ugZWKbepJRMOFXeRCM9UCZDpjRs=
+
 worker-farm@^1.7.0:
   version "1.7.0"
   resolved "https://registry.npm.taobao.org/worker-farm/download/worker-farm-1.7.0.tgz#26a94c5391bbca926152002f69b84a4bf772e5a8"
@@ -8312,6 +8351,11 @@ ws@^6.0.0, ws@^6.2.1:
   integrity sha1-RC/fCkftZPWbal2P8TD0dI7VJPs=
   dependencies:
     async-limiter "~1.0.0"
+
+ws@^7.2.1:
+  version "7.2.3"
+  resolved "https://registry.npm.taobao.org/ws/download/ws-7.2.3.tgz#a5411e1fb04d5ed0efee76d26d5c46d830c39b46"
+  integrity sha1-pUEeH7BNXtDv7nbSbVxG2DDDm0Y=
 
 xdg-basedir@^4.0.0:
   version "4.0.0"
