@@ -5,8 +5,8 @@ const Image = (props) => {
   const content = props.content;
   return (
           <span className='msg-text' >
-             {/* <img src={require(`${content ? content : '../../../../upload/default.png'}`)} /> */}
-             <img src={require(`../../../../upload/default.png`)} />
+             {/* base64格式图片 */}
+             <img src={content} />
           </span>
   );
 };

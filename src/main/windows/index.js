@@ -3,6 +3,8 @@ const {
 } = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
+const fs = require('fs');
+const mineType = require('mime-types');
 
 let win;
 let willQuiteApp = false;
@@ -78,7 +80,12 @@ function createWindow() {
       }
       const filePath = filePaths[0];
       console.log('filePath', filePath);
-      event.sender.send('read-file', {data: filePath})
+      let data = fs.readFileSync(filePath);
+      data = new Buffer.from(data).toString('base64');
+      const base64 = 'data:' + mineType.lookup(filePath) + ';base64,' + data;
+
+      //  读取一个文件的base64格式
+      event.sender.send('read-file', {data: base64})
       })
     })
 

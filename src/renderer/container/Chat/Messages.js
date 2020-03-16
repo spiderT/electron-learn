@@ -122,7 +122,6 @@ export default function Messages() {
 
     // 获取选中的文件
     ipcRenderer.on('read-file',(e, {data})=>{
-        console.log('read-filedata', data);
         // todo 发送出去
         socket.send(data);
         msgData.push(msgBody(3, data, 'me', 'zhizhuxia'))
