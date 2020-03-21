@@ -9,7 +9,7 @@ function ListItem(user) {
                 <p className="name">{user.name}</p>
                 <p className="message">{`您已添加了${user.name}，现在可以开始聊天了。`}</p>
             </div>
-            <div className="time">02/20/23</div>
+            <div className="time">20/03/21</div>
         </div>
     )
 }
