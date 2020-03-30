@@ -426,12 +426,77 @@ tray.popUpContextMenu(contextMenu)
 
 ### 5.2. 使用 Electron API 获得底层能力
 
-- clipboard 
-- screen 
-- globalShortcut 
-- desktopCapture 
-- shell 
-- powerMonitor
+#### 5.2.1. clipboard 
+
+系统快捷键，监听键盘事件  
+
+globalShortcut 模块可以在操作系统中注册/注销全局快捷键, 以便可以为操作定制各种快捷键。  
+
+>注意: 快捷方式是全局的; 即使应用程序没有键盘焦点, 它也仍然在持续监听键盘事件。 在应用程序模块发出 ready  事件之前, 不应使用此模块。
+
+```js
+const { app, globalShortcut } = require('electron')
+
+app.on('ready', () => {
+  // 注册一个 'CommandOrControl+X' 的全局快捷键
+  const ret = globalShortcut.register('CommandOrControl+X', () => {
+    console.log('CommandOrControl+X is pressed')
+  })
+
+  if (!ret) {
+    console.log('registration failed')
+  }
+
+  // 检查快捷键是否注册成功
+  console.log(globalShortcut.isRegistered('CommandOrControl+X'))
+})
+
+app.on('will-quit', () => {
+  // 注销快捷键
+  globalShortcut.unregister('CommandOrControl+X')
+
+  // 注销所有快捷键
+  globalShortcut.unregisterAll()
+})
+
+```
+
+#### 5.2.2. screen 
+
+#### 5.2.3. globalShortcut 
+
+#### 5.2.4. desktopCapture 
+
+#### 5.2.5. shell 
+
+使用默认应用程序管理文件和 url。  
+
+shell 模块提供与桌面集成相关的功能。  
+
+在用户的默认浏览器中打开 URL 的示例:  
+
+```js
+const { shell } = require('electron')
+
+shell.openExternal('https://github.com')
+
+```
+
+##### 方法
+
+shell.showItemInFolder(fullPath)  
+fullPath String  
+在文件管理器中显示给定的文件。如果可以, 选中该文件。  
+
+shell.openItem(fullPath)   
+fullPath String  
+返回 Boolean - 文件是否成功打开,以桌面的默认方式打开给定的文件。    
+
+shell.beep()  
+播放哔哔的声音.  
+
+
+#### 5.2.6. powerMonitor
 
 ### 5.3. 使用 Node.js 获得底层能力
 
