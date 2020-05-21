@@ -30,10 +30,10 @@
     "babel-preset-stage-1": "^6.24.1",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.4.2",
-    "electron": "^6.1.9",
-    "electron-builder": "^22.2.0",
+    "electron": "^9.0.0",
+    "electron-builder": "^22.6.1",
     "electron-fix": "^1.1.2",
-    "electron-is-dev": "^1.1.0",
+    "electron-is-dev": "^1.2.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
@@ -68,12 +68,12 @@
   "build": {
     "appId": "1234",
     "mac": {
-      "category": "music",
+      "category": "spider",
       "icon": "./resources/images/spider.icns"
     },
     "dmg": {
-      "title": "music",
-      "artifactName": "music",
+      "title": "spider",
+      "artifactName": "spider",
       "icon": "./resources/images/spider.icns",
       "iconSize": 150
     }
