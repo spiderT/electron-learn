@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.scss';
 import MsgRender from '../../components/Message';
 import EmojiPackage from '../../components/EmojiPackage';
@@ -14,7 +14,7 @@ ipcRenderer.setMaxListeners(100);
 function render(msgData) {
   const container = [];
   if (msgData && msgData.length) {
-    msgData.map(item => {
+    msgData.map((item) => {
       container.push(MsgRender(item));
     });
   }
@@ -23,15 +23,20 @@ function render(msgData) {
 
 const originData = [
   msgBody(2, '10:29', 'zhizhuxia', 'me'),
-  msgBody(1, '你好，我是蜘蛛侠，很高兴认识你。命运无可掌控，充满了无奈、未知，然而，我依然要走下去。', 'zhizhuxia', 'me'),
+  msgBody(
+    1,
+    '你好，我是蜘蛛侠，很高兴认识你。命运无可掌控，充满了无奈、未知，然而，我依然要走下去。',
+    'zhizhuxia',
+    'me'
+  ),
   msgBody(1, '我也很高兴认识你。', 'me', 'zhizhuxia'),
 ];
 
 const socket = new WebSocket('ws://localhost:8080/ws');
-socket.onopen = function(event) {
+socket.onopen = function (event) {
   console.log('onopen');
 };
-socket.onclose = function(event) {
+socket.onclose = function (event) {
   console.log('onclose');
 };
 
@@ -42,9 +47,21 @@ export default function Messages() {
   const contentEditable = React.createRef();
   const [html, setHtml] = useState('');
 
-  socket.onmessage = function(event) {
+  useEffect(() => {
+    // 获取选中的文件
+    ipcRenderer.on('read-file', (e, { data }) => {
+      // 发送出去
+      socket.send(data);
+      msgData.push(msgBody(3, data, 'me', 'zhizhuxia'));
+      setMsgData(msgData);
+      // 解决 收到消息，聊天区域没有及时渲染
+      setHtml(html + '   ');
+    });
+  }, [msgData]);
+
+  socket.onmessage = function (event) {
     const data = event.data;
-    console.log('onmessage', data);
+    // console.log('onmessage', data);
     if (!data || !data.startsWith('spider->')) {
       return;
     }
@@ -63,7 +80,7 @@ export default function Messages() {
 
     const chatNotication = new Notification(option.title, option);
 
-    chatNotication.onClick = function() {
+    chatNotication.onClick = function () {
       console.log('chatNotication.onClick');
     };
 
@@ -90,22 +107,26 @@ export default function Messages() {
   }
 
   // 聊天内容向上滚动到可见区域
-  function scrollToView(){
-      const msgBoxEle = document.getElementsByClassName('msg-box')[0];
-      setTimeout(function () {
-          (msgBoxEle.lastChild).scrollIntoView();
-      },100);
+  function scrollToView() {
+    const msgBoxEle = document.getElementById('msg-box');
+    const msgChildNodes = msgBoxEle.childNodes;
+    const len = msgChildNodes.length;
+    // 因为加了一个‘’dom
+    const lastChildEle = msgChildNodes[len - 2];
+    setTimeout(function () {
+      lastChildEle.scrollIntoView();
+    }, 100);
   }
 
   function handleKeyDown(e) {
     if (e.keyCode === 13 || e.which === 13) {
       e.preventDefault();
-      
+
       if (!html || !window.WebSocket) {
         return;
       }
       if (socket.readyState === WebSocket.OPEN) {
-          // 判断发送文本，还是图片
+        // 判断发送文本，还是图片
         if (html.includes('<img src')) {
           let imgSrc = getSrcFromImg(html);
           msgData.push(msgBody(3, imgSrc, 'me', 'zhizhuxia'));
@@ -117,7 +138,7 @@ export default function Messages() {
         setMsgData(msgData);
         // 发送结束后清空输入框
         setHtml('');
-       
+
         scrollToView();
       } else {
         console.log('连接没有开启.');
@@ -129,14 +150,6 @@ export default function Messages() {
   function uploadFile() {
     ipcRenderer.send('open-directory-dialog', 'openDirectory');
   }
-
-  // 获取选中的文件
-  ipcRenderer.on('read-file', (e, { data }) => {
-    // todo 发送出去
-    socket.send(data);
-    msgData.push(msgBody(3, data, 'me', 'zhizhuxia'));
-    setMsgData(msgData);
-  });
 
   function showEmoji() {
     toggleShowEmoji(!isShowEmoji);
@@ -155,6 +168,12 @@ export default function Messages() {
     setHtml(e.target.value);
   }
 
+  function handlePasteFromIpc(arg) {
+    console.log('handlePasteFromIpc');
+    const eleHtml = `${html}<img src='${arg}'/>`;
+    setHtml(eleHtml);
+  }
+
   function handlePaste(e) {
     const cbd = e.clipboardData;
     if (!(e.clipboardData && e.clipboardData.items)) {
@@ -170,7 +189,7 @@ export default function Messages() {
         const reader = new FileReader();
         const imgs = new Image();
         imgs.file = blob;
-        reader.onload = e => {
+        reader.onload = (e) => {
           const imgPath = e.target.result;
           imgs.src = imgPath;
           const eleHtml = `${html}<img src='${imgPath}'/>`;
@@ -181,29 +200,37 @@ export default function Messages() {
     }
   }
 
-  ipcRenderer.on('paste-from-clipboard-mainwin', e => {
+  ipcRenderer.on('paste-from-clipboard-mainwin', (e, arg) => {
     console.log('paste-from-clipboard-mainwin');
-    handlePaste(e);
+    handlePasteFromIpc(arg);
   });
 
   return (
     <div>
       <div className="message-wrap">
-        <div className="msg-box" ref={msgBox}>
-          {render(msgData)}
-        </div>
-      </div>
+        <div id="msg-box" className="msg-box" ref={msgBox}>
+          {' '}
+          {render(msgData)}{' '}
+        </div>{' '}
+      </div>{' '}
       <div className="edit-wrap">
-        {isShowEmoji && <EmojiPackage sendEmoji={sendEmoji} />}
+        {' '}
+        {isShowEmoji && <EmojiPackage sendEmoji={sendEmoji} />}{' '}
         <div className="edit-tool">
-          <span className="face" onClick={showEmoji}></span>
-          <span className="file" onClick={uploadFile}></span>
-          <span className="screenshot" onClick={captureScreen}></span>
-          {/* // 以下功能暂时不开发 */}
-          <span className="messages"></span>
-          <span className="video"></span>
-          <span className="phone"></span>
-        </div>
+          <span className="face" onClick={showEmoji}>
+            {' '}
+          </span>{' '}
+          <span className="file" onClick={uploadFile}>
+            {' '}
+          </span>{' '}
+          <span className="screenshot" onClick={captureScreen}>
+            {' '}
+          </span>{' '}
+          {/* // 以下功能暂时未开发 */}{' '}
+          {/* <span className="messages disabled"></span>
+                <span className="video disabled"></span>
+                <span className="phone disabled"></span> */}{' '}
+        </div>{' '}
         <ContentEditable
           innerRef={contentEditable}
           html={html}
@@ -213,8 +240,8 @@ export default function Messages() {
           onKeyDown={handleKeyDown}
           tagName="article"
           onPaste={handlePaste}
-        />
-      </div>
+        />{' '}
+      </div>{' '}
     </div>
   );
 }

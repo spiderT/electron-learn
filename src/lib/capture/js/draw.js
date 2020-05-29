@@ -4,9 +4,8 @@ const {
     nativeImage
 } = require('electron');
 
-ipcRenderer.on('paste-from-clipboard', (e)=>{
-    console.log('paste-form-clipboard');
-    ipcRenderer.send('paste-from-clipboard-capwin')
+ipcRenderer.on('paste-from-clipboard', (e, arg)=>{
+    ipcRenderer.send('paste-from-clipboard-capwin', arg)
 })
 class Draw {
     constructor(screenImgUrl, bg, screenWidth, screenHeight, rect, sizeInfo, toolbar) {
@@ -190,10 +189,11 @@ class Draw {
     done(e) {
         //写入图片到剪贴板
         const dataUrl = this.selectRectMeta.base64Data;
-        clipboard.writeImage(nativeImage.createFromDataURL(dataUrl));
+        const img = nativeImage.createFromDataURL(dataUrl)
+        clipboard.writeImage(img);
 
         // todo 成功后，粘贴到输入框
-        this.sendMsg('paste')
+        this.sendMsg('paste', dataUrl)
         console.log('paste11')
 
         this.destroy({
@@ -204,7 +204,7 @@ class Draw {
     sendMsg(type, msg) {
         ipcRenderer.send('clip-page', {
             type,
-            message: msg
+            msg
         })
     }
 

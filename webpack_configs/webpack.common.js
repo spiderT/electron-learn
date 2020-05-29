@@ -61,6 +61,16 @@ var appConfig = {
       }
     },
     {
+      test: /.jsx$/,
+      exclude: /node_modules/,
+      loader: 'babel-loader',
+      options: {
+        presets: [
+          'react'
+        ],
+      }
+    },
+    {
       test: /\.html$/,
       loader: 'html-loader'
     }, {

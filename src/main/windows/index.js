@@ -89,9 +89,9 @@ function createWindow() {
       })
     })
 
-    ipcMain.on('paste-from-clipboard-capwin', (event) => {
+    ipcMain.on('paste-from-clipboard-capwin', (event, arg) => {
       console.log('paste-from-clipboard-capwin')
-      event.sender.send('paste-from-clipboard-mainwin')
+      win.webContents.send('paste-from-clipboard-mainwin', arg)
     })
 }
 

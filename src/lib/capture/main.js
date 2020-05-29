@@ -75,12 +75,15 @@ ipcMain.on('clip-page', (event, {
 }) => {
     if (type === 'close') {
         if (capWin) {
-            capWin.close()
-            capWin = null
+            // 解决图片自动粘贴问题
+            setTimeout(function(){
+                capWin.close()
+                capWin = null
+            },0)
         }
     }else if(type === 'paste'){
         console.log('paste22')
-        event.sender.send('paste-from-clipboard');
+        event.sender.send('paste-from-clipboard', msg);
     }
 })
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.scss';
-import Messages from './Messages';
+import Messages from './Messages.jsx';
 
 export default function ChatContainer() {
 
