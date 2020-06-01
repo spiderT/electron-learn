@@ -46,6 +46,8 @@ class Draw {
         this.destroy = this.destroy.bind(this)
         this.done = this.done.bind(this)
         this.sendMsg = this.sendMsg.bind(this)
+        this.handleClose = this.handleClose.bind(this)
+        this.handlePaste = this.handlePaste.bind(this)
 
         //初始化toolbar事件
         this.initToolBarEvent()
@@ -182,7 +184,8 @@ class Draw {
 
     //关闭按钮
     destroy(data) {
-        this.sendMsg('close', data)
+        // this.sendMsg('close', data)
+        this.handleClose(data);
     }
 
     //check按钮的动作
@@ -193,12 +196,24 @@ class Draw {
         clipboard.writeImage(img);
 
         // todo 成功后，粘贴到输入框
-        this.sendMsg('paste', dataUrl)
+        // this.sendMsg('paste', dataUrl)
+        this.handlePaste(dataUrl)
         console.log('paste11')
 
         this.destroy({
             base64: dataUrl
         });
+    }
+
+    handleClose(msg){
+       ipcRenderer.send('clip-page', {
+            type: 'close',
+            msg
+        }) 
+    }
+
+    handlePaste(msg){
+        ipcRenderer.sendTo(1, 'clip-page-clipboard', msg)
     }
 
     sendMsg(type, msg) {

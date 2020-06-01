@@ -22,14 +22,15 @@ function render(msgData) {
 }
 
 const originData = [
-  msgBody(2, '10:29', 'zhizhuxia', 'me'),
+  msgBody(2, '10:29', 'zhizhuxia', 'me', 11),
   msgBody(
     1,
     '你好，我是蜘蛛侠，很高兴认识你。命运无可掌控，充满了无奈、未知，然而，我依然要走下去。',
     'zhizhuxia',
-    'me'
+    'me',
+    12
   ),
-  msgBody(1, '我也很高兴认识你。', 'me', 'zhizhuxia'),
+  msgBody(1, '我也很高兴认识你。', 'me', 'zhizhuxia', 13),
 ];
 
 const socket = new WebSocket('ws://localhost:8080/ws');
@@ -75,7 +76,7 @@ export default function Messages() {
     const option = {
       title: 'spider',
       body: value,
-      icon: path.resolve(__dirname, '../../../resources/images/zhizhuxia.png'),
+      icon:  '/images/zhizhuxia.png',
     };
 
     const chatNotication = new Notification(option.title, option);
@@ -102,7 +103,6 @@ export default function Messages() {
     const srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i; // 匹配图片中的src
     const arr = str.match(imgReg); //筛选出所有的img
     const src = arr[0].match(srcReg);
-    console.log('src[1]', src[1]);
     return src[1];
   }
 
@@ -202,6 +202,11 @@ export default function Messages() {
 
   ipcRenderer.on('paste-from-clipboard-mainwin', (e, arg) => {
     console.log('paste-from-clipboard-mainwin');
+    handlePasteFromIpc(arg);
+  });
+  // 'clip-page-clipboard'
+  ipcRenderer.on('clip-page-clipboard', (e, arg) => {
+    console.log('clip-page-clipboard');
     handlePasteFromIpc(arg);
   });
 

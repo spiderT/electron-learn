@@ -4,12 +4,12 @@
  * fromId 消息发送方
  * toId 消息接收方
  */
-export function msgBody(type, content, fromId, toId) {
+export function msgBody(type, content, fromId, toId, id) {
   return {
     type,
     content,
     fromId,
     toId,
-    id: new Date().getTime(),
+    id: id || new Date().getTime(),
   }
 }

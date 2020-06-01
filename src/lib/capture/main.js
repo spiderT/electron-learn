@@ -33,7 +33,9 @@ function createCaptureWindow() {
     } = screen.getPrimaryDisplay().workAreaSize
     capWin = new BrowserWindow({
         // window 使用 fullscreen,  mac 设置为 undefined, 不可为 false
-        fullscreen: process.platform !== 'darwin' || undefined, // win
+        // fullscreen: process.platform !== 'darwin' || undefined, // win
+        // fullscreen: true,
+        simpleFullscreen: true,
         width,
         height,
         x: 0,
@@ -46,6 +48,7 @@ function createCaptureWindow() {
         resizable: false,
         enableLargerThanScreen: true, // mac
         hasShadow: false,
+        alwaysOnTop: true,
         webPreferences: {
             nodeIntegration: true,
         }
@@ -53,12 +56,15 @@ function createCaptureWindow() {
 
     capWin.setAlwaysOnTop(true, 'screen-saver') // mac
     capWin.setVisibleOnAllWorkspaces(true) // mac
-    capWin.setFullScreenable(false) // mac
+    // capWin.setFullScreenable(false) // mac
+    capWin.setSimpleFullScreen(true) // mac
 
     capWin.loadFile(path.join(__dirname, './index.html'))
 
     // // 打开开发者工具
-    // capWin.webContents.openDevTools()
+    capWin.webContents.openDevTools()
+    console.log('capWin.id', capWin.id);
+
 
     capWin.on('closed', () => {
         capWin = null

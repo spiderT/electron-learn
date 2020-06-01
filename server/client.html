@@ -37,6 +37,7 @@
 			}
 			if (socket.readyState == WebSocket.OPEN) {
 				socket.send(message);
+				document.getElementById('message-input').value='';
 			} else {
 				alert("连接没有开启.");
 			}
@@ -46,7 +47,7 @@
 		<h3>WebSocket 聊天室：</h3>
 		<textarea id="responseText" style="width: 500px; height: 300px;"></textarea>
 		<br>
-		<input type="text" name="message" style="width: 300px" value="">
+		<input type="text" name="message" id="message-input" style="width: 300px" value="">
 		<input type="button" value="发送消息" onclick="send('spider->'+this.form.message.value)">
 		<input type="button" onclick="javascript:document.getElementById('responseText').value=''" 
 			value="清空聊天记录">

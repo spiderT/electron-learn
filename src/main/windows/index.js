@@ -25,7 +25,8 @@ function createWindow() {
     minWidth: 800,
     minHeight: 600,
     titleBarStyle: 'hiddenInset',
-    show: false // 先隐藏
+    show: false, // 先隐藏
+    icon: path.join(__dirname, '../../resources/images/zhizhuxia.png'),
   })
 
    // 初始化截图
@@ -52,6 +53,7 @@ function createWindow() {
   // // 打开开发者工具
   // win.webContents.openDevTools()
 
+  console.log('win.id', win.id);
 
   // 打开对话框事件dialog
   ipcMain.on('open-directory-dialog',  (event) => {
