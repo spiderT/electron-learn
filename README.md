@@ -23,16 +23,16 @@ git clone https://github.com/spiderT/electron-learn.git
 cd electron-learn
 npm install
 
+// 启动websocket模拟聊天
+cd ws_server
+node index.js
+// 以live server的方式打开client.html，就可以愉快的聊天了
+
 // 启动react，webpack打包
 npm start
 
 // 启动electron
 npm run electron
-
-// 启动websocket模拟聊天
-cd server
-node index.js
-// 以live server的方式打开client.html，就可以愉快的聊天了
 
 ```
 
@@ -55,9 +55,15 @@ remote https://juejin.im/post/5d4b79a3e51d4561b072dcb0
  https://www.electronjs.org/docs/api/crash-reporter  
  https://www.bookstack.cn/read/electron-v5/61.md  
 
-5. debugger https://cloud.tencent.com/developer/section/1116142  
+5. debugger https://cloud.tencent.com/developer/section/1116142   
 
-6. 测试和调试 https://www.bookstack.cn/read/electron-v6.0-zh/dda8a7a000404b49.md
+6. 测试和调试 https://www.bookstack.cn/read/electron-v6.0-zh/dda8a7a000404b49.md  
+
+7. [Electron的主进程阻塞导致UI卡顿的问题](https://zhuanlan.zhihu.com/p/37050595)  
+
+[Electron 进程间通讯详解](https://www.iguan7u.cn/2019/06/30/Electron-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E8%AE%AF%E8%AF%A6%E8%A7%A3/#1-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B8%BA%E4%BD%95%E4%BC%9A%E5%87%BA%E7%8E%B0%E5%8D%A1%E9%A1%BF%EF%BC%9F)   
+
+8. 
 
 ## 2. electron相关软件安装
 
@@ -496,7 +502,12 @@ shell.beep()
 播放哔哔的声音.  
 
 
-#### 5.2.6. powerMonitor
+#### 5.2.6. powerMonitor 电源监视器
+
+> 监视电源状态的改变。  
+
+https://www.electronjs.org/docs/api/power-monitor
+
 
 ### 5.3. 使用 Node.js 获得底层能力
 
@@ -676,7 +687,9 @@ electron_mirror=http://npm.taobao.org/mirrors/electron/
 
 ### 热重载
 
-https://codeday.me/bug/20190129/597088.html
+[electron-reload](https://www.npmjs.com/package/electron-reload)  
+
+
 
 ### 热更新
 
@@ -1003,3 +1016,29 @@ win.show()
 <body style="-webkit-app-region: drag">
 </body>
 ```
+
+## 14. 更新
+
+mac证书：Could not get code signature for running application  https://github.com/electron/electron/issues/7476  
+
+p12证书：https://www.jianshu.com/p/fdc3ccc3f3de
+
+
+## 15. 性能优化——处理白屏
+
+
+1. 白屏基本功
+
+- 在 ready-to-show 时候再显示   
+- 设置窗口底色  
+
+2. [实现占位图](https://github.com/dengyaolong/electron-loading-window-example)  
+
+BrowserView、BrowserWindow、ChildWindow
+
+
+
+
+
+
+

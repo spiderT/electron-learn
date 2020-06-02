@@ -9,6 +9,13 @@ const {
   close
 } = require('./src/main/windows');
 const path = require('path');
+const isDev = require('electron-is-dev');
+const handleIPC = require('./src/main/ipc');
+
+if (isDev) {
+  /* eslint-disable */
+  require('electron-reload')(__dirname);
+}
 
 // 开机自启动
 const AutoLaunch = require('auto-launch');
@@ -49,7 +56,16 @@ if (!gotTheLock) {
 } else {
   app.on('second-instance', show)
   app.on('ready', () => {
-    createWindow(), setTray()
+    createWindow();
+    setTray();
+    handleIPC();
   })
   app.on('before-quit', close)
+  app.on('will-finish-launching', () => {
+    // 自动更新
+    // if(!isDev) {
+    // require('./src/main/updater.js');
+    // }
+    require('./src/main/crash-reporter').init();
+  })
 }

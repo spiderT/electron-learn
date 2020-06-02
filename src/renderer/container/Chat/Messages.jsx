@@ -200,10 +200,12 @@ export default function Messages() {
     }
   }
 
-  ipcRenderer.on('paste-from-clipboard-mainwin', (e, arg) => {
-    console.log('paste-from-clipboard-mainwin');
-    handlePasteFromIpc(arg);
-  });
+  // 进程间转发
+  // ipcRenderer.on('paste-from-clipboard-mainwin', (e, arg) => {
+  //   console.log('paste-from-clipboard-mainwin');
+  //   handlePasteFromIpc(arg);
+  // });
+  
   // 'clip-page-clipboard'
   ipcRenderer.on('clip-page-clipboard', (e, arg) => {
     console.log('clip-page-clipboard');

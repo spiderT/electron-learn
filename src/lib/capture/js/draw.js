@@ -4,9 +4,11 @@ const {
     nativeImage
 } = require('electron');
 
-ipcRenderer.on('paste-from-clipboard', (e, arg)=>{
-    ipcRenderer.send('paste-from-clipboard-capwin', arg)
-})
+// 进程间转发
+// ipcRenderer.on('paste-from-clipboard', (e, arg)=>{
+//     ipcRenderer.send('paste-from-clipboard-capwin', arg)
+// })
+
 class Draw {
     constructor(screenImgUrl, bg, screenWidth, screenHeight, rect, sizeInfo, toolbar) {
         this.screenImgUrl = screenImgUrl

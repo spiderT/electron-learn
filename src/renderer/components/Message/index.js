@@ -2,7 +2,7 @@
 import React from 'react';
 import Text from './Text';
 import Tip from './Tip';
-import Image from './Image';
+import Image from './Image.jsx';
 import './index.scss';
 
 const AvatarRender = (msg) => {

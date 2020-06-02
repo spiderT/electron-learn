@@ -87,9 +87,10 @@ ipcMain.on('clip-page', (event, {
                 capWin = null
             },0)
         }
-    }else if(type === 'paste'){
-        console.log('paste22')
-        event.sender.send('paste-from-clipboard', msg);
+    // 进程间转发
+    // }else if(type === 'paste'){
+    //     console.log('paste22')
+    //     event.sender.send('paste-from-clipboard', msg);
     }
 })
 
