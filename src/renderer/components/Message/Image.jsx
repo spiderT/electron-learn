@@ -1,28 +1,9 @@
 import React from 'react';
 import './Image.scss';
-const { BrowserWindow } = require('electron').remote;
-const path = require('path');
-
-let picWin;
+const { ipcRenderer } = require('electron');
 
 function handleZoom(src) {
-  // const modalPath = path.join('file://', __dirname, './pic.html');
-  // const modalPath = 'file://' + __dirname + './pic.html';
-  const modalPath = 'file://' + __dirname + '../../../../index.html';
-  console.log('modalPath', modalPath);
-  picWin = new BrowserWindow({
-    width: 600,
-    height: 475,
-    webPreferences: {
-      webSecurity: false,
-    },
-  });
-
-  picWin.on('close', () => {
-    win = null;
-  });
-  picWin.loadURL(modalPath);
-  picWin.show();
+  ipcRenderer.send('create-pic-window', src);
 }
 
 const Image = (props) => {

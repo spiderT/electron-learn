@@ -61,7 +61,7 @@ function createCaptureWindow() {
 
     capWin.loadFile(path.join(__dirname, './index.html'))
 
-    // // 打开开发者工具
+    // 打开开发者工具
     capWin.webContents.openDevTools()
     console.log('capWin.id', capWin.id);
 

@@ -215,7 +215,7 @@ class Draw {
     }
 
     handlePaste(msg){
-        ipcRenderer.sendTo(1, 'clip-page-clipboard', msg)
+        ipcRenderer.win.id(1, 'clip-page-clipboard', msg)
     }
 
     sendMsg(type, msg) {
