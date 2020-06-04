@@ -26,7 +26,7 @@ function createCaptureWindow() {
     if (capWin) return console.log('只能有一个CaptureWindow')
     const {
         screen
-    } = require('electron') 
+    } = require('electron')
     const {
         width,
         height
@@ -62,8 +62,7 @@ function createCaptureWindow() {
     capWin.loadFile(path.join(__dirname, './index.html'))
 
     // 打开开发者工具
-    capWin.webContents.openDevTools()
-    console.log('capWin.id', capWin.id);
+    // capWin.webContents.openDevTools()
 
 
     capWin.on('closed', () => {
@@ -82,15 +81,15 @@ ipcMain.on('clip-page', (event, {
     if (type === 'close') {
         if (capWin) {
             // 解决图片自动粘贴问题
-            setTimeout(function(){
+            setTimeout(function () {
                 capWin.close()
                 capWin = null
-            },0)
+            }, 0)
         }
-    // 进程间转发
-    // }else if(type === 'paste'){
-    //     console.log('paste22')
-    //     event.sender.send('paste-from-clipboard', msg);
+        // 进程间转发
+        // }else if(type === 'paste'){
+        //     console.log('paste22')
+        //     event.sender.send('paste-from-clipboard', msg);
     }
 })
 

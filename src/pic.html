@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,6 +73,18 @@
   .down-load {
     background: url('./resources/images/icons/download.png') no-repeat;
   }
+
+  .msg-tip{
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+  }
 </style>
 
 <body>
@@ -87,6 +98,7 @@
       <i class="pic-icon refresh-line" onclick="refresh()"></i>
       <i class="pic-icon down-load" onclick="downLoad()"></i>
     </div>
+    <div class="msg-tip" id="msg-tip">保存成功</div>
   </div>
 </body>
 
@@ -95,10 +107,12 @@
     ipcRenderer
   } = require('electron');
   const img = document.getElementById('pic-container');
+  const tip = document.getElementById('msg-tip');
   let r = 0;
   let imgWidth;
   let imgHeight;
   let imgData;
+  let tipTimer = null;
 
   ipcRenderer.on('pic-url', (event, data) => {
     img.src = data;
@@ -107,6 +121,15 @@
     imgHeight = img.height;
   })
 
+  // todo 不是main的渲染进程，所以收不到消息
+  ipcRenderer.on('download-item-done', (event) => {
+    console.log('下载完成');
+    tip.style.display = 'block';
+    tipTimer && clearTimeout(tipTimer);
+    tipTimer = setTimeout(() => {
+      tip.style.display = 'none';
+    }, 1000);
+  })
 
   // 放大
   function zoomIn() {

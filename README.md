@@ -685,9 +685,7 @@ electron_mirror=http://npm.taobao.org/mirrors/electron/
 
 ##### NSIS 下载问题
 
-### 热重载
-
-[electron-reload](https://www.npmjs.com/package/electron-reload)  
+### 热重载(开发实时刷新)
 
 
 

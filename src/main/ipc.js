@@ -63,11 +63,13 @@ module.exports = function () {
     picWin = new BrowserWindow({
       width: 600,
       height: 400,
-      resizable: false,
+      // resizable: false,
       webPreferences: {
         nodeIntegration: true
       }
     })
+    global.sharedObject.picWin = picWin;
+
     picWin.loadURL(path.join('file:', __dirname, '../pic.html'));
 
     picWin.webContents.on('did-finish-load', function () {

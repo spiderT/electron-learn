@@ -5,8 +5,7 @@ import EmojiPackage from '../../components/EmojiPackage';
 import ContentEditable from 'react-contenteditable';
 import { msgBody } from '../../utils';
 
-const { ipcRenderer, clipboard } = require('electron');
-const path = require('path');
+const { ipcRenderer } = require('electron');
 
 // fix warning: possible EventEmitter memory leak detected. 11 request listeners added. Use emitter.setMaxListeners() to increase limit.
 ipcRenderer.setMaxListeners(100);

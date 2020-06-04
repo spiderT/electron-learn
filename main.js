@@ -6,29 +6,11 @@ const setTray = require('./src/main/tray');
 const {
   createWindow,
   show,
-  close
+  close,
 } = require('./src/main/windows');
 const path = require('path');
-const isDev = require('electron-is-dev');
 const handleIPC = require('./src/main/ipc');
-
-
-
-if (isDev) {
-  /* eslint-disable */
-  require('electron-nice-auto-reload')({
-    rootPath: path.join(process.cwd()),
-    rules: [{
-      // relaunch the app while main process related js files
-      // were changed
-      action: 'app.relaunch',
-      target: 'ipc.js|main.js'
-    }],
-    ignored: /node_modules/,
-    log: true,
-    devToolsReopen: true
-  })
-}
+const handleDownload = require('./src/main/download');
 
 // 开机自启动
 const AutoLaunch = require('auto-launch');
@@ -69,10 +51,10 @@ if (!gotTheLock) {
 } else {
   app.on('second-instance', show)
   app.on('ready', () => {
-
-    createWindow();
+    const win = createWindow();
     setTray();
     handleIPC();
+    handleDownload(win);
   })
   app.on('before-quit', close)
   app.on('will-finish-launching', () => {
