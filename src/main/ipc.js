@@ -1,15 +1,21 @@
 const {
-  ipcMain, dialog
+  ipcMain,
+  dialog,
+  BrowserWindow,
+  app
 } = require('electron');
 const {
   send
 } = require('./windows');
 const fs = require('fs');
+const path = require('path');
 const mineType = require('mime-types');
+let picWin;
+
 
 module.exports = function () {
   // 打开对话框事件dialog
-  ipcMain.on('open-directory-dialog',  (event) => {
+  ipcMain.on('open-directory-dialog', (event) => {
     dialog.showOpenDialog({
       // properties String -包含对话框应用的功能。支持以下值:
       // openFile - 允许选择文件
@@ -20,17 +26,22 @@ module.exports = function () {
       // noResolveAliases macOS -禁用自动别名 (symlink) 路径解析。 选定的别名现在将返回别名路径而不是其目标路径。
       // treatPackageAsDirectory macOS -将包 (如 .app  文件夹) 视为目录而不是文件。
       properties: ['openFile', 'openDirectory'],
-      filters: [
-        { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
+      filters: [{
+          name: 'Images',
+          extensions: ['jpg', 'png', 'gif']
+        },
         // { name: 'Movies', extensions: ['mkv', 'avi', 'mp4'] },
         // { name: 'Custom File Type', extensions: ['as'] },
         // { name: 'All Files', extensions: ['*'] }
       ]
-    }).then(result=>{
+    }).then(result => {
       // console.log('result', result)
       // result { canceled: false, filePaths: [ '/Users/Desktop/11.jpg' ] }
-      const {canceled, filePaths} = result;
-      if(canceled){
+      const {
+        canceled,
+        filePaths
+      } = result;
+      if (canceled) {
         return
       }
       const filePath = filePaths[0];
@@ -40,7 +51,37 @@ module.exports = function () {
       const base64 = 'data:' + mineType.lookup(filePath) + ';base64,' + data;
 
       //  读取一个文件的base64格式
-      event.sender.send('read-file', {data: base64})
+      event.sender.send('read-file', {
+        data: base64
       })
     })
+  })
+
+
+  // 图片预览
+  ipcMain.on('create-pic-window', (event, arg) => {
+    picWin = new BrowserWindow({
+      width: 600,
+      height: 400,
+      // resizable: false,
+      webPreferences: {
+        nodeIntegration: true
+      }
+    })
+    global.sharedObject.picWin = picWin;
+
+    picWin.loadURL(path.join('file:', __dirname, '../pic.html'));
+
+    picWin.webContents.on('did-finish-load', function () {
+      picWin.webContents.send('pic-url', arg);
+    });
+
+    picWin.show();
+
+    // picWin.webContents.openDevTools();
+
+    picWin.on('closed', () => {
+      picWin.destroy();
+    })
+  })
 }

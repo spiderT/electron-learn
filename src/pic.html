@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>spiderChat</title>
+</head>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    width: 600px;
+    height: 400px;
+    overflow: hidden;
+  }
+
+  .pic-wrap {
+    width: 600px;
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pic-container {
+    max-height: 300px;
+    width: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .btn-wrap {
+    position: absolute;
+    width: 350px;
+    bottom: 10px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .pic-icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    margin: 10px;
+    cursor: pointer;
+  }
+
+  .zoom-in {
+    background: url('./resources/images/icons/zoomin.png') no-repeat;
+  }
+
+  .zoom-out {
+    background: url('./resources/images/icons/zoomout.png') no-repeat;
+  }
+
+  .rotate-left {
+    background: url('./resources/images/icons/rotateleft.png') no-repeat;
+  }
+
+  .rotate-right {
+    background: url('./resources/images/icons/rotateright.png') no-repeat;
+  }
+
+  .refresh-line {
+    background: url('./resources/images/icons/refresh-line.png') no-repeat;
+  }
+
+  .down-load {
+    background: url('./resources/images/icons/download.png') no-repeat;
+  }
+
+  .msg-tip{
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+  }
+</style>
+
+<body>
+  <div class="pic-wrap">
+    <div class="pic-container"><img id="pic-container"></div>
+    <div class="btn-wrap">
+      <i class="pic-icon zoom-in" onclick="zoomIn()"></i>
+      <i class="pic-icon zoom-out" onclick="zoomOut()"></i>
+      <i class="pic-icon rotate-left" onclick="rotateLeft()"></i>
+      <i class="pic-icon rotate-right" onclick="rotateRight()"></i>
+      <i class="pic-icon refresh-line" onclick="refresh()"></i>
+      <i class="pic-icon down-load" onclick="downLoad()"></i>
+    </div>
+    <div class="msg-tip" id="msg-tip">保存成功</div>
+  </div>
+</body>
+
+<script>
+  const {
+    ipcRenderer
+  } = require('electron');
+  const img = document.getElementById('pic-container');
+  const tip = document.getElementById('msg-tip');
+  let r = 0;
+  let imgWidth;
+  let imgHeight;
+  let imgData;
+  let tipTimer = null;
+
+  ipcRenderer.on('pic-url', (event, data) => {
+    img.src = data;
+    imgData = data;
+    imgWidth = img.width;
+    imgHeight = img.height;
+  })
+
+  // todo 不是main的渲染进程，所以收不到消息
+  ipcRenderer.on('download-item-done', (event) => {
+    console.log('下载完成');
+    tip.style.display = 'block';
+    tipTimer && clearTimeout(tipTimer);
+    tipTimer = setTimeout(() => {
+      tip.style.display = 'none';
+    }, 1000);
+  })
+
+  // 放大
+  function zoomIn() {
+    const maxWidth = img.width * 2;
+    if (img.width < maxWidth) {
+      img.width = img.width * 1.1;
+      img.height = img.height * 1.1;
+    }
+  }
+
+  // 缩小
+  function zoomOut() {
+    const minWidth = img.width / 2;
+    if (img.width > minWidth) {
+      img.width = img.width / 1.1;
+      img.height = img.height / 1.1;
+    }
+  }
+
+  // 左旋转
+  function rotateLeft() {
+    r -= 90;
+    img.style.transform = `rotate(${r}deg)`;
+  }
+
+  // 右旋转
+  function rotateRight() {
+    r += 90;
+    img.style.transform = `rotate(${r}deg)`;
+  }
+
+  // 恢复原状
+  function refresh() {
+    img.style.transform = `rotate(0deg)`;
+    img.height = imgHeight;
+    img.width = imgWidth;
+  }
+
+  // 下载
+  function downLoad() {
+    const img = new Image();
+    img.onload = function () {
+      const a = document.createElement('a');
+      a.href = imgData;
+      a.download = '';
+      a.click();
+    }
+    img.src = imgData;
+  }
+</script>
+
+</html>

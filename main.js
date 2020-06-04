@@ -6,16 +6,11 @@ const setTray = require('./src/main/tray');
 const {
   createWindow,
   show,
-  close
+  close,
 } = require('./src/main/windows');
 const path = require('path');
-const isDev = require('electron-is-dev');
 const handleIPC = require('./src/main/ipc');
-
-if (isDev) {
-  /* eslint-disable */
-  require('electron-reload')(__dirname);
-}
+const handleDownload = require('./src/main/download');
 
 // 开机自启动
 const AutoLaunch = require('auto-launch');
@@ -29,7 +24,7 @@ const minecraftAutoLauncher = new AutoLaunch({
 minecraftAutoLauncher.enable();
 
 // 移除开机启动项
-//minecraftAutoLauncher.disable();
+// minecraftAutoLauncher.disable();
 
 // 检测开机启动项状态
 minecraftAutoLauncher.isEnabled()
@@ -56,9 +51,10 @@ if (!gotTheLock) {
 } else {
   app.on('second-instance', show)
   app.on('ready', () => {
-    createWindow();
+    const win = createWindow();
     setTray();
     handleIPC();
+    handleDownload(win);
   })
   app.on('before-quit', close)
   app.on('will-finish-launching', () => {

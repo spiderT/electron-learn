@@ -51,7 +51,6 @@
   "dependencies": {
     "@babel/core": "^7.10.2",
     "auto-launch": "^5.0.5",
-    "electron-reload": "^1.5.0",
     "file-loader": "^6.0.0",
     "less": "^3.11.1",
     "less-loader": "^6.1.0",

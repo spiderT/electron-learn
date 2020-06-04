@@ -8,7 +8,7 @@ var appConfig = {
   entry: {
     app: [
       'babel-polyfill',
-      './src/renderer/index.js'
+      './src/renderer/index.jsx'
     ]
   },
   plugins: [

@@ -1,7 +1,8 @@
 const {
     ipcRenderer,
     clipboard,
-    nativeImage
+    nativeImage,
+    remote
 } = require('electron');
 
 // 进程间转发
@@ -215,7 +216,8 @@ class Draw {
     }
 
     handlePaste(msg){
-        ipcRenderer.sendTo(1, 'clip-page-clipboard', msg)
+        const id = remote.getGlobal('sharedObject').win.webContents.id;
+        ipcRenderer.sendTo(id, 'clip-page-clipboard', msg)
     }
 
     sendMsg(type, msg) {
