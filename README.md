@@ -63,7 +63,9 @@ remote https://juejin.im/post/5d4b79a3e51d4561b072dcb0
 
 [Electron 进程间通讯详解](https://www.iguan7u.cn/2019/06/30/Electron-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E8%AE%AF%E8%AF%A6%E8%A7%A3/#1-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B8%BA%E4%BD%95%E4%BC%9A%E5%87%BA%E7%8E%B0%E5%8D%A1%E9%A1%BF%EF%BC%9F)   
 
-8. 
+8. 打包：mac 文件签名：https://www.cnblogs.com/lovesong/p/11782449.html  
+https://www.cnblogs.com/qirui/p/8327812.html
+
 
 ## 2. electron相关软件安装
 
@@ -575,6 +577,8 @@ demo.isEnabled().then(function(isEnabled){
 
 ### 7.1. [electron-builder](https://github.com/electron-userland/electron-builder)
 
+https://juejin.im/post/5bc53aade51d453df0447927  
+
 1. 在 package.json 应用程序中指定的标准字段 — name, description, version and author.
 
 2. 在 package.json 添加 build 配置:
@@ -1034,9 +1038,79 @@ p12证书：https://www.jianshu.com/p/fdc3ccc3f3de
 
 BrowserView、BrowserWindow、ChildWindow
 
+## 16. 浏览器启动客户端
 
+> 原理  
+浏览器在解析url的时候，会尝试从系统本地寻找url协议所关联的应用，如果有关联的应用，则尝试打开这个应用  
 
+### 16.1. windows平台
 
+在windows下，注册一个协议比较简单，写注册表就可以了。参考 Registering an Application to a URI Scheme：https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa767914(v=vs.85)
 
+### 16.2. mac 平台
 
+几个基本概念
 
+#### 16.2.1. info.plist
+
+iOS和MacOS的应用包中，都有一个info.plist文件，这个文件主要用来记录应用的一些meta信息，参考[Information Property List](https://developer.apple.com/documentation/bundleresources/information_property_list)。文件用键值对的形式来记录信息(xml)，结构如下：
+
+**CFBundleURLTypes**  
+
+A list of URL schemes (http, ftp, and so on) supported by the app.
+
+其实就是info.plist里面的一个key，对应的value是一个数组。可以通过这个字段来为应用注册一个 or 多个 URL Schema。参考[CFBundleURLTypes](https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleurltypes#details)
+
+> 修改info.plist文件  
+
+只需为App包中info.plist，设置CFBundleURLTypes的值即可.  https://zhuanlan.zhihu.com/p/76172940  
+
+通过 extendInfo 中添加数组, 数组中的 值将会被写入 Info.plist 文件中。
+
+```json
+"build": {
+    "appId": "com.spider.chat",
+    "mac": {
+      "category": "spider",
+      "icon": "src/resources/icns/spider.icns",
+      "extendInfo": {
+        "CFBundleURLSchemes": [
+          "spiderlink"
+        ]
+      }
+    },
+```
+
+### 16.3. 接收参数
+
+协议注册完毕之后，我们已经可以在浏览器中，通过访问自定义协议url来启动客户端了。  
+
+对于url中的不同参数，客户端的行为也是不一样的，例如vscode:extension/ms-python.python这个url，启动了VsCode的同时也告诉了VsCode：我要安装插件，插件名是ms-phthon.python。  
+
+Vscode通过解析url中的参数来实现自定义行为，那么作为客户端如何拿到这个url呢？  
+
+### 16.3.1. Windows
+
+参数会通过启动参数的形式传递给应用程序。因此，我们可以很方便的拿到这个参数
+
+```js
+// 通过自定义url启动客户端时
+console.log(process.argv);
+
+// 打印出
+[
+ 'C://your-app.exe', // 启动路径
+ 'kujiale://111',  // 启动的自定义url
+]
+```
+
+### 16.3.2. MacOS
+
+在Mac下不会通过启动参数传递给应用，通过自定义协议打开应用，app会收到 open-url 事件
+
+```js
+// mac下通过kujiale协议启动应用
+app.on('open-url', (e, url) => { // eslint-disable-line
+  parse(url)； 解析url
+});
+```

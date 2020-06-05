@@ -11,6 +11,7 @@ const {
 const path = require('path');
 const handleIPC = require('./src/main/ipc');
 const handleDownload = require('./src/main/download');
+const isDev = require('electron-is-dev');
 
 // 开机自启动
 const AutoLaunch = require('auto-launch');
@@ -60,8 +61,12 @@ if (!gotTheLock) {
   app.on('will-finish-launching', () => {
     // 自动更新
     // if(!isDev) {
-    // require('./src/main/updater.js');
+    require('./src/main/updater.js');
     // }
     require('./src/main/crash-reporter').init();
   })
+  app.on('open-url', (event, url) => {
+    event.preventDefault();
+    console.log('open-url');
+  });
 }

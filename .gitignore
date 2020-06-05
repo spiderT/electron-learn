@@ -3,3 +3,5 @@ npm-debug.log
 .idea
 .git
 .DS_Store
+dist
+build

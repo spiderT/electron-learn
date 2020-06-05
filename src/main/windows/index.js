@@ -48,7 +48,7 @@ function createWindow() {
   if (isDev) {
     win.loadURL('http://localhost:9200')
   } else {
-    win.loadFile(path.resolve('./dist/index.html'))
+    win.loadFile(path.resolve('../../../build/index.html'))
   }
 
   // // 打开开发者工具
