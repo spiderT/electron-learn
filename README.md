@@ -1022,8 +1022,7 @@ win.show()
 ## 14. 更新
 
 mac证书：Could not get code signature for running application  https://github.com/electron/electron/issues/7476  
-
-p12证书：https://www.jianshu.com/p/fdc3ccc3f3de
+https://www.cnblogs.com/qirui/p/8327812.html  
 
 
 ## 15. 性能优化——处理白屏

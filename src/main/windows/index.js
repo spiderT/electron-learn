@@ -46,9 +46,9 @@ function createWindow() {
   })
 
   if (isDev) {
-    win.loadURL('http://localhost:9200')
+    win.loadURL('http://localhost:9200');
   } else {
-    win.loadFile(path.resolve('../../../build/index.html'))
+    win.loadFile(path.join(__dirname, '../../../build/index.html'));
   }
 
   // // 打开开发者工具
