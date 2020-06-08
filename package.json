@@ -71,12 +71,12 @@
     "productName": "spiderchat",
     "files": [
       "build/**/*",
+      "build/images/*",
       "build/index.html",
       "src",
       "main.js"
     ],
     "directories": {
-      "buildResources": "build/images",
       "output": "dist"
     },
     "copyright": "Copyright © 2020 spider",
@@ -87,9 +87,15 @@
       ],
       "icon": "src/resources/icns/spider.icns",
       "extendInfo": {
-        "CFBundleURLSchemes": [
-          "spiderlink"
-        ]
+        "URL types": [
+          {
+            "URL identifier": "spiderchat",
+            "URL Schemes": [
+              "spiderchat"
+            ]
+          }
+        ],
+        "CFBundleURLSchemes": ["spiderchat"]
       }
     },
     "dmg": {
@@ -112,10 +118,8 @@
       "iconSize": 150
     },
     "nsis": {
-      "oneClick": false,
-      "language": "2052",
-      "perMachine": true,
-      "allowToChangeInstallationDirectory": true
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     }
   },
   "prettier": {

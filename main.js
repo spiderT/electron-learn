@@ -18,7 +18,7 @@ const AutoLaunch = require('auto-launch');
 
 const minecraftAutoLauncher = new AutoLaunch({
   name: 'spiderChat',
-  // path: '/Applications/spiderChat.app',
+  path: '/Applications/spiderchat.app',
 });
 
 // 加入开机启动项
@@ -61,7 +61,7 @@ if (!gotTheLock) {
   app.on('will-finish-launching', () => {
     // 自动更新
     // if(!isDev) {
-    require('./src/main/updater.js');
+    // require('./src/main/updater.js');
     // }
     require('./src/main/crash-reporter').init();
   })
