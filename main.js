@@ -1,13 +1,7 @@
-const {
-  app
-} = require('electron');
+const { app } = require('electron');
 const setAppMenu = require('./src/main/menus');
 const setTray = require('./src/main/tray');
-const {
-  createWindow,
-  show,
-  close,
-} = require('./src/main/windows');
+const { createWindow, show, close } = require('./src/main/windows');
 const path = require('path');
 const handleIPC = require('./src/main/ipc');
 const handleDownload = require('./src/main/download');
@@ -28,7 +22,8 @@ minecraftAutoLauncher.enable();
 // minecraftAutoLauncher.disable();
 
 // 检测开机启动项状态
-minecraftAutoLauncher.isEnabled()
+minecraftAutoLauncher
+  .isEnabled()
   .then(function (isEnabled) {
     if (isEnabled) {
       return;
@@ -39,32 +34,37 @@ minecraftAutoLauncher.isEnabled()
     // handle error
   });
 
-
 app.whenReady().then(() => {
-  setAppMenu()
+  setAppMenu();
   app.dock.setIcon(path.join(__dirname, './src/resources/images/zhizhuxia_big.png'));
-})
+});
 
 const gotTheLock = app.requestSingleInstanceLock();
 
 if (!gotTheLock) {
-  app.quit()
+  app.quit();
 } else {
-  app.on('second-instance', show)
+  app.on('second-instance', show);
+
+  app.on('will-finish-launching', () => {
+    // 自动更新
+    if (!isDev) {
+      require('./src/main/updater.js');
+    }
+    require('./src/main/crash-reporter').init();
+  });
+
   app.on('ready', () => {
     const win = createWindow();
     setTray();
     handleIPC();
     handleDownload(win);
-  })
-  app.on('before-quit', close)
-  app.on('will-finish-launching', () => {
-    // 自动更新
-    // if(!isDev) {
-    // require('./src/main/updater.js');
-    // }
-    require('./src/main/crash-reporter').init();
-  })
+  });
+
+  app.on('activate', show);
+
+  app.on('before-quit', close);
+
   app.on('open-url', (event, url) => {
     event.preventDefault();
     console.log('open-url');

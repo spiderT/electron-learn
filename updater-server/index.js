@@ -17,29 +17,18 @@ function getNewVersion(version) {
     if (!version) return null
     let maxVersion = {
         name: '1.0.1',
-        pub_date: '2020-02-01T12:26:53+1:00',
+        pub_date: '2020-06-09T12:26:53+1:00',
         notes: '新增功能AAA',
-        url: `http://127.0.0.1:9999/public/Mercurius-1.0.1-mac.zip`
+        url: `http://127.0.0.1:9999/public/spiderchat-1.0.1-mac.zip`
     }
     if (compareVersions.compare(maxVersion.name, version, '>')) {
         return maxVersion
     }
     return null
 }
-router.get('/win32/RELEASES', (ctx, next) => {
-    let newVersion = getNewVersion(ctx.query.version)
-    if (newVersion) {
-        ctx.body = 'BBC6F98A5CD32C675AAB6737A5F67176248B900C Mercurius-1.0.1-full.nupkg 62177782'
-    } else {
-        ctx.status = 204
-    }
-})
-router.get('/win32/*.nupkg', (ctx, next) => {
-    // redirect s3 静态文件服务
-    ctx.redirect(`/public/${ctx.params[0]}.nupkg`)
-})
+
 router.get('/darwin', (ctx, next) => {
-    console.log('get/darwin')
+    console.log('get/darwin', ctx)
     // 处理Mac更新, ?version=1.0.0&uid=123
     let {
         version

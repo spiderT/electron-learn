@@ -5,7 +5,7 @@ const isDev = require('electron-is-dev');
 const path = require('path');
 
 let win;
-let willQuiteApp = false;
+let willQuitApp = false;
 const {
   createShortcut
 } = require('../../lib/capture/main');
@@ -37,7 +37,8 @@ function createWindow() {
   win.on('ready-to-show', () => win.show()) // 初始化后显示
 
   win.on('close', e => {
-    if (willQuiteApp) {
+    console.log('close', willQuitApp);
+    if (willQuitApp) {
       win = null
     } else {
       e.preventDefault();

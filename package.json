@@ -13,7 +13,7 @@
     "build:dev": "webpack --env dev",
     "build": "webpack --env prod"
   },
-  "author": "",
+  "author": "ivy",
   "license": "ISC",
   "devDependencies": {
     "uglifyjs-webpack-plugin": "^2.2.0",
@@ -89,13 +89,13 @@
       "extendInfo": {
         "URL types": [
           {
-            "URL identifier": "spiderchat",
+            "Document Role": "Viewer",
+            "URL identifier": "spider chat",
             "URL Schemes": [
               "spiderchat"
             ]
           }
-        ],
-        "CFBundleURLSchemes": ["spiderchat"]
+        ]
       }
     },
     "dmg": {
@@ -112,8 +112,6 @@
           "type": "file"
         }
       ],
-      "title": "spider",
-      "artifactName": "spider",
       "icon": "src/resources/icns/spider.icns",
       "iconSize": 150
     },
