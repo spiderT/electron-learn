@@ -6,7 +6,8 @@ const AbsulotePath = require('./absulotePath');
 
 var appConfig = {
   entry: {
-    app: ['babel-polyfill', './src/renderer/index.jsx'],
+    // app: ['babel-polyfill', './src/renderer/index.jsx'],
+    app: ['./src/renderer/index.jsx'],
   },
   plugins: [
     new CleanWebpackPlugin(),

@@ -5,7 +5,6 @@ const {
 } = require('electron');
 
 if (process.platform == 'darwin') {
-    debugger
     autoUpdater.setFeedURL('http://127.0.0.1:9999/darwin?version=' + app.getVersion())
 } else {
     autoUpdater.setFeedURL('http://127.0.0.1:9999/win32?version=' + app.getVersion())

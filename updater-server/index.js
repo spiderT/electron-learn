@@ -18,7 +18,7 @@ function getNewVersion(version) {
     let maxVersion = {
         name: '1.0.1',
         pub_date: '2020-06-09T12:26:53+1:00',
-        notes: '新增功能AAA',
+        notes: '新增功能: 菜单栏改成红色',
         url: `http://127.0.0.1:9999/public/spiderchat-1.0.1-mac.zip`
     }
     if (compareVersions.compare(maxVersion.name, version, '>')) {

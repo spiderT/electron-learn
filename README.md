@@ -14,7 +14,7 @@
 2. 发送表情  
 3. 选择文件（只支持选择图片）发送  
 4. 截图发送  
-5. 粘贴图片（只支持截图后的剪切板上粘贴图片）发送  
+5. 粘贴图片（只支持剪切板上粘贴图片）发送  
 
 ### 使用方式  
 
@@ -28,12 +28,8 @@ cd ws_server
 node index.js
 // 以live server的方式打开client.html，就可以愉快的聊天了
 
-// 启动react，webpack打包
+// 启动
 npm start
-
-// 启动electron
-npm run electron
-
 ```
 
 ### 参考资料  
