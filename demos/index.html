@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    We are using Node.js <span id="node-version"></span>, Chromium <span id="chrome-version"></span>, and Electron
+    <span id="electron-version"></span>.
+
+    <div>
+      <button id="btn_1">frame: false</button>
+      <button id="btn_2">titleBarStyle: 'hidden'</button>
+      <button id="btn_3">titleBarStyle: 'hiddenInset'</button>
+      <button id="btn_4">titleBarStyle: 'customButtonsOnHover'</button>
+      <button id="btn_5">transparent: true</button>
+    </div>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>

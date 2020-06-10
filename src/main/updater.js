@@ -19,7 +19,7 @@ autoUpdater.on('update-available', () => {
 autoUpdater.on('update-downloaded', (e, notes, version) => {
     // 提醒用户更新
     app.whenReady().then(() => {
-        let clickId = dialog.showMessageBoxSync({
+        const clickId = dialog.showMessageBoxSync({
             type: 'info',
             title: '升级提示',
             message: '已为你升级到最新版，是否立即体验',

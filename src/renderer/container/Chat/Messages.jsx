@@ -59,7 +59,7 @@ export default function Messages() {
     });
   }, [msgData]);
 
-  socket.onmessage = function (event) {
+  socket.onmessage = async (event) => {
     const data = event.data;
     // console.log('onmessage', data);
     if (!data || !data.startsWith('spider->')) {
@@ -71,18 +71,18 @@ export default function Messages() {
       return;
     }
 
-    // 通知
-    const option = {
-      title: 'spider',
-      body: value,
-      icon:  '/images/zhizhuxia.png',
-    };
+    // // 通知
+    // const option = {
+    //   title: 'spider',
+    //   body: value,
+    // };
 
-    const chatNotication = new Notification(option.title, option);
+    // // 渲染进程的Notification
+    // const chatNotication = new Notification(option.title, option);
 
-    chatNotication.onClick = function () {
-      console.log('chatNotication.onClick');
-    };
+    // chatNotication.onClick = function () {
+    //   console.log('chatNotication.onClick');
+    // };
 
     msgData.push(msgBody(1, value, 'zhizhuxia', 'me'));
     setMsgData(msgData);
@@ -91,7 +91,22 @@ export default function Messages() {
     setHtml(html + '   ');
 
     scrollToView();
+
+    // 发给主进程，展示Notification
+    const res = await ipcRenderer.invoke('msg-receive', { title: '蜘蛛侠', body: value });
+    res.event === 'action' ? onsend(res.text) : onclose()
   };
+
+  function onclose() { }
+
+  function onsend(html) {
+    msgData.push(msgBody(1, html, 'me', 'zhizhuxia'));
+    socket.send(html);
+    setMsgData(msgData);
+    // 发送结束后清空输入框
+    setHtml('');
+    scrollToView();
+  }
 
   function captureScreen() {
     ipcRenderer.send('capture-screen');
@@ -204,10 +219,10 @@ export default function Messages() {
   //   console.log('paste-from-clipboard-mainwin');
   //   handlePasteFromIpc(arg);
   // });
-  
-  // 'clip-page-clipboard'
-  ipcRenderer.on('clip-page-clipboard', (e, arg) => {
-    console.log('clip-page-clipboard');
+
+  // 'paste-pic-from-clipboard'
+  ipcRenderer.on('paste-pic-from-clipboard', (e, arg) => {
+    console.log('paste-pic-from-clipboard');
     handlePasteFromIpc(arg);
   });
 

@@ -22,8 +22,7 @@ function createWindow() {
     titleBarStyle: 'hiddenInset',
     show: false, // 先隐藏
     icon: path.join(__dirname, '../../resources/images/zhizhuxia.png'),
-    // 优化白屏，设置窗口底色
-    background: '#f5f5f5',
+    backgroundColor: '#f3f3f3', // 优化白屏，设置窗口底色
   })
 
   global.sharedObject = {
