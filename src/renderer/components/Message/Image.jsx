@@ -10,8 +10,7 @@ const Image = (props) => {
   const content = props.content;
   return (
     <span className="msg-text">
-      {' '}
-      {/* base64格式图片 */} <img src={content} onClick={() => handleZoom(content)} />{' '}
+      <img src={content} onClick={() => handleZoom(content)} />
     </span>
   );
 };

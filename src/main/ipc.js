@@ -7,8 +7,10 @@ let picWin;
 
 module.exports = function () {
   // 打开对话框事件dialog
-  ipcMain.on('open-directory-dialog', (event) => {
-    dialog
+  ipcMain.handle('open-directory-dialog', async (event) => {
+
+    const res = new Promise((resolve, reject) => 
+    resolve (dialog
       .showOpenDialog({
         // properties String -包含对话框应用的功能。支持以下值:
         // openFile - 允许选择文件
@@ -22,7 +24,7 @@ module.exports = function () {
         filters: [
           {
             name: 'Images',
-            extensions: ['jpg', 'png', 'gif'],
+            extensions: ['jpg', 'jpeg', 'png', 'gif'],
           },
           // { name: 'Movies', extensions: ['mkv', 'avi', 'mp4'] },
           // { name: 'Custom File Type', extensions: ['as'] },
@@ -34,19 +36,16 @@ module.exports = function () {
         // result { canceled: false, filePaths: [ '/Users/Desktop/11.jpg' ] }
         const { canceled, filePaths } = result;
         if (canceled) {
-          return;
+         return ({event: 'canceled'})
         }
         const filePath = filePaths[0];
-        console.log('filePath', filePath);
         let data = fs.readFileSync(filePath);
         data = new Buffer.from(data).toString('base64');
         const base64 = 'data:' + mineType.lookup(filePath) + ';base64,' + data;
-
-        //  读取一个文件的base64格式
-        event.sender.send('read-file', {
-          data: base64,
-        });
-      });
+        return ({event: 'send', data: base64})
+      })
+    ))
+    return res;
   });
 
   // 图片预览

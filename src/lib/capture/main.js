@@ -5,7 +5,6 @@ const {
 } = require('electron');
 
 const path = require('path');
-
 let capWin;
 
 //注册快捷键
@@ -31,33 +30,29 @@ function createCaptureWindow() {
         width,
         height
     } = screen.getPrimaryDisplay().workAreaSize
+
     capWin = new BrowserWindow({
         // window 使用 fullscreen,  mac 设置为 undefined, 不可为 false
-        // fullscreen: process.platform !== 'darwin' || undefined, // win
-        // fullscreen: true,
-        simpleFullscreen: true,
+        fullscreen: process.platform !== 'darwin' || undefined,
         width,
         height,
         x: 0,
         y: 0,
         transparent: true,
         frame: false,
-        skipTaskbar: true,
-        autoHideMenuBar: true,
         movable: false,
         resizable: false,
-        enableLargerThanScreen: true, // mac
+        enableLargerThanScreen: true,
         hasShadow: false,
-        alwaysOnTop: true,
         webPreferences: {
             nodeIntegration: true,
         }
     })
 
-    capWin.setAlwaysOnTop(true, 'screen-saver') // mac
-    capWin.setVisibleOnAllWorkspaces(true) // mac
-    // capWin.setFullScreenable(false) // mac
-    capWin.setSimpleFullScreen(true) // mac
+    capWin.setAlwaysOnTop(true, 'screen-saver')
+    capWin.setVisibleOnAllWorkspaces(true) 
+    capWin.setSimpleFullScreen(true)
+    // capWin.setFullScreenable(false)
 
     capWin.loadFile(path.join(__dirname, './index.html'))
 

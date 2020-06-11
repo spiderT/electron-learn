@@ -10,7 +10,7 @@ const uploadCrash = multer({
 })
 router.post('/crash', uploadCrash.single('upload_file_minidump'), (ctx, next) => {
     console.log('crash', ctx.req.body)
-    // 存DB
+    // todo 存DB
 })
 
 function getNewVersion(version) {
@@ -28,7 +28,6 @@ function getNewVersion(version) {
 }
 
 router.get('/darwin', (ctx, next) => {
-    console.log('get/darwin', ctx)
     // 处理Mac更新, ?version=1.0.0&uid=123
     let {
         version

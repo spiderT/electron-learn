@@ -1,4 +1,4 @@
-const { app } = require('electron');
+const { app, globalShortcut } = require('electron');
 const setAppMenu = require('./src/main/menus');
 const setTray = require('./src/main/tray');
 const { createWindow, show, close } = require('./src/main/windows');
@@ -64,6 +64,11 @@ if (!gotTheLock) {
   app.on('activate', show);
 
   app.on('before-quit', close);
+
+  app.on('will-quit', () => {
+    // Unregister all shortcuts.
+    globalShortcut.unregisterAll();
+  });
 
   app.on('open-url', (event, url) => {
     event.preventDefault();

@@ -117,8 +117,10 @@
   ipcRenderer.on('pic-url', (event, data) => {
     img.src = data;
     imgData = data;
-    imgWidth = img.width;
-    imgHeight = img.height;
+    img.onload = function(){
+      imgWidth = img.width;
+      imgHeight = img.height;
+    }
   })
 
   // todo 不是main的渲染进程，所以收不到消息

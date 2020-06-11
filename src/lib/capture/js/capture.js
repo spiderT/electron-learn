@@ -20,7 +20,7 @@ desktopCapturer.getSources({
         height
     }
 }).then(
-    async (sources) => {
+     (sources) => {
         const screenImgUrl = sources[0].thumbnail.toDataURL()
 
         const bg = document.querySelector('.bg')

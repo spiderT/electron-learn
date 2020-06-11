@@ -10,16 +10,6 @@ const { ipcRenderer } = require('electron');
 // fix warning: possible EventEmitter memory leak detected. 11 request listeners added. Use emitter.setMaxListeners() to increase limit.
 ipcRenderer.setMaxListeners(100);
 
-function render(msgData) {
-  const container = [];
-  if (msgData && msgData.length) {
-    msgData.map((item) => {
-      container.push(MsgRender(item));
-    });
-  }
-  return container;
-}
-
 const originData = [
   msgBody(2, '10:29', 'zhizhuxia', 'me', 11),
   msgBody(
@@ -47,21 +37,9 @@ export default function Messages() {
   const contentEditable = React.createRef();
   const [html, setHtml] = useState('');
 
-  useEffect(() => {
-    // 获取选中的文件
-    ipcRenderer.on('read-file', (e, { data }) => {
-      // 发送出去
-      socket.send(data);
-      msgData.push(msgBody(3, data, 'me', 'zhizhuxia'));
-      setMsgData(msgData);
-      // 解决 收到消息，聊天区域没有及时渲染
-      setHtml(html + '   ');
-    });
-  }, [msgData]);
 
   socket.onmessage = async (event) => {
     const data = event.data;
-    // console.log('onmessage', data);
     if (!data || !data.startsWith('spider->')) {
       return;
     }
@@ -71,7 +49,7 @@ export default function Messages() {
       return;
     }
 
-    // // 通知
+    // // h5通知
     // const option = {
     //   title: 'spider',
     //   body: value,
@@ -88,7 +66,7 @@ export default function Messages() {
     setMsgData(msgData);
 
     // 解决 收到消息，聊天区域没有及时渲染
-    setHtml(html + '   ');
+    setHtml(html + ' ');
 
     scrollToView();
 
@@ -161,8 +139,18 @@ export default function Messages() {
   }
 
   // 上传文件
-  function uploadFile() {
-    ipcRenderer.send('open-directory-dialog', 'openDirectory');
+  async function uploadFile() {
+    const res = await ipcRenderer.invoke('open-directory-dialog', 'openDirectory');
+    console.log('res', res)
+    if(res.event === 'send'){
+      const data = res.data;
+      socket.send(data);
+      msgData.push(msgBody(3, data, 'me', 'zhizhuxia'));
+      setMsgData(msgData);
+      // 解决 收到消息，聊天区域没有及时渲染
+      setHtml(html + ' ');
+      scrollToView();
+    }
   }
 
   function showEmoji() {
@@ -230,28 +218,26 @@ export default function Messages() {
     <div>
       <div className="message-wrap">
         <div id="msg-box" className="msg-box" ref={msgBox}>
-          {' '}
-          {render(msgData)}{' '}
-        </div>{' '}
-      </div>{' '}
+          {msgData && msgData.length ? msgData.map((item) => MsgRender(item)) : null}
+        </div>
+      </div>
       <div className="edit-wrap">
-        {' '}
-        {isShowEmoji && <EmojiPackage sendEmoji={sendEmoji} />}{' '}
+        {isShowEmoji && <EmojiPackage sendEmoji={sendEmoji} />}
         <div className="edit-tool">
           <span className="face" onClick={showEmoji}>
-            {' '}
-          </span>{' '}
+
+          </span>
           <span className="file" onClick={uploadFile}>
-            {' '}
-          </span>{' '}
+
+          </span>
           <span className="screenshot" onClick={captureScreen}>
-            {' '}
-          </span>{' '}
-          {/* // 以下功能暂时未开发 */}{' '}
+
+          </span>
+          {/* // 以下功能暂时未开发 */}
           {/* <span className="messages disabled"></span>
                 <span className="video disabled"></span>
-                <span className="phone disabled"></span> */}{' '}
-        </div>{' '}
+                <span className="phone disabled"></span> */}
+        </div>
         <ContentEditable
           innerRef={contentEditable}
           html={html}
@@ -261,8 +247,8 @@ export default function Messages() {
           onKeyDown={handleKeyDown}
           tagName="article"
           onPaste={handlePaste}
-        />{' '}
-      </div>{' '}
+        />
+      </div>
     </div>
   );
 }

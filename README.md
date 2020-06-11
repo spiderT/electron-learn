@@ -432,6 +432,66 @@ tray.popUpContextMenu(contextMenu)
 
 #### 5.2.1. clipboard 
 
+在系统剪贴板上执行复制和粘贴操作。
+
+```js
+const { clipboard, nativeImage } = require('electron')
+
+// 将 image 写入剪贴板
+const dataUrl = this.selectRectMeta.base64Data
+const img = nativeImage.createFromDataURL(dataUrl)
+clipboard.writeImage(img)
+
+// 自动粘贴剪贴板上的图片
+function handlePaste(e) {
+  const cbd = e.clipboardData
+  if (!(e.clipboardData && e.clipboardData.items)) {
+    return
+  }
+  for (let i = 0; i < cbd.items.length; i++) {
+    const item = cbd.items[i]
+    if (item.kind == 'file') {
+      const blob = item.getAsFile()
+      if (blob.size === 0) {
+        return
+      }
+      const reader = new FileReader()
+      const imgs = new Image()
+      imgs.file = blob
+      reader.onload = (e) => {
+        const imgPath = e.target.result
+        imgs.src = imgPath
+        const eleHtml = `${html}<img src='${imgPath}'/>`
+        setHtml(eleHtml)
+      }
+      reader.readAsDataURL(blob)
+    }
+  }
+}
+
+```
+
+
+#### 5.2.2. screen 
+
+检索有关屏幕大小、显示器、光标位置等的信息。
+
+```js
+// 创建填充整个屏幕的窗口的示例:
+const { app, BrowserWindow, screen } = require('electron')
+
+let win
+app.on('ready', () => {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
+  win = new BrowserWindow({ width, height })
+  win.loadURL('https://github.com')
+})
+
+```
+
+
+#### 5.2.3. globalShortcut 
+
 系统快捷键，监听键盘事件  
 
 globalShortcut 模块可以在操作系统中注册/注销全局快捷键, 以便可以为操作定制各种快捷键。  
@@ -465,11 +525,32 @@ app.on('will-quit', () => {
 
 ```
 
-#### 5.2.2. screen 
+#### 5.2.4. desktopCapturer 
 
-#### 5.2.3. globalShortcut 
+用于从桌面上捕获音频和视频的媒体源信息。
 
-#### 5.2.4. desktopCapture 
+```js
+desktopCapturer.getSources({
+    types: ['screen', 'window'],
+    thumbnailSize: {
+        width,
+        height
+    }
+}).then(
+    async (sources) => {
+        const screenImgUrl = sources[0].thumbnail.toDataURL()
+
+        const bg = document.querySelector('.bg')
+        const rect = document.querySelector('.rect')
+        const sizeInfo = document.querySelector('.size-info')
+        const toolbar = document.querySelector('.toolbar')
+        const draw = new Draw(screenImgUrl, bg, width, height, rect, sizeInfo, toolbar)
+        document.addEventListener('mousedown', draw.startRect.bind(draw))
+        document.addEventListener('mousemove', draw.drawingRect.bind(draw))
+        document.addEventListener('mouseup', draw.endRect.bind(draw))
+    }
+).catch(err => console.log('err', err))
+```
 
 #### 5.2.5. shell 
 
