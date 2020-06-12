@@ -198,8 +198,9 @@ class Draw {
         const img = nativeImage.createFromDataURL(dataUrl)
         clipboard.writeImage(img);
 
-        // todo 成功后，粘贴到输入框
+        // 进程间转发 成功后，粘贴到输入框
         // this.sendMsg('paste', dataUrl)
+
         this.handlePaste(dataUrl)
         console.log('paste11')
 

@@ -55,6 +55,8 @@ if (!gotTheLock) {
   });
 
   app.on('ready', () => {
+    // 模拟crash
+    // process.crash();
     const win = createWindow();
     setTray();
     handleIPC();

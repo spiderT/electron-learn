@@ -12,6 +12,7 @@ if (process.platform == 'darwin') {
 
 // 定时轮训、服务端推送
 autoUpdater.checkForUpdates(); 
+
 autoUpdater.on('update-available', () => {
     console.log('update-available')
 })

@@ -47,9 +47,7 @@ remote https://juejin.im/post/5d4b79a3e51d4561b072dcb0
  https://stackoverflow.com/questions/32986826/calling-node-native-addons-c-in-electron  
 
 4. 奔溃报告上传  https://juejin.im/post/5c5ee47be51d457f95354c82  
- https://cloud.tencent.com/developer/section/1116135  
- https://www.electronjs.org/docs/api/crash-reporter  
- https://www.bookstack.cn/read/electron-v5/61.md  
+ https://www.electronjs.org/docs/api/crash-reporter   
 
 5. debugger https://cloud.tencent.com/developer/section/1116142   
 
@@ -191,36 +189,95 @@ const S3 = require('aws-sdk/clients/s3');
 
 ### 4.1. app
 
-主进程
+进程： Main  
+用于控制应用生命周期。  
+ 
+ready: 当 Electron 完成初始化时被触发。  
+
+will-finish-launching: 当应用程序完成基础的启动的时候被触发。常会在这里为 open-file 和 open-url 设置监听器，并启动崩溃报告和自动更新。  
+
+activate: 当应用被激活时触发，常用于点击应用的 dock 图标的时候。  
+
+window-all-closed: 当所有的窗口都被关闭时触发。如果没有监听此事件，当所有窗口都已关闭时，默认行为是退出应用程序。  
+
 
 ```js
 const { app } = require('electron')
+
+app.on('second-instance', show);
+
+app.on('will-finish-launching', () => {
+  // 自动更新
+  if (!isDev) {
+    require('./src/main/updater.js');
+  }
+  require('./src/main/crash-reporter').init();
+});
+
+app.on('ready', () => {
+  // 模拟crash
+  // process.crash();
+  const win = createWindow();
+  setTray();
+  handleIPC();
+  handleDownload(win);
+});
+
+app.on('activate', show);
+
+app.on('before-quit', close);
+
+app.on('will-quit', () => {
+  // Unregister all shortcuts.
+  globalShortcut.unregisterAll();
+});
 app.on('window-all-closed', () => {
   app.quit()
 })
+
+
 ```
 
-#### 4.1.1. 事件
+### 4.2. BrowserWindow
 
-https://electronjs.org/docs/api/app#%E4%BA%8B%E4%BB%B6
+进程： Main  
+创建和控制浏览器窗口。  
 
-### 4.2. menu
+```js
+win = new BrowserWindow({
+    width: 900,
+    height: 700,
+    webPreferences: {
+      nodeIntegration: true
+    },
+    minWidth: 800,
+    minHeight: 600,
+    titleBarStyle: 'hiddenInset',
+    show: false, // 先隐藏
+    icon: path.join(__dirname, '../../resources/images/zhizhuxia.png'),
+    backgroundColor: '#f3f3f3', // 优化白屏，设置窗口底色
+  })
+```
 
-#### accelerator 快捷键
+BrowserWindow——无边框  
 
-https://electronjs.org/docs/api/accelerator
+1、BrowserWindow 的 options 中将 frame 设置为 false。  
 
-1. 快捷键可以包含多个功能键和一个键码的字符串，由符号+结合，用来定义你应用中的键盘快捷键
+macOS 上的其他方案：  
+2、titleBarStyle设为hidden，返回一个隐藏标题栏的全尺寸内容窗口，在左上角仍然有标准的窗口控制按钮。  
 
-## 5. 渲染进程和主进程
+3、titleBarStyle设为hiddenInset，返回一个另一种隐藏了标题栏的窗口，其中控制按钮到窗口边框的距离更大。  
 
-Electron 运行 package.json 的 main 脚本的进程被称为主进程。 在主进程中运行的脚本通过创建 web 页面来展示用户界面。 一个 Electron 应用总是有且只有一个主进程。
+4、customButtonsOnHover  
+使用自定义的关闭、缩小和全屏按钮，这些按钮会在划过窗口的左上角时显示。  
 
-由于 Electron 使用了 Chromium 来展示 web 页面，所以 Chromium 的多进程架构也被使用到。 每个 Electron 中的 web 页面运行在它自己的渲染进程中。
+5、透明窗口：通过将 transparent 选项设置为 true, 还可以使无框窗口透明:  
 
-在普通的浏览器中，web 页面通常在沙盒环境中运行，并且无法访问操作系统的原生资源。 然而 Electron 的用户在 Node.js 的 API 支持下可以在页面中和操作系统进行一些底层交互。
+默认情况下, 无边框窗口是不可拖拽的。 需要在 CSS 中指定 -webkit-app-region: drag 来告诉 Electron 哪些区域是可拖拽的。  
 
-### 4.1. 主进程和渲染进程之间的区别
+### 4.3. ipcMain 和 ipcRenderer
+
+1. 主进程和渲染进程之间的区别
 
 主进程使用 BrowserWindow 实例创建页面。 每个 BrowserWindow 实例都在自己的渲染进程里运行页面。 当一个 BrowserWindow 实例被销毁后，相应的渲染进程也会被终止。
 
@@ -232,7 +289,7 @@ Electron 为主进程（ main process）和渲染器进程（renderer processes�
 
 ![渲染进程和主进程](images/ipcRenderer.png)
 
-### 4.2. Electron 渲染进程
+2. Electron 渲染进程
 
 ```js
 // 引入模块，各进程直接在electron模块引入即可。例子:
@@ -248,7 +305,7 @@ ipcRenderer.invoke(channel, ...args).then(result => { handleResult }) // 渲染�
 
 - 一个 Electron 应用可以有多个渲染进程
 
-### 4.3. Electron 主进程
+3. Electron 主进程
 
 ipcMain.handle(channel, handler)，处理理渲染进程的 channel 请求，在 handler 中 return 返回结果
 
@@ -264,14 +321,14 @@ ipcMain.handle(channel, handler)，处理理渲染进程的 channel 请求，在
 
 ![渲染进程和主进程](images/ipcRenderer2.png)
 
-### 4.4. 进程间通信
+4. 进程间通信
 
-1. IPC 模块通信  
+1） IPC 模块通信  
 
 - Electron 提供了 IPC 通信模块，主进程的 ipcMain 和 渲染进程的 ipcRenderer  
 - ipcMain、ipcRenderer 都是 EventEmitter 对象  
 
-2. 进程间通信:从渲染进程到主进程  
+2） 进程间通信:从渲染进程到主进程  
 
 - Callback 写法:  
 ipcRenderer.send  
@@ -281,13 +338,13 @@ ipcMain.on
 ipcRenderer.invoke   
 ipcMain.handle  
 
-3. 进程间通信:从主进程到渲染进程  
+3） 进程间通信:从主进程到渲染进程  
 
 - 主进程通知渲染进程:  
 ipcRenderer.on  
 webContents.send  
 
-4. 页面间(渲染进程与渲染进程间)通信  
+4）页面间(渲染进程与渲染进程间)通信  
 
 - 通知事件  
   
@@ -329,38 +386,7 @@ Web 技术(localStorage、sessionStorage、indexedDB)
 - 不要用 sync 模式  
 - 在请求 + 响应的通信模式下，需要自定义超时限制  
 
-## 5. Electron 应用原生能力
-
-### 5.1. 使用 Electron API 创建原生 GUI
-
-- BrowserWindow 
-- Tray
-- app
-- Menu
-- dialog 
-- TouchBar
-
-#### 5.1.1. 关于窗口
-
-1. 禁止多开  
-
-```js
-const gotTheLock = app.requestSingleInstanceLock()
-if (!gotTheLock) { app.quit()
-} else {
-app.on('second-instance', (event, commandLine, workingDirectory) => {
-// 当运行第二个实例时,将会聚焦到myWindow这个窗口
-showMainWindow() })
-app.on('ready', () => {...
-}) }
-```
-
-2. 窗口假关闭  
-
-- 用户点击窗口关闭按钮时候，应用只是隐藏   
-- 点击「退出应用」时才真正关闭窗口  
-
-#### 5.1.2. Menu/MenuItem(菜单/菜单项)
+### 4.4. Menu/MenuItem(菜单/菜单项)
 
 1. 新建菜单
 
@@ -398,7 +424,7 @@ menu.popup({ window: remote.getCurrentWindow() })
 app.applicationMenu = appMenu;
 ```
 
-#### 5.1.3. Tray(托盘)
+### 4.5. Tray(托盘)
 
 1. 方法  
 
@@ -428,9 +454,7 @@ tray.popUpContextMenu(contextMenu)
 'drop-files':文件拖拽。类似的还有drop-text  
 'balloon-click':托盘气泡被点击(Windows特性)
 
-### 5.2. 使用 Electron API 获得底层能力
-
-#### 5.2.1. clipboard 
+### 4.6. clipboard 
 
 在系统剪贴板上执行复制和粘贴操作。
 
@@ -472,7 +496,7 @@ function handlePaste(e) {
 ```
 
 
-#### 5.2.2. screen 
+### 4.7. screen 
 
 检索有关屏幕大小、显示器、光标位置等的信息。
 
@@ -490,7 +514,7 @@ app.on('ready', () => {
 ```
 
 
-#### 5.2.3. globalShortcut 
+### 4.8. globalShortcut 
 
 系统快捷键，监听键盘事件  
 
@@ -525,7 +549,7 @@ app.on('will-quit', () => {
 
 ```
 
-#### 5.2.4. desktopCapturer 
+### 4.9. desktopCapturer 
 
 用于从桌面上捕获音频和视频的媒体源信息。
 
@@ -552,7 +576,7 @@ desktopCapturer.getSources({
 ).catch(err => console.log('err', err))
 ```
 
-#### 5.2.5. shell 
+### 4.10. shell 
 
 使用默认应用程序管理文件和 url。  
 
@@ -581,14 +605,14 @@ shell.beep()
 播放哔哔的声音.  
 
 
-#### 5.2.6. powerMonitor 电源监视器
+### 4.11. powerMonitor 电源监视器
 
 > 监视电源状态的改变。  
 
 https://www.electronjs.org/docs/api/power-monitor
 
 
-### 5.3. 使用 Node.js 获得底层能力
+### 4.12. 使用 Node.js 获得底层能力
 
 - Electron 同时在主进程和渲染进程中对 Node.js 暴露了所有的接口
 
@@ -597,20 +621,13 @@ crypto 进行加解密
 
 - 通过 npm 安装即可引入社区上所有的 Node.js 库
 
-### 5.4. 使用 Node.js 调用原生模块
+### 4.13. 使用 Node.js 调用原生模块
 
 - node.js add-on  
 - node-ffi  
 
-### 5.5. 调用 OS 能力
 
-- WinRT 
-- Applescript 
-- Shell
-
-![Electron 的能力](images/ability.png)
-
-## 6. 开机自启动 [node-auto-launch](https://github.com/Teamwork/node-auto-launch)
+## 5. 开机自启动 [node-auto-launch](https://github.com/Teamwork/node-auto-launch)
 
 主进程main.js：  
 
@@ -649,6 +666,56 @@ demo.isEnabled().then(function(isEnabled){
   // handle error
 });
 ```
+
+## 6. 监控—crashReporter
+
+可以用process.crash()模拟崩溃  
+
+崩溃报告发送 multipart/form-data POST 型的数据给 submitURL:  
+
+```js
+//  客户端
+crashReporter.start({
+  productName: 'spiderchat',
+  companyName: 'spiderT',
+  submitURL: 'http://127.0.0.1:9999/crash',
+})
+
+// 服务端
+const multer = require('koa-multer')
+const uploadCrash = multer({
+    dest: 'crash/'
+})
+router.post('/crash', uploadCrash.single('upload_file_minidump'), (ctx, next) => {
+    console.log('crash', ctx.req.body)
+    // todo 存DB
+})
+```
+
+崩溃报告解析
+
+下载并解压 symbol https://github.com/electron/electron/releases  
+
+• Mac electron-vX.X.X-darwin-x64-symbols.zip  
+
+• Win electron-vX.X.X-win32-ia32-symbols.zip   
+
+ 解析 dmp 文件  
+
+• node-minidump  
+
+```js
+const minidump = require('minidump');
+const fs = require('fs');
+
+// symbolpath
+minidump.addSymbolPath('/Users/tangting/tt/soft/electron-v9/breakpad_symbols/');
+
+minidump.walkStack('./crash/aebd0e03e9f27f8e9d111f3aa8b67409',(err, res)=>{
+    fs.writeFileSync('./error.txt', res);
+})
+```
+
 
 ## 7. 打包
 
@@ -750,33 +817,7 @@ arch “x64” | “ia32” | “armv7l” | “arm64”> | “x64” | “ia32�
 
 ```
 
-#### 常见错误
-
-##### NPM 下载的问题
-
-因为 NPM 在国内比较慢。导致 electron-V.xxxx.zip 下载失败。这些东西如果是第一次打包的话是需要下载对应 electron 版本的支持文件。解决办法有两个
-
-1. 设置镜像：在.npmrc 文件。然后加入下面这句代码
-
-```text
-electron_mirror=http://npm.taobao.org/mirrors/electron/
-```
-
-2. 直接去淘宝镜像文件库找到对应的文件并下载，放到指定的目录下，electron 的淘宝镜像地址。下载完之后放到指定的文件。
-
-##### NSIS 下载问题
-
-### 热重载(开发实时刷新)
-
-
-
-### 热更新
-
-## 8. 脚手架 electron-forge
-
-https://juejin.im/post/5c46ab47e51d45522b4f55b1
-
-## 9. 集成c++
+## 8. 集成c++
 
 安装  
 
@@ -853,7 +894,7 @@ var addon = require("./build/Release/addon");
 console.log(addon.hello());
 ```
 
-## 10. 测试和调试
+## 9. 测试和调试
 
 1. [spectron](https://www.electronjs.org/spectron)  
 
@@ -916,218 +957,98 @@ driver.wait(() => {
 driver.quit()
 ```
 
-## 11. Electron 开发过程中可能会遇到的几个问题和场景。
+## 10. 更新
 
-- 启动时间优化  
-Electron 应用创建窗口之后，由于需要初始化窗口，加载 html，js 以及各种依赖，会出现一个短暂的白屏。除了传统的，比如说延迟 js 加载等 web 性能优化的方法，在 Electron 中还可以使用一种方式，就是在 close 窗口之前缓存 index 页面，下次再打开窗口的时候直接加载缓存好的页面，这样就会提前页面渲染的时间，缩短白屏时间。  
-
-但是，优化之后也还是会有白屏出现，对于这段时间可以用一个比较 tricky 的方法，就是让窗口监听 ready-to-show 事件，等到页面完成首次绘制后，再显示窗口。这样，虽然延迟了窗口显示时间，总归不会有白屏出现了。  
-
--  CPU 密集型任务处理  
-对于 cpu 密集型或者 long-running 的 task，我们肯定不希望它们阻塞主进程或者影响渲染进程页面的渲染，这时候就需要在其他进程中执行这些任务。通常有三种方式：  
-
-1. 使用 child_process 模块，spawn 或者 fork 一个子进程；    
-2. WebWorker；  
-3. Backgroundprocess。在 Electron 应用中，我们可以创建一个隐藏的 Browser Window 作为 background process，这种方法的优势就在于它本身就是一个渲染进程，所以可以使用 Electron 和 Node.js 提供的所有 api。    
-
-- 数据持久化存储  
-为了使应用在 offline 的情况下也可以正常运行，对于桌面应用，我们会将一些数据存储到本地，常见方式有：  
-
-localStorage。对于渲染进程中的数据，可以存到 localStorage 中。需要注意的是主进程是无法获取的。  
-嵌入式数据库。我们也可以直接打包一个嵌入式数据库到应用中，比如说 SQLite，nedb，这种方式比较适合大规模数据的存储以及增删改查。  
-对于简易的配置或者用户数据，可以使用 electron-config 等模块，将数据以 JSON 格式保存到文件中。  
-
-- 安全性考虑  
-在 Electron 应用中，web 页面是可以直接调用 Node.js api 的，这样就可以做很多事情，比如说操作文件系统，但同时也会带来安全隐患，建议大家渲染进程中禁用 NodeJS 集成。  
-
-如果需要在页面中使用 node 或者 electron 的 api，可以通过提前加载一个 preload.js 作为 bridge，这个 js 会在所有页面 js 运行前被执行。我们可以在里面做很多事情，比如说把需要的 node 方法放到 global 或者 window 中，这样页面中就没办法直接使用 node 模块，但是又可以使用需要的某些功能，如下图所示。  
-
-Electron在DevTools中的探索与实践  
-
-除此之外，还要注意，使用安全的协议，比如说 https 加载外部资源。在 Electron 应用中，可以通过监听新窗口创建和页面跳转事件，判断是否是安全跳转，加以限制。亦可以通过设置 CSP，对指定 URL 的访问进行约束。  
-
-- 应用体积优化  
-对于 Electron 应用打包，首先会使用 webpack 分别对主进程和渲染进程代码进行处理优化，和 web 应用一样。有点区别的地方是配置中主进程的 target 是 electron-main, 渲染进程的 target 是 electron-renderer。除此之外，还要对 node 做一些配置，我们是不需要 webpack 来 polyfill 或者 mocknode 的全局变量和模块的，所以设为 false。  
-
-之后，在基于 electron-builder 将应用 build 成不同平台的安装包，需要注意的是，对于 package.json，尽可能地把可以打包到 bundle 的依赖模块，从 dependencies 移到 devDependencies，因为所有 dependencies 中的模块都会被打到安装包中，会严重增大安装包体积。
-
-
-## 12. Electron客户端的安全：从xss到rce
-
-
-## 13. Electron无边框窗口（最小化、最大化、关闭、拖动）以及动态改变窗口大小
-
-### 方法1
-
-1. 要创建无边框窗口，只需在BrowserWindow的options中将frame设置为 false.  
-
-
-2. 可拖拽区  
-
-应用程序需要在 CSS 中指定 -webkit-app-region: drag 来告诉 Electron 哪些区域是可拖拽的  
-在可拖拽区域内部使用 -webkit-app-region: no-drag 则可以将其中部分区域排除  
-拖动行为可能与选择文本冲突。 例如, 当您拖动标题栏时, 您可能会意外地选择标题栏上的文本。 为防止此操作, 您需要在可区域中禁用文本选择  
-
-```css
-.titlebar {
-  -webkit-app-region: drag;
-  -webkit-user-select: none;
-}
-```
-
-在某些平台上，可拖拽区域不被视为窗口的实际内容，而是作为窗口边框处理，因此在右键单击时会弹出系统菜单。 要使上下文菜单在所有平台上都正确运行, 您永远也不要在可拖拽区域上使用自定义上下文菜单。  
-
-#### 最小化、最大化、关闭
-
-1. render 进程通过 ipcRenderer 与 ipcMain 进行通讯，以通知 main 进程操作窗体。  
-
-2. 在renderer.js中添加click事件，发送操作命令给主进程
+客户端使用autoUpdater
 
 ```js
-let ipcRenderer = require('electron').ipcRenderer;
+const {
+    autoUpdater,
+    app,
+    dialog
+} = require('electron');
 
-var max = document.getElementById('max');
-if (max) {
-    max.addEventListener('click', () => {
-        //发送最大化命令
-        ipcRenderer.send('window-max');
-        //最大化图形切换
-        if (max.getAttribute('src') == 'images/max.png') {
-            max.setAttribute('src', 'images/maxed.png');
-        } else {
-            max.setAttribute('src', 'images/max.png');
+if (process.platform == 'darwin') {
+    autoUpdater.setFeedURL('http://127.0.0.1:9999/darwin?version=' + app.getVersion())
+} else {
+    autoUpdater.setFeedURL('http://127.0.0.1:9999/win32?version=' + app.getVersion())
+}
+
+// 定时轮训、服务端推送
+autoUpdater.checkForUpdates(); 
+autoUpdater.on('update-available', () => {
+    console.log('update-available')
+})
+
+autoUpdater.on('update-downloaded', (e, notes, version) => {
+    // 提醒用户更新
+    app.whenReady().then(() => {
+        const clickId = dialog.showMessageBoxSync({
+            type: 'info',
+            title: '升级提示',
+            message: '已为你升级到最新版，是否立即体验',
+            buttons: ['马上升级', '手动重启'],
+            cancelId: 1,
+        })
+        if (clickId === 0) {
+            autoUpdater.quitAndInstall()
+            app.quit()
         }
     })
-}
-
-var min = document.getElementById('min');
-if (min) {
-    min.addEventListener('click', () => {
-        //发送最小化命令
-        ipcRenderer.send('window-min');
-    })
-}
-
-var close = document.getElementById('close');
-if (close) {
-    close.addEventListener('click', () => {
-        //发送关闭命令
-        ipcRenderer.send('window-close');
-    })
-}
-```
-
-3. 在main.js中接收操作命令，做出相应处理
-
-```js
-let ipcMain = require('electron').ipcMain;
-//接收最小化命令
-ipcMain.on('window-min', function() {
-    mainWindow.minimize();
 })
-//接收最大化命令
-ipcMain.on('window-max', function() {
-    if (mainWindow.isMaximized()) {
-        mainWindow.restore();
-    } else {
-        mainWindow.maximize();
-    }
-})
-//接收关闭命令
-ipcMain.on('window-close', function() {
-    mainWindow.close();
+
+autoUpdater.on('error', (err) => {
+    console.log('error', err)
 })
 ```
 
-这里最大化和取消最大化时，修改图标的方法不合适，因为通过双击drag-area或者拉动窗口到屏幕边缘等操作，也可能修改窗口的状态。
-因此，应该在主进程中监听窗口的最大化操作，然后发送命令给渲染进程：
+服务端
 
 ```js
-mainWindow.on('maximize', function () {
- mainWindow.webContents.send('main-window-max');
-})
-mainWindow.on('unmaximize', function () {
-  mainWindow.webContents.send('main-window-unmax');
-})
-```
-在渲染进程中接收到相应命令，再进行处理：
+function getNewVersion(version) {
+  if (!version) return null;
+  const maxVersion = {
+    name: '1.0.1',
+    pub_date: '2020-06-09T12:26:53+1:00',
+    notes: '新增功能: 菜单栏改成红色',
+    url: `http://127.0.0.1:9999/public/spiderchat-1.0.1-mac.zip`,
+  };
+  if (compareVersions.compare(maxVersion.name, version, '>')) {
+    return maxVersion;
+  }
+  return null;
+}
 
-```js
-ipcRenderer.on('main-window-max', (event) => {
-	max.classList.remove('icon-max');
-	max.classList.add('icon-maxed');
-});
-ipcRenderer.on('main-window-unmax', (event) => {
-	max.classList.remove('icon-maxed');
-	max.classList.add('icon-max');
+router.get('/darwin', (ctx, next) => {
+  // 处理Mac更新, ?version=1.0.0&uid=123
+  const { version } = ctx.query;
+  const newVersion = getNewVersion(version);
+  if (newVersion) {
+    ctx.body = newVersion;
+  } else {
+    ctx.status = 204;
+  }
 });
 ```
 
-发送最大化给主进程
-
-```js
-var loginbtn = document.getElementById('login');
-if (loginbtn) {
-    loginbtn.addEventListener('click', () => {
-        ipcRenderer.send('window-max');
-        location.href = "index.html";
-    })
-}
-```
-
-### 方法2
-
-结果在一个隐藏的标题栏中，另一种方式是交通灯按钮从窗口边缘稍微嵌入。
-
-```js
-const {BrowserWindow} = require('electron')
-let win = new BrowserWindow({titleBarStyle: 'hiddenInset'})
-win.show()
-```
-
-默认情况下, 无边框窗口是不可拖拽的。 应用程序需要在 CSS 中指定 -webkit-app-region: drag 来告诉 Electron 哪些区域是可拖拽的（如操作系统的标准标题栏），在可拖拽区域内部使用 -webkit-app-region: no-drag 则可以将其中部分区域排除。 请注意, 当前只支持矩形形状。  
-
-注意: -webkit-app-region: drag 在开发人员工具打开时会出现问题。 查看更多信息 (包括变通方法), 请参见此 [GitHub 问题](https://github.com/electron/electron/issues/3647) 。  
-
-要使整个窗口可拖拽, 您可以添加 -webkit-app-region: drag 作为 body 的样式:  
-
-```html
-<body style="-webkit-app-region: drag">
-</body>
-```
-
-## 14. 更新
-
-mac证书：Could not get code signature for running application  https://github.com/electron/electron/issues/7476  
-https://www.cnblogs.com/qirui/p/8327812.html  
+## 11. Electron客户端的安全：从xss到rce
 
 
-## 15. 性能优化——处理白屏
 
-
-1. 白屏基本功
-
-- 在 ready-to-show 时候再显示   
-- 设置窗口底色  
-
-2. [实现占位图](https://github.com/dengyaolong/electron-loading-window-example)  
-
-BrowserView、BrowserWindow、ChildWindow
-
-## 16. 浏览器启动客户端
+## 12. 浏览器启动客户端
 
 > 原理  
 浏览器在解析url的时候，会尝试从系统本地寻找url协议所关联的应用，如果有关联的应用，则尝试打开这个应用  
 
-### 16.1. windows平台
+### 12.1. windows平台
 
 在windows下，注册一个协议比较简单，写注册表就可以了。参考 Registering an Application to a URI Scheme：https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa767914(v=vs.85)
 
-### 16.2. mac 平台
+### 12.2. mac 平台
 
 几个基本概念
 
-#### 16.2.1. info.plist
+#### 12.2.1. info.plist
 
 iOS和MacOS的应用包中，都有一个info.plist文件，这个文件主要用来记录应用的一些meta信息，参考[Information Property List](https://developer.apple.com/documentation/bundleresources/information_property_list)。文件用键值对的形式来记录信息(xml)，结构如下：
 
@@ -1157,7 +1078,7 @@ A list of URL schemes (http, ftp, and so on) supported by the app.
     },
 ```
 
-### 16.3. 接收参数
+### 12.3. 接收参数
 
 协议注册完毕之后，我们已经可以在浏览器中，通过访问自定义协议url来启动客户端了。  
 
@@ -1165,7 +1086,7 @@ A list of URL schemes (http, ftp, and so on) supported by the app.
 
 Vscode通过解析url中的参数来实现自定义行为，那么作为客户端如何拿到这个url呢？  
 
-### 16.3.1. Windows
+### 12.3.1. Windows
 
 参数会通过启动参数的形式传递给应用程序。因此，我们可以很方便的拿到这个参数
 
@@ -1180,7 +1101,7 @@ console.log(process.argv);
 ]
 ```
 
-### 16.3.2. MacOS
+### 12.3.2. MacOS
 
 在Mac下不会通过启动参数传递给应用，通过自定义协议打开应用，app会收到 open-url 事件
 
@@ -1190,3 +1111,64 @@ app.on('open-url', (e, url) => { // eslint-disable-line
   parse(url)； 解析url
 });
 ```
+
+## Electron 开发过程中可能会遇到的几个问题和场景。
+
+- 启动时间优化  
+Electron 应用创建窗口之后，由于需要初始化窗口，加载 html，js 以及各种依赖，会出现一个短暂的白屏。除了传统的，比如说延迟 js 加载等 web 性能优化的方法，在 Electron 中还可以使用一种方式，就是在 close 窗口之前缓存 index 页面，下次再打开窗口的时候直接加载缓存好的页面，这样就会提前页面渲染的时间，缩短白屏时间。  
+
+但是，优化之后也还是会有白屏出现，对于这段时间可以用一个比较 tricky 的方法，就是让窗口监听 ready-to-show 事件，等到页面完成首次绘制后，再显示窗口。这样，虽然延迟了窗口显示时间，总归不会有白屏出现了。  
+
+1. 在 ready-to-show 时候再显示    
+  设置窗口底色   
+
+2. [实现占位图](https://github.com/dengyaolong/electron-loading-window-example)  
+
+BrowserView、BrowserWindow、ChildWindow
+
+-  CPU 密集型任务处理  
+对于 cpu 密集型或者 long-running 的 task，我们肯定不希望它们阻塞主进程或者影响渲染进程页面的渲染，这时候就需要在其他进程中执行这些任务。通常有三种方式：  
+
+1. 使用 child_process 模块，spawn 或者 fork 一个子进程；    
+2. WebWorker；  
+3. Backgroundprocess。在 Electron 应用中，我们可以创建一个隐藏的 Browser Window 作为 background process，这种方法的优势就在于它本身就是一个渲染进程，所以可以使用 Electron 和 Node.js 提供的所有 api。    
+
+- 数据持久化存储  
+为了使应用在 offline 的情况下也可以正常运行，对于桌面应用，我们会将一些数据存储到本地，常见方式有：  
+
+localStorage。对于渲染进程中的数据，可以存到 localStorage 中。需要注意的是主进程是无法获取的。  
+嵌入式数据库。我们也可以直接打包一个嵌入式数据库到应用中，比如说 SQLite，nedb，这种方式比较适合大规模数据的存储以及增删改查。  
+对于简易的配置或者用户数据，可以使用 electron-config 等模块，将数据以 JSON 格式保存到文件中。  
+
+- 安全性考虑  
+在 Electron 应用中，web 页面是可以直接调用 Node.js api 的，这样就可以做很多事情，比如说操作文件系统，但同时也会带来安全隐患，建议大家渲染进程中禁用 NodeJS 集成。  
+
+如果需要在页面中使用 node 或者 electron 的 api，可以通过提前加载一个 preload.js 作为 bridge，这个 js 会在所有页面 js 运行前被执行。我们可以在里面做很多事情，比如说把需要的 node 方法放到 global 或者 window 中，这样页面中就没办法直接使用 node 模块，但是又可以使用需要的某些功能，如下图所示。  
+
+Electron在DevTools中的探索与实践  
+
+除此之外，还要注意，使用安全的协议，比如说 https 加载外部资源。在 Electron 应用中，可以通过监听新窗口创建和页面跳转事件，判断是否是安全跳转，加以限制。亦可以通过设置 CSP，对指定 URL 的访问进行约束。  
+
+- 应用体积优化  
+对于 Electron 应用打包，首先会使用 webpack 分别对主进程和渲染进程代码进行处理优化，和 web 应用一样。有点区别的地方是配置中主进程的 target 是 electron-main, 渲染进程的 target 是 electron-renderer。除此之外，还要对 node 做一些配置，我们是不需要 webpack 来 polyfill 或者 mocknode 的全局变量和模块的，所以设为 false。  
+
+之后，在基于 electron-builder 将应用 build 成不同平台的安装包，需要注意的是，对于 package.json，尽可能地把可以打包到 bundle 的依赖模块，从 dependencies 移到 devDependencies，因为所有 dependencies 中的模块都会被打到安装包中，会严重增大安装包体积。
+
+##### NPM 下载的问题
+
+因为 NPM 在国内比较慢。导致 electron-V.xxxx.zip 下载失败。这些东西如果是第一次打包的话是需要下载对应 electron 版本的支持文件。解决办法有两个
+
+1. 设置镜像：在.npmrc 文件。然后加入下面这句代码
+
+```text
+electron_mirror=http://npm.taobao.org/mirrors/electron/
+```
+
+2. 直接去淘宝镜像文件库找到对应的文件并下载，放到指定的目录下，electron 的淘宝镜像地址。下载完之后放到指定的文件。
+
+##### NSIS 下载问题
+
+### 热重载(开发实时刷新)
+
+
+### 热更新

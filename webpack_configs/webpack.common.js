@@ -42,8 +42,7 @@ var appConfig = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
-          presets: [['env', { modules: false }], 'stage-2', 'react'],
-          plugins: ['transform-decorators-legacy', ['import', { libraryName: 'antd', style: 'css' }]],
+          presets: [['env', { modules: false }], 'stage-2', 'react']
         },
       },
       {
