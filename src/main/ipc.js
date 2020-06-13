@@ -51,8 +51,8 @@ module.exports = function () {
   // 图片预览
   ipcMain.on('create-pic-window', (event, arg) => {
     picWin = new BrowserWindow({
-      width: 600,
-      height: 400,
+      width: 800,
+      height: 600,
       // resizable: false,
       webPreferences: {
         nodeIntegration: true,

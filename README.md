@@ -24,12 +24,16 @@ cd electron-learn
 npm install
 
 // 启动websocket模拟聊天
-cd ws_server
+cd ws-server
 node index.js
 // 以live server的方式打开client.html，就可以愉快的聊天了
 
 // 启动
 npm start
+
+// 启动crash，update服务
+cd updater-server
+node index.js
 ```
 
 ### 参考资料  

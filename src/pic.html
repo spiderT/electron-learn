@@ -10,27 +10,27 @@
   body {
     margin: 0;
     padding: 0;
-    width: 600px;
-    height: 400px;
+    width: 800px;
+    height: 600px;
     overflow: hidden;
   }
 
   .pic-wrap {
-    width: 600px;
-    height: 400px;
+    width: 800px;
+    height: 600px;
     position: relative;
     overflow: hidden;
   }
 
   .pic-container {
-    max-height: 300px;
+    max-height: 700px;
     width: auto;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
-
+  
   .btn-wrap {
     position: absolute;
     width: 350px;
@@ -89,7 +89,7 @@
 
 <body>
   <div class="pic-wrap">
-    <div class="pic-container"><img id="pic-container"></div>
+    <div class="pic-container"><img id="pic" class="pic"></div>
     <div class="btn-wrap">
       <i class="pic-icon zoom-in" onclick="zoomIn()"></i>
       <i class="pic-icon zoom-out" onclick="zoomOut()"></i>
@@ -106,7 +106,7 @@
   const {
     ipcRenderer
   } = require('electron');
-  const img = document.getElementById('pic-container');
+  const img = document.getElementById('pic');
   const tip = document.getElementById('msg-tip');
   let r = 0;
   let imgWidth;
