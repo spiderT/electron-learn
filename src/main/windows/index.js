@@ -26,7 +26,7 @@ function createWindow() {
   })
 
   global.sharedObject = {
-    win
+    mainId: win.webContents.id
   };
 
    // 初始化截图

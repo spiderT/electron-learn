@@ -8,7 +8,7 @@ export default function App() {
     ipcRenderer.on('download-item-done', (e) => {
       console.log('下载完成✅');
 
-      const id = remote.getGlobal('sharedObject').picWin.webContents.id;
+      const id = remote.getGlobal('sharedObject').picId;
       ipcRenderer.sendTo(id, 'download-item-done');
     });
   }, []);

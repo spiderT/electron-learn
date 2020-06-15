@@ -40,8 +40,10 @@ node index.js
 
 1. electron 优化 https://juejin.im/post/5e0010866fb9a015fd69c645  
 
-2. 坑https://www.jianshu.com/p/9c8f7223ccbb  
-remote https://juejin.im/post/5d4b79a3e51d4561b072dcb0
+Electron的主进程阻塞导致UI卡顿的问题 https://zhuanlan.zhihu.com/p/37050595  
+
+2. 打包：mac 文件签名：https://www.cnblogs.com/lovesong/p/11782449.html  
+https://www.cnblogs.com/qirui/p/8327812.html  
 
 3. 集成c++  
  https://www.jianshu.com/p/93ffa05f028f  
@@ -56,13 +58,6 @@ remote https://juejin.im/post/5d4b79a3e51d4561b072dcb0
 5. debugger https://cloud.tencent.com/developer/section/1116142   
 
 6. 测试和调试 https://www.bookstack.cn/read/electron-v6.0-zh/dda8a7a000404b49.md  
-
-7. [Electron的主进程阻塞导致UI卡顿的问题](https://zhuanlan.zhihu.com/p/37050595)  
-
-[Electron 进程间通讯详解](https://www.iguan7u.cn/2019/06/30/Electron-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E8%AE%AF%E8%AF%A6%E8%A7%A3/#1-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B8%BA%E4%BD%95%E4%BC%9A%E5%87%BA%E7%8E%B0%E5%8D%A1%E9%A1%BF%EF%BC%9F)   
-
-8. 打包：mac 文件签名：https://www.cnblogs.com/lovesong/p/11782449.html  
-https://www.cnblogs.com/qirui/p/8327812.html
 
 
 ## 2. electron相关软件安装

@@ -217,7 +217,7 @@ class Draw {
     }
 
     handlePaste(msg){
-        const id = remote.getGlobal('sharedObject').win.webContents.id;
+        const id = remote.getGlobal('sharedObject').mainId;
         ipcRenderer.sendTo(id, 'paste-pic-from-clipboard', msg)
     }
 

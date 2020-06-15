@@ -58,7 +58,7 @@ module.exports = function () {
         nodeIntegration: true,
       },
     });
-    global.sharedObject.picWin = picWin;
+    global.sharedObject.picId = pic.webContents.id;
 
     picWin.loadURL(path.join('file:', __dirname, '../pic.html'));
 
