@@ -1,24 +1,61 @@
 const {
-  BrowserWindow
+  BrowserWindow, ipcMain
 } = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
 
 let win;
+let loginWin;
 let willQuitApp = false;
 const {
   createShortcut
 } = require('../../lib/capture/main');
-function createWindow() {
-  // 创建浏览器窗口
-  win = new BrowserWindow({
-    width: 900,
-    height: 700,
+
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+});
+
+function createLoginWindow(){
+  loginWin = new BrowserWindow({
+    width: 300,
+    height: 420,
+    frame: false,
     webPreferences: {
       nodeIntegration: true
     },
-    minWidth: 800,
-    minHeight: 600,
+  })
+
+  loginWin.loadFile(path.join(__dirname, '../../login.html'));
+}
+
+ // 登录
+ ipcMain.on('login-error',  (event, arg) => {
+  console.log('login-error');
+  win.flashFrame(true);
+});
+
+ipcMain.on('login-success', (event, arg) => {
+  console.log('login-success');
+  createWindow();
+  loginWin.close();
+  win.setSize(900, 700);
+  win.center();
+})
+
+ipcMain.on('close-login', (event, arg) => {
+  loginWin.close();
+})
+
+function createWindow() {
+  // 创建浏览器窗口
+  win = new BrowserWindow({
+    width: 0,
+    height: 0,
+    webPreferences: {
+      nodeIntegration: true
+    },
+    // minWidth: 800,
+    // minHeight: 600,
     titleBarStyle: 'hiddenInset',
     show: false, // 先隐藏
     icon: path.join(__dirname, '../../resources/images/zhizhuxia.png'),
@@ -78,6 +115,7 @@ function send(channel, ...args) {
 }
 
 module.exports = {
+  createLoginWindow,
   createWindow,
   show,
   close,

@@ -12,7 +12,7 @@
     "build:render": "webpack --env prod",
     "build": "npm run build:render && npm run pack:mac"
   },
-  "author": "ivy",
+  "author": "Ivy",
   "license": "ISC",
   "devDependencies": {
     "babel-loader": "^7.1.2",
@@ -87,7 +87,7 @@
         "URL types": [
           {
             "Document Role": "Viewer",
-            "URL identifier": "spider chat",
+            "URL identifier": "spiderchat",
             "URL Schemes": [
               "spiderchat"
             ]

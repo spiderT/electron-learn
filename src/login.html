@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    body {
+      -webkit-app-region: drag;
+    }
+    .user-wrap {
+      padding: 20px;
+    }
+    .user-avatar {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      text-align: center;
+      margin: 40px 70px 10px;
+    }
+
+    .login-btn {
+      width: 200px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 20px;
+      text-align: center;
+      background-color: rgb(57, 187, 70);
+      color: #fff;
+      margin: 34px 24px 24px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    input {
+      outline-style: none;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 4px 6px;
+      font-size: 20px;
+      width: 170px;
+    }
+
+    #close-icon {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 0;
+      background-color: rgb(259, 99, 91);
+      font-size: 14px;
+      line-height: 14px;
+      text-align: center;
+    }
+
+    #close-btn {
+      display: none;
+    }
+
+    #error-tip {
+      color: red;
+      line-height: 12px;
+      font-size: 12px;
+      display: none;
+    }
+  </style>
+  <body>
+    <div id="close-icon"><span id="close-btn">x</span></div>
+    <div class="user-wrap">
+      <img class="user-avatar" src="./resources/images/users/user.png" />
+      <p class="input-wrap">账号：<input type="text" value="Ivy" /></p>
+      <p class="input-wrap">密码：<input id="password" type="password" /></p>
+      <span id="error-tip">密码错误</span>
+      <div class="login-btn" onclick="handleLogin()">登录</div>
+    </div>
+  </body>
+  <script>
+    const PASSWORD = '123456';
+    const { ipcRenderer } = require('electron');
+
+    const closeIcon = document.getElementById('close-icon');
+    const closeBtn = document.getElementById('close-btn');
+    const errorTip = document.getElementById('error-tip');
+    const passwordEle = document.getElementById('password');
+
+    function handleLogin() {
+      const password = passwordEle.value;
+      console.log('password', password);
+      if (password !== PASSWORD) {
+        ipcRenderer.send('login-error');
+        errorTip.style.display = 'block';
+      } else {
+        ipcRenderer.send('login-success');
+      }
+    }
+
+    passwordEle.oninput = () => (errorTip.style.display = 'none');
+    closeIcon.onmouseenter = () => (closeBtn.style.display = 'block');
+    closeIcon.onmouseleave = () => (closeBtn.style.display = 'none');
+    closeBtn.onclick = () => ipcRenderer.send('close-login');
+  </script>
+</html>

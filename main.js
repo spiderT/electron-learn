@@ -1,7 +1,7 @@
 const { app, globalShortcut } = require('electron');
 const setAppMenu = require('./src/main/menus');
 const setTray = require('./src/main/tray');
-const { createWindow, show, close } = require('./src/main/windows');
+const { createLoginWindow, createWindow, show, close } = require('./src/main/windows');
 const path = require('path');
 const handleIPC = require('./src/main/ipc');
 const handleDownload = require('./src/main/download');
@@ -57,9 +57,11 @@ if (!gotTheLock) {
   app.on('ready', () => {
     // 模拟crash
     // process.crash();
+    createLoginWindow();
     const win = createWindow();
     setTray();
     handleIPC();
+    // 升级包1.0.1的功能
     handleDownload(win);
   });
 

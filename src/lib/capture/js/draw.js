@@ -75,7 +75,7 @@ class Draw {
             } else {
                 img.onload = () => resolve(img)
             }
-        })
+        }).catch(err => console.log(err))
 
         this.$bgCanvas.width = width
         this.$bgCanvas.height = height

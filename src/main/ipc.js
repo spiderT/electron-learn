@@ -44,6 +44,7 @@ module.exports = function () {
         const base64 = 'data:' + mineType.lookup(filePath) + ';base64,' + data;
         return ({event: 'send', data: base64})
       })
+      .catch(err => console.log(err))
     ))
     return res;
   });
@@ -58,7 +59,7 @@ module.exports = function () {
         nodeIntegration: true,
       },
     });
-    global.sharedObject.picId = pic.webContents.id;
+    global.sharedObject.picId = picWin.webContents.id;
 
     picWin.loadURL(path.join('file:', __dirname, '../pic.html'));
 
@@ -90,7 +91,13 @@ module.exports = function () {
       notification.on('close', (e) => {
         resolve({ event: 'close' });
       });
-    });
+    })
+    .catch(err => console.log(err));
     return res;
+  });
+
+  // 登录
+  ipcMain.on('login-success',  (event, arg) => {
+    
   });
 };
