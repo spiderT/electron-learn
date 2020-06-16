@@ -1,92 +1,90 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>截屏</title>
+  </head>
+  <style>
+    @import './iconfont/iconfont.css';
 
-<head>
-  <meta charset="UTF-8">
-  <title>截屏</title>
-</head>
-<style>
-  @import "./iconfont/iconfont.css";
+    html,
+    body,
+    div {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  html,
-  body,
-  div {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+    .bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
 
-  .bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
+    .mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+    }
 
-  .mask {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-  }
+    .rect {
+      position: absolute;
+      display: none;
+      z-index: 1;
+    }
 
-  .rect {
-    position: absolute;
-    display: node;
-    z-index: 1;
-  }
+    .size-info {
+      position: absolute;
+      color: #ffffff;
+      font-size: 12px;
+      background: rgba(40, 40, 40, 0.8);
+      padding: 5px 10px;
+      border-radius: 2px;
+      font-family: Arial Consolas sans-serif;
+      display: none;
+      z-index: 2;
+    }
 
-  .size-info {
-    position: absolute;
-    color: #ffffff;
-    font-size: 12px;
-    background: rgba(40, 40, 40, 0.8);
-    padding: 5px 10px;
-    border-radius: 2px;
-    font-family: Arial Consolas sans-serif;
-    display: none;
-    z-index: 2;
-  }
+    .toolbar {
+      position: absolute;
+      width: 98px;
+      color: #343434;
+      font-size: 12px;
+      background: #f5f5f5;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-family: Arial Consolas sans-serif;
+      display: none;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      z-index: 2;
+      align-items: center;
+    }
 
-  .toolbar {
-    position: absolute;
-    width: 98px;
-    color: #343434;
-    font-size: 12px;
-    background: #f5f5f5;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-family: Arial Consolas sans-serif;
-    display: none;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-    z-index: 2;
-    align-items: center;
-  }
+    .toolbar > .iconfont {
+      display: inline-block;
+      cursor: pointer;
+      font-size: 28px;
+      margin-right: 8px;
+    }
+  </style>
 
-  .toolbar>.iconfont {
-    display: inline-block;
-    cursor: pointer;
-    font-size: 28px;
-    margin-right: 8px;
-  }
-</style>
-
-<body>
-  <!--背景为灰色的遮罩层-->
-  <div class="bg"></div>
-  <div id="mask" class="mask"></div>
-  <canvas class="rect"></canvas>
-  <!--尺寸信息-->
-  <div class="size-info">200*200</div>
-  <!--toolbar-->
-  <div class="toolbar">
-    <div class="iconfont icon-guanbi" id="js-tool-close"></div>
-    <div class="iconfont icon-duihao" id="js-tool-ok"></div>
-  </div>
-  <script src="./js/capture.js"></script>
-</body>
-
+  <body>
+    <!--背景为灰色的遮罩层-->
+    <div class="bg" id="bg"></div>
+    <div id="mask" class="mask"></div>
+    <canvas class="rect"></canvas>
+    <!--尺寸信息-->
+    <div class="size-info">200*200</div>
+    <!--toolbar-->
+    <div class="toolbar">
+      <div class="iconfont icon-guanbi" id="js-tool-close"></div>
+      <div class="iconfont icon-duihao" id="js-tool-ok"></div>
+    </div>
+    <script src="./js/capture.js"></script>
+  </body>
 </html>

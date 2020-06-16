@@ -18,7 +18,7 @@ process.on('unhandledRejection', (reason, p) => {
 function createLoginWindow(){
   loginWin = new BrowserWindow({
     width: 300,
-    height: 420,
+    height: 400,
     frame: false,
     webPreferences: {
       nodeIntegration: true
