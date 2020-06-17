@@ -36,7 +36,9 @@ minecraftAutoLauncher
 
 app.whenReady().then(() => {
   setAppMenu();
-  app.dock.setIcon(path.join(__dirname, './src/resources/images/zhizhuxia_big.png'));
+  if (process.platform === 'darwin') {
+    app.dock.setIcon(path.join(__dirname, './src/resources/images/zhizhuxia_big.png'));
+  }
 });
 
 const gotTheLock = app.requestSingleInstanceLock();

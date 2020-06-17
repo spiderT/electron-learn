@@ -1,37 +1,35 @@
-const {
-  BrowserWindow, ipcMain
-} = require('electron');
+const { BrowserWindow, ipcMain, app } = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
 
 let win;
 let loginWin;
 let willQuitApp = false;
-const {
-  createShortcut
-} = require('../../lib/capture/main');
+const { createShortcut } = require('../../lib/capture/main');
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-function createLoginWindow(){
+function createLoginWindow() {
   loginWin = new BrowserWindow({
     width: 300,
     height: 400,
     frame: false,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
     },
-  })
+    resizable: false,
+  });
 
   loginWin.loadFile(path.join(__dirname, '../../login.html'));
 }
 
- // 登录
- ipcMain.on('login-error',  (event, arg) => {
+// 登录
+ipcMain.on('login-error', (event, arg) => {
   console.log('login-error');
-  win.flashFrame(true);
+  // todo 未生效？？
+  loginWin.flashFrame(true);
 });
 
 ipcMain.on('login-success', (event, arg) => {
@@ -40,11 +38,15 @@ ipcMain.on('login-success', (event, arg) => {
   loginWin.close();
   win.setSize(900, 700);
   win.center();
-})
+});
 
 ipcMain.on('close-login', (event, arg) => {
+  console.log('close-login');
   loginWin.close();
-})
+  close();
+  loginWin = null;
+  win = null;
+});
 
 function createWindow() {
   // 创建浏览器窗口
@@ -52,35 +54,39 @@ function createWindow() {
     width: 0,
     height: 0,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
     },
-    // minWidth: 800,
-    // minHeight: 600,
+    minWidth: 800,
+    minHeight: 600,
     titleBarStyle: 'hiddenInset',
     show: false, // 先隐藏
     icon: path.join(__dirname, '../../resources/images/zhizhuxia.png'),
     backgroundColor: '#f3f3f3', // 优化白屏，设置窗口底色
-  })
+  });
 
   global.sharedObject = {
-    mainId: win.webContents.id
+    mainId: win.webContents.id,
   };
 
-   // 初始化截图
-   createShortcut()
-  
+  // 初始化截图
+  createShortcut();
 
-  win.on('ready-to-show', () => win.show()) // 初始化后显示
+  win.on('ready-to-show', () => win.show()); // 初始化后显示
 
-  win.on('close', e => {
+  win.on('close', (e) => {
     console.log('close', willQuitApp);
     if (willQuitApp) {
-      win = null
+      win = null;
     } else {
       e.preventDefault();
       win.hide();
     }
-  })
+  });
+
+  // win.on('focus', () => {
+  //   console.log('focus');
+  //   app.setBadgeCount(0);
+  // });
 
   if (isDev) {
     win.loadURL('http://localhost:9200');
@@ -91,7 +97,6 @@ function createWindow() {
   // // 打开开发者工具
   // win.webContents.openDevTools()
 
-
   // 进程间转发
   // ipcMain.on('paste-from-clipboard-capwin', (event, arg) => {
   //   console.log('paste-from-clipboard-capwin')
@@ -100,14 +105,13 @@ function createWindow() {
   return win;
 }
 
-
 function show() {
-  win.show()
+  win.show();
 }
 
 function close() {
-  willQuitApp = true
-  win.close()
+  willQuitApp = true;
+  win.close();
 }
 
 function send(channel, ...args) {
@@ -120,4 +124,4 @@ module.exports = {
   show,
   close,
   send,
-}
+};

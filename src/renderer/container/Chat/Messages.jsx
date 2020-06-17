@@ -5,7 +5,7 @@ import EmojiPackage from '../../components/EmojiPackage';
 import ContentEditable from 'react-contenteditable';
 import { msgBody } from '../../utils';
 
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, remote } = require('electron');
 
 // fix warning: possible EventEmitter memory leak detected. 11 request listeners added. Use emitter.setMaxListeners() to increase limit.
 ipcRenderer.setMaxListeners(100);
@@ -39,6 +39,7 @@ export default function Messages() {
 
 
   socket.onmessage = async (event) => {
+    console.log('onmessage');
     const data = event.data;
     if (!data || !data.startsWith('spider->')) {
       return;
@@ -71,13 +72,14 @@ export default function Messages() {
     scrollToView();
 
     // 发给主进程，展示Notification
+    console.log('invoke msg-receive');
     const res = await ipcRenderer.invoke('msg-receive', { title: '蜘蛛侠', body: value });
-    res.event === 'action' ? onsend(res.text) : onclose()
+    res.event === 'action' ? onSend(res.text) : onClose();
   };
 
-  function onclose() { }
+  function onClose() { }
 
-  function onsend(html) {
+  function onSend(html) {
     msgData.push(msgBody(1, html, 'me', 'zhizhuxia'));
     socket.send(html);
     setMsgData(msgData);
