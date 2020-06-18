@@ -5,7 +5,7 @@ import EmojiPackage from '../../components/EmojiPackage';
 import ContentEditable from 'react-contenteditable';
 import { msgBody } from '../../utils';
 
-const { ipcRenderer, remote } = require('electron');
+const { ipcRenderer } = require('electron');
 
 // fix warning: possible EventEmitter memory leak detected. 11 request listeners added. Use emitter.setMaxListeners() to increase limit.
 ipcRenderer.setMaxListeners(100);
@@ -73,8 +73,9 @@ export default function Messages() {
 
     // 发给主进程，展示Notification
     console.log('invoke msg-receive');
+
     const res = await ipcRenderer.invoke('msg-receive', { title: '蜘蛛侠', body: value });
-    res.event === 'action' ? onSend(res.text) : onClose();
+    res.event === 'reply' ? onSend(res.text) : onClose();
   };
 
   function onClose() { }
@@ -84,9 +85,10 @@ export default function Messages() {
     socket.send(html);
     setMsgData(msgData);
     // 发送结束后清空输入框
-    setHtml('');
+    setHtml(' ');
     scrollToView();
   }
+
 
   function captureScreen() {
     ipcRenderer.send('capture-screen');
@@ -131,7 +133,7 @@ export default function Messages() {
 
         setMsgData(msgData);
         // 发送结束后清空输入框
-        setHtml('');
+        setHtml(' ');
 
         scrollToView();
       } else {
@@ -144,7 +146,7 @@ export default function Messages() {
   async function uploadFile() {
     const res = await ipcRenderer.invoke('open-directory-dialog', 'openDirectory');
     console.log('res', res)
-    if(res.event === 'send'){
+    if (res.event === 'send') {
       const data = res.data;
       socket.send(data);
       msgData.push(msgBody(3, data, 'me', 'zhizhuxia'));

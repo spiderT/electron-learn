@@ -28,7 +28,7 @@ function createLoginWindow() {
 // 登录
 ipcMain.on('login-error', (event, arg) => {
   console.log('login-error');
-  // todo 未生效？？
+  // todo 未生效？？?
   loginWin.flashFrame(true);
 });
 
@@ -82,11 +82,6 @@ function createWindow() {
       win.hide();
     }
   });
-
-  // win.on('focus', () => {
-  //   console.log('focus');
-  //   app.setBadgeCount(0);
-  // });
 
   if (isDev) {
     win.loadURL('http://localhost:9200');

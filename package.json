@@ -56,12 +56,11 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2",
-    "ws": "^7.3.0"
+    "ws": "^7.3.0",
+    "babel-core": "^6.26.3"
   },
   "dependencies": {
     "about-window": "^1.13.2",
-    "auto-launch": "^5.0.5",
-    "babel-core": "^6.26.3",
     "electron-is-dev": "^1.2.0",
     "mime-types": "^2.1.27"
   },

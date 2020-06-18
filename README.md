@@ -626,7 +626,9 @@ crypto 进行加解密
 - node-ffi  
 
 
-## 5. 开机自启动 [node-auto-launch](https://github.com/Teamwork/node-auto-launch)
+## 5. 开机自启动 
+
+### 5.1. [node-auto-launch](https://github.com/Teamwork/node-auto-launch)
 
 主进程main.js：  
 
@@ -665,6 +667,30 @@ demo.isEnabled().then(function(isEnabled){
   // handle error
 });
 ```
+
+> 升级mac系统到catalina后报错  
+
+```text
+<rejected> Error: 36:145: execution error: “System Events”遇到一个错误：应用程序没有运行。 (-600)
+  
+      at ChildProcess.<anonymous> (/Users/tangting/tt/github/electron-learn/node_modules/applescript/lib/applescript.js:49:13)
+      at ChildProcess.emit (events.js:223:5)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:272:12) {
+    appleScript: 'tell application "System Events" to make login item at end with properties {path:"/Applications/spiderchat.app", hidden:false, name:"spiderchat"}',
+    exitCode: 1
+  }
+}
+```
+
+### 5.2. app.getLoginItemSettings([options])  
+
+options 的值  
+
+openAtLogin Boolean - true 如果应用程序设置为在登录时打开, 则设为true  
+openAsHidden Boolean macOS - true 表示应用在登录时以隐藏的方式启动。 该配置在 MAS 构建 时不可用。  
+wasOpenedAtLogin Boolean macOS - true 表示应用在自动登录后已经启动。 该配置在 MAS 构建 时不可用。  
+wasOpenedAsHiddenBoolean macOS - 如果应用在登录时已经隐藏启动, 则为 true。 这表示应用程序在启动时不应打开任何窗口。 该配置在 MAS 构建 时不可用。  
+restoreState Boolean macOS - true 表示应用作为登录启动项并且需要恢复之前的会话状态。 这表示程序应该还原上次关闭时打开的窗口。 该配置在 MAS 构建 时不可用。  
 
 ## 6. 监控—crashReporter
 

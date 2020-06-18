@@ -6,7 +6,8 @@ let capWin;
 //注册快捷键
 function createShortcut() {
   globalShortcut.register('CmdOrCtrl+Shift+A', captureScreen);
-  globalShortcut.register('Esc', () => {
+  // Esc 与 其他应用的快捷键冲突
+  globalShortcut.register('CmdOrCtrl+Esc', () => {
     if (capWin) {
       capWin.close();
       capWin = null;

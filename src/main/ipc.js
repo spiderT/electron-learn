@@ -87,18 +87,12 @@ module.exports = function () {
       });
       notification.show();
       notification.on('reply', (e, reply) => {
-        resolve({ event: 'action', text: reply });
+        resolve({ event: 'reply', text: reply });
       });
       notification.on('close', (e) => {
         resolve({ event: 'close' });
       });
-    }).catch((err) => console.log(err));
-
-    // const badge = app.getBadgeCount();
-
-    // console.log('badge', badge);
-    // //  setBadgeCount
-    // app.setBadgeCount(badge + 1);
+    });
     return res;
   });
 };
