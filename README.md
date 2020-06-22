@@ -23,6 +23,12 @@ git clone https://github.com/spiderT/electron-learn.git
 cd electron-learn
 npm install
 
+// 消息存储服务端 koa+mongodb, 需要事先安装配置mongodb
+git clone https://github.com/spiderT/koa-mongodb-learn.git
+cd koa-mongodb-learn
+npm install
+node index.js
+
 // 启动websocket模拟聊天
 cd ws-server
 node index.js
@@ -31,7 +37,7 @@ node index.js
 // 启动
 npm start
 
-// 启动crash，update服务
+// 如果需要启动crash报告收集，update服务
 cd updater-server
 node index.js
 ```
@@ -920,6 +926,24 @@ console.log(addon.hello());
 ```
 
 ## 9. 测试和调试
+
+### 9.1. 调试debug
+
+1. 渲染进程调试  
+
+win.webContents.openDevTools()  
+
+打开控制台，跟web页面调试一样
+
+
+2. 主进程调试
+
+./node_modules/.bin/electron . --inspect=[port]         //port 不设置，默认是5858  
+
+通过访问 chrome://inspect 来连接 Chrome 并在那里选择需要检查的Electron 应用程序    
+
+
+### 9.2. 自动化测试
 
 1. [spectron](https://www.electronjs.org/spectron)  
 

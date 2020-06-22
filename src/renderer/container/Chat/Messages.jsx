@@ -1,26 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
 import './index.scss';
 import MsgRender from '../../components/Message';
 import EmojiPackage from '../../components/EmojiPackage';
 import ContentEditable from 'react-contenteditable';
 import { msgBody } from '../../utils';
+import { MyContext } from '../../context-manager';
 
 const { ipcRenderer } = require('electron');
 
 // fix warning: possible EventEmitter memory leak detected. 11 request listeners added. Use emitter.setMaxListeners() to increase limit.
 ipcRenderer.setMaxListeners(100);
-
-const originData = [
-  msgBody(2, '10:29', 'zhizhuxia', 'me', 11),
-  msgBody(
-    1,
-    '你好，我是蜘蛛侠，很高兴认识你。命运无可掌控，充满了无奈、未知，然而，我依然要走下去。',
-    'zhizhuxia',
-    'me',
-    12
-  ),
-  msgBody(1, '我也很高兴认识你。', 'me', 'zhizhuxia', 13),
-];
 
 const socket = new WebSocket('ws://localhost:8080/ws');
 socket.onopen = function (event) {
@@ -30,16 +20,16 @@ socket.onclose = function (event) {
   console.log('onclose');
 };
 
-export default function Messages() {
-  const [msgData, setMsgData] = useState(originData);
+export default function Messages(props) {
+  console.log('props', props);
+  const { setMsgData } = useContext(MyContext);
   const [isShowEmoji, toggleShowEmoji] = useState(false);
   const msgBox = React.createRef();
   const contentEditable = React.createRef();
   const [html, setHtml] = useState('');
 
-
   socket.onmessage = async (event) => {
-    console.log('onmessage');
+
     const data = event.data;
     if (!data || !data.startsWith('spider->')) {
       return;
@@ -49,6 +39,7 @@ export default function Messages() {
     if (!value) {
       return;
     }
+
 
     // // h5通知
     // const option = {
@@ -63,13 +54,10 @@ export default function Messages() {
     //   console.log('chatNotication.onClick');
     // };
 
-    msgData.push(msgBody(1, value, 'zhizhuxia', 'me'));
-    setMsgData(msgData);
+    handleMsg(1, value, 'receive');
 
     // 解决 收到消息，聊天区域没有及时渲染
     setHtml(html + ' ');
-
-    scrollToView();
 
     // 发给主进程，展示Notification
     console.log('invoke msg-receive');
@@ -81,14 +69,33 @@ export default function Messages() {
   function onClose() { }
 
   function onSend(html) {
-    msgData.push(msgBody(1, html, 'me', 'zhizhuxia'));
-    socket.send(html);
-    setMsgData(msgData);
-    // 发送结束后清空输入框
-    setHtml(' ');
+    handleMsg(1, html);
+  }
+
+  function handleMsg(msgType, data, type) {
+    let msg;
+    if (type === 'receive') {
+      msg = msgBody(msgType, data, 'zhizhuxia', 'me');
+    } else {
+      msg = msgBody(msgType, data, 'me', 'zhizhuxia');
+      socket.send(data);
+    }
+    console.log('msg', msg);
+    props.msgData.push(msg)
+    addMsg(msg)
+    setMsgData(props.msgData);
     scrollToView();
   }
 
+  function addMsg(data) {
+    console.log('addMsgdata', data);
+    axios
+      .post('http://127.0.0.1:1234/addmsg', {
+        ...data
+      })
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error));
+  }
 
   function captureScreen() {
     ipcRenderer.send('capture-screen');
@@ -125,17 +132,12 @@ export default function Messages() {
         // 判断发送文本，还是图片
         if (html.includes('<img src')) {
           let imgSrc = getSrcFromImg(html);
-          msgData.push(msgBody(3, imgSrc, 'me', 'zhizhuxia'));
+          handleMsg(3, imgSrc)
         } else {
-          msgData.push(msgBody(1, html, 'me', 'zhizhuxia'));
+          handleMsg(1, html)
         }
-        socket.send(html);
-
-        setMsgData(msgData);
         // 发送结束后清空输入框
         setHtml(' ');
-
-        scrollToView();
       } else {
         console.log('连接没有开启.');
       }
@@ -148,12 +150,9 @@ export default function Messages() {
     console.log('res', res)
     if (res.event === 'send') {
       const data = res.data;
-      socket.send(data);
-      msgData.push(msgBody(3, data, 'me', 'zhizhuxia'));
-      setMsgData(msgData);
+      handleMsg(3, data);
       // 解决 收到消息，聊天区域没有及时渲染
       setHtml(html + ' ');
-      scrollToView();
     }
   }
 
@@ -162,11 +161,7 @@ export default function Messages() {
   }
 
   function sendEmoji(item) {
-    console.log('item', item);
-    socket.send(item);
-    // todo msgData增加, 不用在 发送的时候增加，应该在socket里监听增加 filter fromid 和 toid
-    msgData.push(msgBody(1, item, 'me', 'zhizhuxia'));
-    setMsgData(msgData);
+    handleMsg(1, item);
     showEmoji();
   }
 
@@ -219,10 +214,11 @@ export default function Messages() {
   });
 
   return (
-    <div>
+    <div className="chat-container">
+      <div className="head">蜘蛛侠</div>
       <div className="message-wrap">
         <div id="msg-box" className="msg-box" ref={msgBox}>
-          {msgData && msgData.length ? msgData.map((item) => MsgRender(item)) : null}
+          {props.msgData && props.msgData.length ? props.msgData.map((item) => MsgRender(item)) : null}
         </div>
       </div>
       <div className="edit-wrap">

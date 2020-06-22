@@ -1,201 +1,207 @@
-.right-wrap{
-    float: left;
-    width: calc(100% - 70px);
-    height: 100%;
+.right-wrap {
+  float: left;
+  width: calc(100% - 70px);
+  height: 100%;
 }
-.list-wrap{
-    margin-top: 40px;
-    border-right: 1px solid #eee;
+.list-wrap {
+  margin-top: 50px;
+  border-right: 1px solid #eee;
 }
-.chat-wrap{
-    width: 260px;
-    float: left;
-    height: 100%;
-    overflow: scroll;
-    padding: 10px 0;
+.chat-wrap {
+  width: 260px;
+  float: left;
+  height: 100%;
+  overflow: scroll;
+  box-sizing: border-box;
+  .search {
     box-sizing: border-box;
-    .search{
-        margin-bottom: 14px;
-        width: 250px;
-        height: 100px;
-        position: fixed;
-        background-color: #fff;
-        margin-left: 10px;
-        input{
-            width: calc(100% - 84px);
-            background-color: #eee;
-            border: none;
-            height: 22px;
-            line-height: 22px;
-            font-size: 12px;
-            border-radius: 4px;
-            padding-left: 26px;
-        }
-        .icon{
-            display: block;
-            width: 20px;
-            height: 20px;
-            background: url('../../../resources/images/icons/sousuo.png') no-repeat;
-            position: absolute;
-            top: 6px;
-            left: 4px;
-        }
-        .plus{
-            display: inline-block;
-            margin-left: 10px;
-            vertical-align: middle;
-            border-radius: 2px;
-            width: 24px;
-            height: 20px;
-            border: 1px solid #ddd;
-            color: #999;
-            font-size: 20px;
-            line-height: 16px;
-            text-align: center;
-        }
+    padding: 14px 10px;
+    width: 260px;
+    height: 50px;
+    position: fixed;
+    background-color: #fff;
+    z-index: 99;
+    input {
+      width: calc(100% - 84px);
+      background-color: #eee;
+      border: none;
+      height: 22px;
+      line-height: 22px;
+      font-size: 12px;
+      border-radius: 4px;
+      padding-left: 26px;
     }
-    .list-item{
-        height: 66px;
-        padding: 8px 0;
-        box-sizing: border-box;
-        border-bottom: 1px solid #ddd;
-        position: relative;
-        &:first-child{
-            background-color: #ddd;
-        }
-        padding-left: 10px;
+    .icon {
+      display: block;
+      width: 20px;
+      height: 20px;
+      background: url('../../../resources/images/icons/sousuo.png') no-repeat;
+      position: absolute;
+      top: 18px;
+      left: 14px;
     }
-    .avatar{
-        float: left;
-        border: 1px solid #ddd;
-        width: 44px;
-        height: 44px;
-        overflow: hidden;
-        img{
-            width: 44px;
-            height: 44px;
-        }
+    .plus {
+      display: inline-block;
+      margin-left: 10px;
+      vertical-align: middle;
+      border-radius: 2px;
+      width: 24px;
+      height: 20px;
+      border: 1px solid #ddd;
+      color: #999;
+      font-size: 20px;
+      line-height: 16px;
+      text-align: center;
     }
-    .info{
-        float: left;
-        margin-left: 10px;
-        line-height: 22px;
-        .name{
-           font-weight: 500;
-           font-size: 14px; 
-           margin: 0;    
-           width: 160px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .message{
-            font-size: 12px;
-            color: #888;
-            margin: 0;
-            width: 180px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .clearfix:after{
-            content: "020"; 
-            display: block; 
-            height: 0; 
-            clear: both; 
-            visibility: hidden;  
-        }
-          
-        .clearfix {
-            zoom: 1; 
-        }
+  }
+  .list-item {
+    -webkit-user-select: none;
+    height: 66px;
+    padding: 8px 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+    &:first-child {
+      background-color: #ddd;
     }
-    .time{
-        position: absolute;
-        right: 10px;
-        top: 8px;
-        color: #888;
-        font-size: 12px;
-    }
-}
-
-.chat-container{
-    background-color:rgb(243, 243, 243);
+    padding-left: 10px;
+  }
+  .avatar {
     float: left;
-    width: calc(100% - 260px);
-    height: 100%;
-    .head{
-        height: 50px;
-        margin-left: 20px;
-        line-height: 50px;
-        -webkit-app-region: drag;
-        -webkit-user-select: none;
+    border: 1px solid #ddd;
+    width: 44px;
+    height: 44px;
+    overflow: hidden;
+    img {
+      width: 44px;
+      height: 44px;
     }
-    .message-wrap{
-        height: 400px;
-        border-top: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
-        padding: 20px;
-        box-sizing: border-box;
-        overflow-y: scroll;
-        overflow-x: hidden;
+  }
+  .info {
+    float: left;
+    margin-left: 10px;
+    line-height: 22px;
+    .name {
+      font-weight: 500;
+      font-size: 14px;
+      margin: 0;
+      width: 160px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .edit-wrap{
-        padding: 6px 8px;
-        box-sizing: border-box;
-        position: relative;
-        .edit-tool{
-            height: 40px;
-            .face, .file, .screenshot, .messages, .phone, .video{
-                display: inline-block;
-                width: 24px;
-                height: 24px;
-                background-image: url('../../../resources/images/icons/xiaolian.png');
-                background-size: 100% 100%;
-                margin-right: 6px;
-            }
-            .file{
-                background-image: url('../../../resources/images/icons/wenjian.png');
-            }
-            .screenshot{
-                background-image: url('../../../resources/images/icons/jianqie.png');
-            }
-            .messages{
-                background-image: url('../../../resources/images/icons/xiaoxi.png');
-            }
-            .phone{
-                background-image: url('../../../resources/images/icons/dianhua.png');
-                float: right;
-            }
-            .video{
-                background-image: url('../../../resources/images/icons/shipin.png');
-                float: right;
-            }
-        }
-        .edit-box{
-            resize: none;
-            border: none;
-            display: inline-block;
-            background-color: transparent;
-            width: 100%;
-            height: 160px;
-            background-color:rgb(243, 243, 243);
-        }
+    .message {
+      font-size: 12px;
+      color: #888;
+      margin: 0;
+      width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
+    .clearfix:after {
+      content: '020';
+      display: block;
+      height: 0;
+      clear: both;
+      visibility: hidden;
+    }
+
+    .clearfix {
+      zoom: 1;
+    }
+  }
+  .time {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    color: #888;
+    font-size: 12px;
+  }
 }
 
-.edit-div{
-    display: inline-block;
-    background-color:rgb(243, 243, 243);
-    width: 100%;
-    height: 160px;
-    text-align: left;
-    resize: none;
-	outline: none;
+.chat-container {
+  background-color: rgb(243, 243, 243);
+  float: left;
+  width: calc(100% - 260px);
+  height: 100%;
+  .head {
+    height: 50px;
+    margin-left: 20px;
+    line-height: 50px;
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+  }
+  .message-wrap {
+    height: 400px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 20px;
+    box-sizing: border-box;
     overflow-y: scroll;
-    padding: 10px;
-    font-size: 14px;
-    img{
-        max-width: 100px;
+    overflow-x: hidden;
+  }
+  .edit-wrap {
+    padding: 6px 8px;
+    box-sizing: border-box;
+    position: relative;
+    .edit-tool {
+      height: 40px;
+      .face,
+      .file,
+      .screenshot,
+      .messages,
+      .phone,
+      .video {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        background-image: url('../../../resources/images/icons/xiaolian.png');
+        background-size: 100% 100%;
+        margin-right: 6px;
+      }
+      .file {
+        background-image: url('../../../resources/images/icons/wenjian.png');
+      }
+      .screenshot {
+        background-image: url('../../../resources/images/icons/jianqie.png');
+      }
+      .messages {
+        background-image: url('../../../resources/images/icons/xiaoxi.png');
+      }
+      .phone {
+        background-image: url('../../../resources/images/icons/dianhua.png');
+        float: right;
+      }
+      .video {
+        background-image: url('../../../resources/images/icons/shipin.png');
+        float: right;
+      }
     }
+    .edit-box {
+      resize: none;
+      border: none;
+      display: inline-block;
+      background-color: transparent;
+      width: 100%;
+      height: 160px;
+      background-color: rgb(243, 243, 243);
+    }
+  }
+}
+
+.edit-div {
+  display: inline-block;
+  background-color: rgb(243, 243, 243);
+  width: 100%;
+  height: 160px;
+  text-align: left;
+  resize: none;
+  outline: none;
+  overflow-y: scroll;
+  padding: 10px;
+  font-size: 14px;
+  img {
+    max-width: 100px;
+  }
 }
