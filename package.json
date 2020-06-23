@@ -61,7 +61,6 @@
   },
   "dependencies": {
     "about-window": "^1.13.2",
-    "axios": "^0.19.2",
     "electron-is-dev": "^1.2.0",
     "mime-types": "^2.1.27"
   },

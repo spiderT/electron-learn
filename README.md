@@ -1161,6 +1161,17 @@ app.on('open-url', (e, url) => { // eslint-disable-line
 });
 ```
 
+
+## 13. 性能优化
+
+### 13.1. 减少包体积大小
+
+yarn autoclean -I  
+
+yarn autoclean -F  
+
+
+
 ## Electron 开发过程中可能会遇到的几个问题和场景。
 
 - 启动时间优化  

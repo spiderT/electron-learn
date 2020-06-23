@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import User from './container/User';
 import Chat from './container/Chat/index.jsx';
-const { ipcRenderer, remote } = require('electron');
+// const { ipcRenderer, remote } = require('electron');
+
+import { ipcRenderer, remote } from 'electron';
 
 export default function App() {
   useEffect(() => {

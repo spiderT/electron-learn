@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import './index.scss';
 import MsgRender from '../../components/Message';
 import EmojiPackage from '../../components/EmojiPackage';
 import ContentEditable from 'react-contenteditable';
 import { msgBody } from '../../utils';
 import { MyContext } from '../../context-manager';
+const TO_ID = 'zhizhuxia';
+const FROM_ID = 'ivy';
 
-const { ipcRenderer } = require('electron');
+// const { ipcRenderer } = require('electron');
+
+import { ipcRenderer } from 'electron';
 
 // fix warning: possible EventEmitter memory leak detected. 11 request listeners added. Use emitter.setMaxListeners() to increase limit.
 ipcRenderer.setMaxListeners(100);
@@ -21,80 +24,78 @@ socket.onclose = function (event) {
 };
 
 export default function Messages(props) {
-  console.log('props', props);
+  const { msgData } = props;
   const { setMsgData } = useContext(MyContext);
   const [isShowEmoji, toggleShowEmoji] = useState(false);
   const msgBox = React.createRef();
   const contentEditable = React.createRef();
   const [html, setHtml] = useState('');
 
+  useEffect(() => {
+    setTimeout(() => scrollToView(), 300);
+  }, [])
+
+
   socket.onmessage = async (event) => {
-
-    const data = event.data;
-    if (!data || !data.startsWith('spider->')) {
-      return;
+    const msg = JSON.parse(event.data);
+    if (msg.fromId !== TO_ID) {
+      return
     }
 
-    const value = data.split('->')[1];
-    if (!value) {
-      return;
-    }
+    handleMsg(msg.type, msg.content, 'receive');
 
+    // h5通知
+    const option = {
+      title: TO_ID,
+      body: msg.content,
+    };
 
-    // // h5通知
-    // const option = {
-    //   title: 'spider',
-    //   body: value,
-    // };
+    // 渲染进程的Notification
+    const chatNotication = new Notification(option.title, option);
 
-    // // 渲染进程的Notification
-    // const chatNotication = new Notification(option.title, option);
+    chatNotication.onClick = function () {
+      console.log('chatNotication.onClick');
+    };
 
-    // chatNotication.onClick = function () {
-    //   console.log('chatNotication.onClick');
-    // };
-
-    handleMsg(1, value, 'receive');
-
-    // 解决 收到消息，聊天区域没有及时渲染
-    setHtml(html + ' ');
-
-    // 发给主进程，展示Notification
-    console.log('invoke msg-receive');
-
-    const res = await ipcRenderer.invoke('msg-receive', { title: '蜘蛛侠', body: value });
-    res.event === 'reply' ? onSend(res.text) : onClose();
+    // // 发给主进程，展示Notification
+    // const res = await ipcRenderer.invoke('msg-receive', { title: 'TO_ID', body: msg.content });
+    // console.log('res' ,res);
+    // res.event === 'reply' ? onSend(res.text) : onClose();
   };
+
 
   function onClose() { }
 
-  function onSend(html) {
-    handleMsg(1, html);
+  function onSend(data) {
+    handleMsg(1, data);
   }
 
   function handleMsg(msgType, data, type) {
     let msg;
     if (type === 'receive') {
-      msg = msgBody(msgType, data, 'zhizhuxia', 'me');
+      msg = msgBody(msgType, data, TO_ID, FROM_ID);
     } else {
-      msg = msgBody(msgType, data, 'me', 'zhizhuxia');
-      socket.send(data);
+      msg = msgBody(msgType, data, FROM_ID, TO_ID);
+      socket.send(JSON.stringify(msg));
+      addMsg(msg)
     }
-    console.log('msg', msg);
-    props.msgData.push(msg)
-    addMsg(msg)
-    setMsgData(props.msgData);
+    msgData.push(msg)
+    setMsgData(msgData);
+    // 解决 收到消息，聊天区域没有及时渲染
+    setHtml(html + ' ');
     scrollToView();
   }
 
   function addMsg(data) {
-    console.log('addMsgdata', data);
-    axios
-      .post('http://127.0.0.1:1234/addmsg', {
-        ...data
-      })
+    fetch('http://127.0.0.1:1234/addmsg', {
+      body: JSON.stringify(data),
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+    })
       .then((response) => console.log(response))
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
   }
 
   function captureScreen() {
@@ -125,7 +126,7 @@ export default function Messages(props) {
     if (e.keyCode === 13 || e.which === 13) {
       e.preventDefault();
 
-      if (!html || !window.WebSocket) {
+      if (!html || !html.trim() || !window.WebSocket) {
         return;
       }
       if (socket.readyState === WebSocket.OPEN) {
@@ -136,7 +137,6 @@ export default function Messages(props) {
         } else {
           handleMsg(1, html)
         }
-        // 发送结束后清空输入框
         setHtml(' ');
       } else {
         console.log('连接没有开启.');
@@ -151,8 +151,6 @@ export default function Messages(props) {
     if (res.event === 'send') {
       const data = res.data;
       handleMsg(3, data);
-      // 解决 收到消息，聊天区域没有及时渲染
-      setHtml(html + ' ');
     }
   }
 
@@ -218,7 +216,7 @@ export default function Messages(props) {
       <div className="head">蜘蛛侠</div>
       <div className="message-wrap">
         <div id="msg-box" className="msg-box" ref={msgBox}>
-          {props.msgData && props.msgData.length ? props.msgData.map((item) => MsgRender(item)) : null}
+          {msgData && msgData.length ? msgData.map((item) => MsgRender(item)) : null}
         </div>
       </div>
       <div className="edit-wrap">

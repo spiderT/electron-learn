@@ -1,6 +1,4 @@
 import React, { useEffect, useContext } from 'react';
-import axios from 'axios';
-
 import { MyContext } from '../../context-manager';
 
 import './index.scss';
@@ -65,10 +63,13 @@ const users = [
 ];
 
 export default function Chatlist(props) {
-  useEffect(() => fetchData(), []);
-  console.log('chatlistprops', props);
-  const { setMsgData } = useContext(MyContext);
+  console.log('props', props);
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const { setMsgData } = useContext(MyContext);
   function renderCurMsg(user) {
     const msgData = props.msgData;
     if (msgData && msgData.length) {
@@ -99,9 +100,11 @@ export default function Chatlist(props) {
   }
 
   function fetchData() {
-    axios
-      .get('http://127.0.0.1:1234/allmsgs')
-      .then((response) => setMsgData((response && response.data) || []))
+    fetch('http://127.0.0.1:1234/allmsgs')
+      .then((response) => response.json())
+      .then((response) => {
+        setMsgData(response || []);
+      })
       .catch((error) => console.log(error));
   }
 

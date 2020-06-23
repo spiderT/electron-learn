@@ -1,6 +1,7 @@
 import React from 'react';
 import './Image.scss';
-const { ipcRenderer } = require('electron');
+// const { ipcRenderer } = require('electron');
+import { ipcRenderer } from 'electron';
 
 function handleZoom(src) {
   ipcRenderer.send('create-pic-window', src);

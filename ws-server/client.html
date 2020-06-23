@@ -1,62 +1,136 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>WebSocket Chat</title>
+  </head>
+  <style>
+    #response-area {
+      width: 500px;
+      height: 500px;
+      border: 1px solid #ccc;
+    }
 
-<head>
-	<meta charset="UTF-8">
-	<title>WebSocket Chat</title>
-</head>
+    .right {
+      text-align: right;
+    }
 
-<body>
-	<script type="text/javascript">
-		var socket;
-		if (!window.WebSocket) {
-			window.WebSocket = window.MozWebSocket;
-		}
-		if (window.WebSocket) {
-			socket = new WebSocket("ws://localhost:8080/ws");
-			socket.onmessage = function (event) {
-				console.log('event', event.data)
-				var ta = document.getElementById('responseText');
-				ta.value = ta.value + '\n' + event.data
-			};
-			socket.onopen = function (event) {
-				var ta = document.getElementById('responseText');
-				ta.value = "连接开启!";
-			};
-			socket.onclose = function (event) {
-				var ta = document.getElementById('responseText');
-				ta.value = ta.value + "连接被关闭";
-			};
-		} else {
-			alert("你的浏览器不支持 WebSocket！");
-		}
+	.right .name{
+		margin-left: 10px;
+	}
 
-		function send(message) {
-			if (!window.WebSocket) {
-				return;
-			}
-			if(!message){
-				return;
-			}
-			if (socket.readyState == WebSocket.OPEN) {
-				socket.send('spider->'+message);
-				document.getElementById('message-input').value='';
-			} else {
-				alert("连接没有开启.");
-			}
-		}
-	</script>
-	<form onsubmit="return false;">
-		<h3>WebSocket 聊天室：</h3>
-		<textarea id="responseText" style="width: 500px; height: 300px;"></textarea>
-		<br>
-		<input type="text" name="message" id="message-input" style="width: 300px" value="">
-		<input type="button" value="发送消息" onclick="send(this.form.message.value)">
-		<input type="button" onclick="javascript:document.getElementById('responseText').value=''" 
-			value="清空聊天记录">
-	</form>
-	<br>
-	<br>
-</body>
+    .left {
+      text-align: left;
+    }
 
+	.left .name{
+		margin-right: 10px;
+		background-color: dodgerblue;
+	}
+
+    .name {
+      font-weight: bold;
+      padding: 0 10px;
+      width: 20px;
+      height: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background-color: darkseagreen;
+      color: #fff;
+    }
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  </style>
+  <body>
+    <script type="text/javascript">
+      let socket;
+
+      const FROM_ID = 'zhizhuxia';
+      const TO_ID = 'ivy';
+
+      function createMsgbody(content) {
+        return JSON.stringify({
+          type: 1,
+          content,
+          fromId: FROM_ID,
+          toId: TO_ID,
+          id: new Date().getTime(),
+        });
+      }
+
+      function parseMsg(data) {
+        const { fromId, type, content } = JSON.parse(data);
+        const contentText = type === 3 ? '<img src=' + content + '>' : content;
+        if (fromId === FROM_ID) {
+          return `<div class="right">
+              ${contentText}<span class="name">spider</span>
+            </div>`;
+        } else {
+          return `<div class="left">
+              <span class="name">ivy</span>${contentText}
+            </div>`;
+        }
+      }
+
+      if (!window.WebSocket) {
+        window.WebSocket = window.MozWebSocket;
+      }
+      if (window.WebSocket) {
+        socket = new WebSocket('ws://localhost:8080/ws');
+        socket.onmessage = function (event) {
+          console.log('event', event.data);
+          const imArea = document.getElementById('response-area');
+          imArea.innerHTML = imArea.innerHTML + '\n' + parseMsg(event.data);
+        };
+        socket.onopen = function (event) {
+          const imArea = document.getElementById('response-area');
+          imArea.innerHTML = '连接开启!';
+        };
+        socket.onclose = function (event) {
+          var ta = document.getElementById('responseText');
+          ta.value = ta.value + '\n' + '连接被关闭';
+        };
+      } else {
+        alert('你的浏览器不支持 WebSocket！');
+      }
+
+      function send(message) {
+        if (!window.WebSocket || !message) {
+          return;
+        }
+
+        if (socket.readyState == WebSocket.OPEN) {
+          socket.send(createMsgbody(message));
+          addmsg(createMsgbody(message));
+          document.getElementById('message-input').value = '';
+        } else {
+          alert('连接没有开启.');
+        }
+      }
+
+      function addmsg(data) {
+        return fetch('http://127.0.0.1:1234/addmsg', {
+          body: data,
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+        })
+          .then((response) => console.log(response))
+          .catch((error) => console.log(error));
+      }
+    </script>
+    <form onsubmit="return false;">
+      <h3>WebSocket：</h3>
+      <div id="response-area"></div>
+      <br />
+      <input type="text" name="message" id="message-input" style="width: 400px;" value="" />
+      <input type="button" value="发送消息" onclick="send(this.form.message.value)" />
+    </form>
+    <br />
+    <br />
+  </body>
 </html>

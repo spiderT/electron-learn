@@ -8,7 +8,7 @@ const AvatarRender = (msg) => {
   return (
     <img
       className="chat-avatar"
-      src={require(`../../../resources/images/users/${msg.fromId === 'me' ? 'user' : msg.fromId}.png`)}
+      src={require(`../../../resources/images/users/${msg.fromId === 'ivy' ? 'user' : msg.fromId}.png`)}
     />
   );
 };
@@ -31,7 +31,7 @@ const MsgRender = (msg) => {
   }
 
   return (
-    <div key={msg.id} className={`msg-item clearfix ${msg.type !== 2 ? (msg.fromId === 'me' ? 'right' : 'left') : ''}`}>
+    <div key={msg.id} className={`msg-item clearfix ${msg.type !== 2 ? (msg.fromId === 'ivy' ? 'right' : 'left') : ''}`}>
       {msg.type !== 2 ? AvatarRender(msg) : null}
       {content}
     </div>
