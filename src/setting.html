@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    body {
+      -webkit-app-region: drag;
+    }
+    .setting-wrap {
+      margin: 40px;
+      -webkit-app-region: no-drag;
+    }
+    .size-wrap {
+      margin-left: 70px;
+    }
+    .small {
+      font-size: 10px;
+    }
+
+    .big {
+      font-size: 20px;
+      margin-left: 100px;
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+    }
+
+    button {
+      float: right;
+    }
+
+    .name {
+      line-height: 50px;
+      font-size: 18px;
+      vertical-align: top;
+    }
+
+    .font-wrap {
+      margin-top: 20px;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+
+    .title {
+      line-height: 30px;
+      vertical-align: top;
+    }
+
+    .app-img {
+      width: 80px;
+      height: 80px;
+      float: left;
+    }
+    .out-wrap {
+      float: left;
+    }
+
+    .btn-blue {
+      background-color: dodgerblue;
+      border: 1px solid blue;
+      color: #fff;
+    }
+
+    #login-out {
+      width: 380px;
+      height: 150px;
+      border-radius: 8px;
+      position: fixed;
+      top: 40px;
+      left: 10px;
+      background-color: #fff;
+      box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.2), -8px 0 20px rgba(0, 0, 0, 0.2), 0 8px 20px rgba(0, 0, 0, 0.2),
+        8px 0 20px rgba(0, 0, 0, 0.2);
+      display: none;
+    }
+
+    .out-btn-wrap {
+      margin: 20px 0;
+    }
+
+    .out-btn-wrap button {
+      width: 80px;
+      text-align: center;
+      margin: 0 10px;
+    }
+  </style>
+  <body>
+    <div class="setting-wrap">
+      <div><span class="title">账号信息</span></div>
+      <div>
+        <img src="./resources/images/users/user.png" alt="" />
+        <span class="name">Ivy</span>
+        <button onclick="showLoginout()">退出登录</button>
+      </div>
+      <div class="font-wrap">
+        <label for="fader" class="title">字体大小</label>
+        <input
+          id="range"
+          type="range"
+          min="0"
+          max="100"
+          value="50"
+          id="fader"
+          step="25"
+          list="volsettings"
+          oninput="handleFontsize()"
+        />
+        <datalist id="volsettings">
+          <option>0</option>
+          <option>25</option>
+          <option>50</option>
+          <option>75</option>
+          <option>100</option>
+        </datalist>
+        <p class="size-wrap"><span class="small">小</span><span class="big">大</span></p>
+      </div>
+    </div>
+    <div id="login-out">
+      <img class="app-img" src="./resources/images/zhizhuxia_big.png" alt="" />
+      <div class="out-wrap">
+        <p class="out-title">退出登录</p>
+        <input id="checkbox" type="checkbox" /> <label for="checkbox">退出并清空所有数据</label>
+        <div class="out-btn-wrap">
+          <button class="btn-blue" onclick="handleLoginout()">退出登录</button>
+          <button onclick="handlCancel()">取消</button>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    const { ipcRenderer, remote } = require('electron');
+    const id = remote.getGlobal('sharedObject').mainId;
+
+    function handleFontsize() {
+      const value = document.getElementById('range').value;
+      console.log('value', value);
+      ipcRenderer.sendTo(id, 'change-fontsize', value);
+    }
+
+    // 打开退出登录弹窗（div就可以了，fix定位，不需要原生弹窗） 勾选清理，调用remove接口
+    function showLoginout() {
+      const loginoutEle = document.getElementById('login-out');
+      loginoutEle.style.display = 'block';
+    }
+
+    function handleLoginout() {
+      const isClear = document.getElementById('checkbox').checked;
+      console.log('isClear', isClear);
+      if (isClear) {
+        // 调删除接口
+        fetch('http://127.0.0.1:1234/clearmsgs', {
+          method: 'DELETE',
+        })
+          .then((response) => console.log(response))
+          .catch((error) => console.log(error));
+      }
+      ipcRenderer.send('login-out');
+    }
+
+    function handlCancel() {
+      const loginoutEle = document.getElementById('login-out');
+      loginoutEle.style.display = 'none';
+    }
+  </script>
+</html>

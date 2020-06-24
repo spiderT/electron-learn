@@ -1,62 +1,87 @@
-.wrap{
-    height: 100%;
+.wrap {
+  height: 100%;
 }
 
-.user-wrap{
-    -webkit-app-region: drag;
-    background-color: #000;
-    width: 70px;
-    height: 100%;
-    text-align: center;
-    float: left;
-    position: relative;
-    .avatar{
-        display: block;
-        width: 44px;
-        margin-left: 10px;
-        height: 44px;
-        margin-top: 60px;
-        background-image: url('../../../resources/images/users/user.png');
-        background-size: contain;
+.user-wrap {
+  -webkit-app-region: drag;
+  background-color: #000;
+  width: 70px;
+  height: 100%;
+  text-align: center;
+  float: left;
+  position: relative;
+  .avatar {
+    display: block;
+    width: 44px;
+    margin-left: 10px;
+    height: 44px;
+    margin-top: 60px;
+    background-image: url('../../../resources/images/users/user.png');
+    background-size: contain;
+  }
+  .chat,
+  .contacts,
+  .collect,
+  .phone,
+  .setting {
+    display: block;
+    width: 26px;
+    height: 26px;
+    margin-left: 18px;
+    background-image: url('../../../resources/images/icons/bubble.png');
+    background-size: 100% 100%;
+    margin-top: 30px;
+    &.active {
+      background-image: url('../../../resources/images/icons/bubble_green.png');
     }
-    .chat, .contacts, .collect, .phone, .setting{
-        display: block;
-        width: 26px;
-        height: 26px;
-        margin-left: 18px;
-        background-image: url('../../../resources/images/icons/bubble.png');
-        background-size: 100% 100%;
-        margin-top: 30px;
-        &.active{
-            background-image: url('../../../resources/images/icons/bubble_green.png');
-        }
+  }
+  .contacts {
+    background-image: url('../../../resources/images/icons/lianxiren.png');
+    &.active {
+      background-image: url('../../../resources/images/icons/lianxiren_green.png');
     }
-    .contacts{
-        background-image: url('../../../resources/images/icons/lianxiren.png');
-        &.active{
-            background-image: url('../../../resources/images/icons/lianxiren_green.png');
-        }
+  }
+  .collect {
+    background-image: url('../../../resources/images/icons/lifangti.png');
+    &.active {
+      background-image: url('../../../resources/images/icons/lifangti_green.png');
     }
-    .collect{
-        background-image: url('../../../resources/images/icons/lifangti.png');
-        &.active{
-            background-image: url('../../../resources/images/icons/lifangti_green.png');
-        }
+  }
+  .phone {
+    background-image: url('../../../resources/images/icons/shouji.png');
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    margin-left: -18px;
+  }
+  .setting {
+    width: 20px;
+    height: 20px;
+    background-image: url('../../../resources/images/icons/santiaogang.png');
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    margin-left: -14px;
+  }
+}
+
+.setting-wrap {
+  width: 120px;
+  box-sizing: border-box;
+  height: 80px;
+  background-color: #333;
+  color: #555;
+  position: fixed;
+  left: 70px;
+  bottom: 10px;
+  z-index: 999;
+  text-align: left;
+  .setting-item {
+    line-height: 40px;
+    height: 40px;
+    padding-left: 10px;
+    &:hover {
+      background-color: #aaa;
     }
-    .phone{
-        background-image: url('../../../resources/images/icons/shouji.png');
-        position: absolute;
-        bottom: 90px;
-        left: 50%;
-        margin-left: -18px;
-    }
-    .setting{
-        width: 20px;
-        height: 20px;
-        background-image: url('../../../resources/images/icons/santiaogang.png');
-        position: absolute;
-        bottom: 30px;
-        left: 50%;
-        margin-left: -14px;
-    }
+  }
 }

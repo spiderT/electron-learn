@@ -1,10 +1,10 @@
-const { BrowserWindow, ipcMain, app } = require('electron');
+const { BrowserWindow, ipcMain, nativeTheme } = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
 
-let win;
-let loginWin;
-let willQuitApp = false;
+let win,
+  loginWin,
+  willQuitApp = false;
 const { createShortcut } = require('../../lib/capture/main');
 
 process.on('unhandledRejection', (reason, p) => {
@@ -22,6 +22,7 @@ function createLoginWindow() {
     resizable: false,
   });
 
+  willQuitApp = false;
   loginWin.loadFile(path.join(__dirname, '../../login.html'));
 }
 
@@ -42,10 +43,8 @@ ipcMain.on('login-success', (event, arg) => {
 
 ipcMain.on('close-login', (event, arg) => {
   console.log('close-login');
-  loginWin.close();
+  loginWin && loginWin.close();
   close();
-  loginWin = null;
-  win = null;
 });
 
 function createWindow() {
@@ -97,16 +96,23 @@ function createWindow() {
   //   console.log('paste-from-clipboard-capwin')
   //   win.webContents.send('paste-from-clipboard-mainwin', arg)
   // })
+
+  nativeTheme.on('updated', function (e) {
+    const darkMode = nativeTheme.shouldUseDarkColors;
+    console.log('updateddarkMode', darkMode);
+    send('change-mode', darkMode);
+  });
+
   return win;
 }
 
 function show() {
-  win.show();
+  win && win.show();
 }
 
 function close() {
   willQuitApp = true;
-  win.close();
+  win && win.close();
 }
 
 function send(channel, ...args) {

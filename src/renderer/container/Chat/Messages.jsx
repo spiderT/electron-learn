@@ -44,23 +44,23 @@ export default function Messages(props) {
 
     handleMsg(msg.type, msg.content, 'receive');
 
-    // h5通知
-    const option = {
-      title: TO_ID,
-      body: msg.content,
-    };
+    // // h5通知
+    // const option = {
+    //   title: '蜘蛛侠',
+    //   body: msg.content,
+    // };
 
-    // 渲染进程的Notification
-    const chatNotication = new Notification(option.title, option);
+    // // 渲染进程的Notification
+    // const chatNotication = new Notification(option.title, option);
 
-    chatNotication.onClick = function () {
-      console.log('chatNotication.onClick');
-    };
+    // chatNotication.onClick = function () {
+    //   console.log('chatNotication.onClick');
+    // };
 
-    // // 发给主进程，展示Notification
-    // const res = await ipcRenderer.invoke('msg-receive', { title: 'TO_ID', body: msg.content });
-    // console.log('res' ,res);
-    // res.event === 'reply' ? onSend(res.text) : onClose();
+    // 发给主进程，展示Notification
+    const res = await ipcRenderer.invoke('msg-receive', { title: '蜘蛛侠', body: msg.content });
+    console.log('res', res);
+    res.event === 'reply' ? onSend(res.text) : onClose();
   };
 
 
@@ -117,7 +117,7 @@ export default function Messages(props) {
     const len = msgChildNodes.length;
     // 因为加了一个‘’dom
     const lastChildEle = msgChildNodes[len - 2];
-    setTimeout(function () {
+    lastChildEle && setTimeout(function () {
       lastChildEle.scrollIntoView();
     }, 100);
   }
@@ -156,6 +156,10 @@ export default function Messages(props) {
 
   function showEmoji() {
     toggleShowEmoji(!isShowEmoji);
+  }
+
+  function handleLeaveEmoji() {
+    toggleShowEmoji(false)
   }
 
   function sendEmoji(item) {
@@ -220,17 +224,11 @@ export default function Messages(props) {
         </div>
       </div>
       <div className="edit-wrap">
-        {isShowEmoji && <EmojiPackage sendEmoji={sendEmoji} />}
+        {isShowEmoji && <EmojiPackage sendEmoji={sendEmoji} handleLeave={handleLeaveEmoji} />}
         <div className="edit-tool">
-          <span className="face" onClick={showEmoji}>
-
-          </span>
-          <span className="file" onClick={uploadFile}>
-
-          </span>
-          <span className="screenshot" onClick={captureScreen}>
-
-          </span>
+          <span className="face" onClick={showEmoji} />
+          <span className="file" onClick={uploadFile} />
+          <span className="screenshot" onClick={captureScreen} />
           {/* // 以下功能暂时未开发 */}
           {/* <span className="messages disabled"></span>
                 <span className="video disabled"></span>

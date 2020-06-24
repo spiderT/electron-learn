@@ -3,6 +3,30 @@ import './index.scss';
 import Chatlist from './Chatlist';
 import Messages from './Messages.jsx';
 import { MyContext } from '../../context-manager';
+import { ipcRenderer } from 'electron';
+
+function addDarkMode() {
+    document.getElementsByTagName('body')[0].classList.add("dark-mode");
+}
+
+function removeDarkMode() {
+    document.getElementsByTagName('body')[0].classList.remove("dark-mode");
+}
+
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    addDarkMode();
+} else {
+    removeDarkMode();
+}
+
+ipcRenderer.on('change-mode', (e, arg) => {
+    console.log('change-mode')
+    if (arg) {
+        addDarkMode();
+    } else {
+        removeDarkMode();
+    }
+})
 
 function Chat() {
 

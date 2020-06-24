@@ -2,7 +2,9 @@ const { ipcMain, dialog, BrowserWindow, app, Notification } = require('electron'
 const fs = require('fs');
 const path = require('path');
 const mineType = require('mime-types');
-let picWin;
+
+const { createLoginWindow, close } = require('./windows');
+let picWin, settingWin;
 
 module.exports = function () {
   // 打开对话框事件dialog
@@ -54,7 +56,7 @@ module.exports = function () {
     picWin = new BrowserWindow({
       width: 800,
       height: 600,
-      // resizable: false,
+      resizable: false,
       webPreferences: {
         nodeIntegration: true,
       },
@@ -94,5 +96,33 @@ module.exports = function () {
       });
     });
     return res;
+  });
+
+  // 打开设置页
+  ipcMain.on('open-settings', () => {
+    settingWin = new BrowserWindow({
+      width: 400,
+      height: 300,
+      resizable: false,
+      titleBarStyle: 'hiddenInset',
+      webPreferences: {
+        nodeIntegration: true,
+      },
+    });
+
+    settingWin.loadURL(path.join('file:', __dirname, '../setting.html'));
+
+    settingWin.show();
+
+    settingWin.on('closed', () => {
+      settingWin.destroy();
+    });
+  });
+
+  // 退出登录
+  ipcMain.on('login-out', () => {
+    close();
+    settingWin.destroy();
+    createLoginWindow();
   });
 };

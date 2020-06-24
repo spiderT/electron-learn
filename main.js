@@ -7,33 +7,6 @@ const handleIPC = require('./src/main/ipc');
 const handleDownload = require('./src/main/download');
 const isDev = require('electron-is-dev');
 
-// // 开机自启动
-// const AutoLaunch = require('auto-launch');
-
-// const minecraftAutoLauncher = new AutoLaunch({
-//   name: 'spiderChat',
-//   path: '/Applications/spiderchat.app',
-// });
-
-// // 加入开机启动项
-// minecraftAutoLauncher.enable();
-
-// // 移除开机启动项
-// // minecraftAutoLauncher.disable();
-
-// // 检测开机启动项状态
-// minecraftAutoLauncher
-//   .isEnabled()
-//   .then(function (isEnabled) {
-//     if (isEnabled) {
-//       return;
-//     }
-//     minecraftAutoLauncher.enable();
-//   })
-//   .catch(function (err) {
-//     // handle error
-//   });
-
 // 开机自启动
 app.setLoginItemSettings({
   openAtLogin: true,
