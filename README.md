@@ -244,7 +244,21 @@ app.on('window-all-closed', () => {
   app.quit()
 })
 
+```
 
+禁止多开  
+
+```js
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) {
+ app.quit()
+} else {
+ app.on('second-instance', (event, commandLine, workingDirectory) => {
+ // 当运行第二个实例时,将会聚焦到myWindow这个窗口
+ showMainWindow()
+ })
+ app.on('ready', () => {...})
+}
 ```
 
 ### 4.2. BrowserWindow
@@ -1230,9 +1244,10 @@ electron_mirror=http://npm.taobao.org/mirrors/electron/
 
 2. 直接去淘宝镜像文件库找到对应的文件并下载，放到指定的目录下，electron 的淘宝镜像地址。下载完之后放到指定的文件。
 
-##### NSIS 下载问题
 
-### 热重载(开发实时刷新)
+### 热重载
+
+webpack的electron配置  
 
 
 ### 热更新

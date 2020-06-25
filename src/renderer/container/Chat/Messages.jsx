@@ -24,7 +24,7 @@ socket.onclose = function (event) {
 };
 
 export default function Messages(props) {
-  const { msgData } = props;
+  const { msgData = []} = props;
   const { setMsgData } = useContext(MyContext);
   const [isShowEmoji, toggleShowEmoji] = useState(false);
   const msgBox = React.createRef();
@@ -220,7 +220,7 @@ export default function Messages(props) {
       <div className="head">蜘蛛侠</div>
       <div className="message-wrap">
         <div id="msg-box" className="msg-box" ref={msgBox}>
-          {msgData && msgData.length ? msgData.map((item) => MsgRender(item)) : null}
+          {msgData.length ? msgData.map((item) => MsgRender(item)) : null}
         </div>
       </div>
       <div className="edit-wrap">
