@@ -20,7 +20,7 @@ autoUpdater.on('update-downloaded', (e, notes, version) => {
     const clickId = dialog.showMessageBoxSync({
       type: 'info',
       title: '升级提示',
-      message: '已为你升级到最新版，是否立即体验',
+      message: '新版本：增加深色主题，自动匹配系统主题',
       buttons: ['马上升级', '手动重启'],
       cancelId: 1,
     });

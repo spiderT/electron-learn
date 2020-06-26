@@ -627,30 +627,48 @@ fullPath String
 shell.beep()  
 播放哔哔的声音.  
 
-
 ### 4.11. powerMonitor 电源监视器
 
 > 监视电源状态的改变。  
 
 https://www.electronjs.org/docs/api/power-monitor
 
+### 4.12. nativeTheme 读取并响应Chromium本地色彩主题中的变化
 
-### 4.12. 使用 Node.js 获得底层能力
+主进程监听主题变化，通知渲染进程增加dark-mode的class
 
-- Electron 同时在主进程和渲染进程中对 Node.js 暴露了所有的接口
+```js
+nativeTheme.on('updated', function (e) {
+    const darkMode = nativeTheme.shouldUseDarkColors;
+    console.log('updateddarkMode', darkMode);
+    send('change-mode', darkMode);
+  });
 
-fs 进行文件读写
-crypto 进行加解密
+ function addDarkMode() {
+    document.getElementsByTagName('body')[0].classList.add("dark-mode");
+}
 
-- 通过 npm 安装即可引入社区上所有的 Node.js 库
+function removeDarkMode() {
+    document.getElementsByTagName('body')[0].classList.remove("dark-mode");
+}
 
-### 4.13. 使用 Node.js 调用原生模块
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    addDarkMode();
+} else {
+    removeDarkMode();
+}
 
-- node.js add-on  
-- node-ffi  
+ipcRenderer.on('change-mode', (e, arg) => {
+    console.log('change-mode')
+    if (arg) {
+        addDarkMode();
+    } else {
+        removeDarkMode();
+    }
+})
+```
 
-
-## 5. 开机自启动 
+## 5. 开机自启动
 
 ### 5.1. [node-auto-launch](https://github.com/Teamwork/node-auto-launch)
 
@@ -939,7 +957,7 @@ npm install
 在js里使用  
 
 ```js
-var addon = require("./build/Release/addon");
+const addon = require("./build/Release/addon");
 console.log(addon.hello());
 ```
 
@@ -970,10 +988,10 @@ win.webContents.openDevTools()
 $ npm install --save-dev spectron
 
 // A simple test to verify a visible window is opened with a title
-var Application = require('spectron').Application
-var assert = require('assert')
+const Application = require('spectron').Application
+const assert = require('assert')
 
-var app = new Application({
+const app = new Application({
   path: '/Applications/MyApp.app/Contents/MacOS/MyApp'
 })
 
@@ -1248,6 +1266,208 @@ electron_mirror=http://npm.taobao.org/mirrors/electron/
 ### 热重载
 
 webpack的electron配置  
+
+```js
+'use strict'
+
+const chalk = require('chalk')
+const electron = require('electron')
+const path = require('path')
+const { say } = require('cfonts')
+const { spawn } = require('child_process')
+const webpack = require('webpack')
+const WebpackDevServer = require('webpack-dev-server')
+const webpackHotMiddleware = require('webpack-hot-middleware')
+
+const mainConfig = require('./webpack.main.config')
+const rendererConfig = require('./webpack.renderer.config')
+
+let electronProcess = null
+let manualRestart = false
+let hotMiddleware
+
+function logStats(proc, data) {
+  let log = ''
+
+  log += chalk.yellow.bold(
+    `┏ ${proc} Process ${new Array(19 - proc.length + 1).join('-')}`
+  )
+  log += '\n\n'
+
+  if (typeof data === 'object') {
+    data
+      .toString({
+        colors: true,
+        chunks: false
+      })
+      .split(/\r?\n/)
+      .forEach(line => {
+        log += '  ' + line + '\n'
+      })
+  } else {
+    log += `  ${data}\n`
+  }
+
+  log += '\n' + chalk.yellow.bold(`┗ ${new Array(28 + 1).join('-')}`) + '\n'
+
+  console.log(log)
+}
+
+function startRenderer() {
+  return new Promise((resolve, reject) => {
+    rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(
+      rendererConfig.entry.renderer
+    )
+    rendererConfig.mode = 'development'
+    const compiler = webpack(rendererConfig)
+    hotMiddleware = webpackHotMiddleware(compiler, {
+      log: false,
+      heartbeat: 2500
+    })
+
+    compiler.hooks.compilation.tap('compilation', compilation => {
+      compilation.hooks.htmlWebpackPluginAfterEmit.tapAsync(
+        'html-webpack-plugin-after-emit',
+        (data, cb) => {
+          hotMiddleware.publish({ action: 'reload' })
+          cb()
+        }
+      )
+    })
+
+    compiler.hooks.done.tap('done', stats => {
+      logStats('Renderer', stats)
+    })
+
+    const server = new WebpackDevServer(compiler, {
+      hot: true,
+      contentBase: path.join(__dirname, '../'),
+      quiet: true,
+      before(app, ctx) {
+        app.use(hotMiddleware)
+        ctx.middleware.waitUntilValid(() => {
+          resolve()
+        })
+      }
+    })
+
+    server.listen(9080)
+  })
+}
+
+function startMain() {
+  return new Promise((resolve, reject) => {
+    mainConfig.entry.main = [
+      path.join(__dirname, '../src/main/index.dev.js')
+    ].concat(mainConfig.entry.main)
+    mainConfig.mode = 'development'
+    const compiler = webpack(mainConfig)
+
+    compiler.hooks.watchRun.tapAsync('watch-run', (compilation, done) => {
+      logStats('Main', chalk.white.bold('compiling...'))
+      hotMiddleware.publish({ action: 'compiling' })
+      done()
+    })
+
+    compiler.watch({}, (err, stats) => {
+      if (err) {
+        console.log(err)
+        return
+      }
+
+      logStats('Main', stats)
+
+      if (electronProcess && electronProcess.kill) {
+        manualRestart = true
+        process.kill(electronProcess.pid)
+        electronProcess = null
+        startElectron()
+
+        setTimeout(() => {
+          manualRestart = false
+        }, 5000)
+      }
+
+      resolve()
+    })
+  })
+}
+
+function startElectron() {
+  var args = [path.join(__dirname, '../dist/electron/main.js')]
+
+  // detect yarn or npm and process commandline args accordingly
+  if (process.env.npm_execpath.endsWith('yarn.js')) {
+    args = args.concat(process.argv.slice(3))
+  } else if (process.env.npm_execpath.endsWith('npm-cli.js')) {
+    args = args.concat(process.argv.slice(2))
+  }
+
+  electronProcess = spawn(electron, args)
+
+  electronProcess.stdout.on('data', data => {
+    electronLog(data, 'blue')
+  })
+  electronProcess.stderr.on('data', data => {
+    electronLog(data, 'red')
+  })
+
+  electronProcess.on('close', () => {
+    if (!manualRestart) process.exit()
+  })
+}
+
+function electronLog(data, color) {
+  let log = ''
+  data = data.toString().split(/\r?\n/)
+  data.forEach(line => {
+    log += `  ${line}\n`
+  })
+  if (/[0-9A-z]+/.test(log)) {
+    console.log(
+      chalk[color].bold('┏ Electron -------------------') +
+        '\n\n' +
+        log +
+        chalk[color].bold('┗ ----------------------------') +
+        '\n'
+    )
+  }
+}
+
+function greeting() {
+  const cols = process.stdout.columns
+  let text = ''
+
+  if (cols > 104) text = 'electron-react'
+  else if (cols > 76) text = 'electron-|react'
+  else text = false
+
+  if (text) {
+    say(text, {
+      colors: ['yellow'],
+      font: 'simple3d',
+      space: false
+    })
+  } else console.log(chalk.yellow.bold('\n  electron-react'))
+  console.log(chalk.blue('  getting ready...') + '\n')
+}
+
+function init() {
+  greeting()
+
+  Promise.all([startRenderer(), startMain()])
+    .then(() => {
+      startElectron()
+    })
+    .catch(err => {
+      console.error(err)
+    })
+}
+init()
+
+```
+
+
 
 
 ### 热更新

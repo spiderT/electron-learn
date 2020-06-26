@@ -1,10 +1,10 @@
 const { app, globalShortcut } = require('electron');
-const setAppMenu = require('./src/main/menus');
-const setTray = require('./src/main/tray');
-const { createLoginWindow, createWindow, show, close } = require('./src/main/windows');
+const setAppMenu = require('./menus');
+const setTray = require('./tray');
+const { createLoginWindow, createWindow, show, close } = require('./windows');
 const path = require('path');
-const handleIPC = require('./src/main/ipc');
-const handleDownload = require('./src/main/download');
+const handleIPC = require('./ipc');
+const handleDownload = require('./download');
 const isDev = require('electron-is-dev');
 
 // 开机自启动
@@ -29,9 +29,9 @@ if (!gotTheLock) {
   app.on('will-finish-launching', () => {
     // 自动更新
     if (!isDev) {
-      require('./src/main/updater.js');
+      require('./updater.js');
     }
-    require('./src/main/crash-reporter').init();
+    require('./crash-reporter').init();
   });
 
   app.on('ready', () => {

@@ -24,7 +24,7 @@ socket.onclose = function (event) {
 };
 
 export default function Messages(props) {
-  const { msgData = []} = props;
+  const { msgData = [] } = props;
   const { setMsgData } = useContext(MyContext);
   const [isShowEmoji, toggleShowEmoji] = useState(false);
   const msgBox = React.createRef();
@@ -68,9 +68,14 @@ export default function Messages(props) {
 
   function onSend(data) {
     handleMsg(1, data);
+    // todo 解决 收到消息，聊天区域没有及时渲染
+    document.getElementsByClassName('list-item')[0].click();
   }
 
   function handleMsg(msgType, data, type) {
+    if (!data) {
+      return
+    }
     let msg;
     if (type === 'receive') {
       msg = msgBody(msgType, data, TO_ID, FROM_ID);
@@ -79,9 +84,9 @@ export default function Messages(props) {
       socket.send(JSON.stringify(msg));
       addMsg(msg)
     }
-    msgData.push(msg)
+    msgData.push(msg);
     setMsgData(msgData);
-    // 解决 收到消息，聊天区域没有及时渲染
+    // todo 解决 收到消息，聊天区域没有及时渲染
     setHtml(html + ' ');
     scrollToView();
   }

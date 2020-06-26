@@ -2,7 +2,7 @@
   "name": "spiderchat",
   "version": "1.0.0",
   "description": "spiderChat baseon electron",
-  "main": "main.js",
+  "main": "src/main/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"npm run start:render\" \"wait-on http://localhost:9200&& npm run start:main\" ",
