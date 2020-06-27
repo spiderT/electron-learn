@@ -36,6 +36,11 @@ export default function Messages(props) {
 
   useEffect(() => {
     setTimeout(() => scrollToView(), 300);
+    // 'paste-pic-from-clipboard'
+    ipcRenderer.on('paste-pic-from-clipboard', (e, arg) => {
+      console.log('paste-pic-from-clipboard');
+      handlePasteFromIpc(arg);
+    });
   }, [])
 
   socket.onmessage = (event) => {
@@ -237,11 +242,7 @@ export default function Messages(props) {
   //   handlePasteFromIpc(arg);
   // });
 
-  // 'paste-pic-from-clipboard'
-  ipcRenderer.on('paste-pic-from-clipboard', (e, arg) => {
-    console.log('paste-pic-from-clipboard');
-    handlePasteFromIpc(arg);
-  });
+
 
   return (
     <div className="chat-container">

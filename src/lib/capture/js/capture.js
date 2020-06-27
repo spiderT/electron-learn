@@ -6,7 +6,7 @@ const { Draw } = require(`${__dirname}/js/draw.js`);
 
 desktopCapturer
   .getSources({
-    types: ['screen', 'window'],
+    types: ['screen'],
     thumbnailSize: {
       width,
       height,
