@@ -1,27 +1,30 @@
 import React, { useState, useEffect, useContext } from 'react';
-import './index.scss';
+import { ipcRenderer, remote } from 'electron';
 import MsgRender from '../../components/Message';
 import EmojiPackage from '../../components/EmojiPackage';
 import ContentEditable from 'react-contenteditable';
 import { msgBody } from '../../utils';
 import { MyContext } from '../../context-manager';
+import './index.scss';
+let unread = 0;
+const app = remote.app;
+
 const TO_ID = 'zhizhuxia';
 const FROM_ID = 'ivy';
-
-// const { ipcRenderer } = require('electron');
-
-import { ipcRenderer } from 'electron';
-
-// fix warning: possible EventEmitter memory leak detected. 11 request listeners added. Use emitter.setMaxListeners() to increase limit.
 ipcRenderer.setMaxListeners(100);
 
 const socket = new WebSocket('ws://localhost:8080/ws');
-socket.onopen = function (event) {
+socket.onopen = (event) => {
   console.log('onopen');
 };
-socket.onclose = function (event) {
+socket.onclose = (event) => {
   console.log('onclose');
 };
+
+app.on('browser-window-focus', () => {
+  unread = 0;
+  app.setBadgeCount(unread);
+})
 
 export default function Messages(props) {
   const { msgData = [] } = props;
@@ -35,41 +38,61 @@ export default function Messages(props) {
     setTimeout(() => scrollToView(), 300);
   }, [])
 
-
-  socket.onmessage = async (event) => {
+  socket.onmessage = (event) => {
     const msg = JSON.parse(event.data);
     if (msg.fromId !== TO_ID) {
       return
     }
 
     handleMsg(msg.type, msg.content, 'receive');
+    // createNativeNotification(msg);
+    // createHtmlNotification(msg) 
 
-    // // h5通知
-    // const option = {
-    //   title: '蜘蛛侠',
-    //   body: msg.content,
-    // };
+    unread += 1;
+    app.setBadgeCount(unread);
+    handleNativeNoti(msg);
+  };
 
-    // // 渲染进程的Notification
-    // const chatNotication = new Notification(option.title, option);
+  function createHtmlNotification(msg) {
+    // h5通知
+    const option = {
+      title: '蜘蛛侠',
+      body: msg.content,
+    };
 
-    // chatNotication.onClick = function () {
-    //   console.log('chatNotication.onClick');
-    // };
+    // 渲染进程的Notification
+    const chatNotication = new Notification(option.title, option);
+    chatNotication.onclick = () => {
+      console.log('clickchatNotication')
+    }
+  }
 
+  async function createNativeNotification(msg) {
     // 发给主进程，展示Notification
     const res = await ipcRenderer.invoke('msg-receive', { title: '蜘蛛侠', body: msg.content });
     console.log('res', res);
     res.event === 'reply' ? onSend(res.text) : onClose();
-  };
+  }
 
+  function handleNativeNoti(msg) {
+    const notification = new remote.Notification({
+      title: '蜘蛛侠',
+      body: msg.content,
+      hasReply: true,
+    });
+    notification.show();
+    notification.on('reply', (e, reply) => {
+      onSend(reply)
+    });
+    notification.on('close', (e) => {
+      onClose()
+    });
+  }
 
   function onClose() { }
 
   function onSend(data) {
     handleMsg(1, data);
-    // todo 解决 收到消息，聊天区域没有及时渲染
-    document.getElementsByClassName('list-item')[0].click();
   }
 
   function handleMsg(msgType, data, type) {

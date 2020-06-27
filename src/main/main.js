@@ -15,7 +15,7 @@ app.setLoginItemSettings({
 app.whenReady().then(() => {
   setAppMenu();
   if (process.platform === 'darwin') {
-    app.dock.setIcon(path.join(__dirname, './src/resources/images/zhizhuxia_big.png'));
+    app.dock.setIcon(path.join(__dirname, '../resources/images/zhizhuxia_big.png'));
   }
 });
 

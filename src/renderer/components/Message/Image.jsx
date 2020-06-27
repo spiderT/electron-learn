@@ -1,6 +1,5 @@
 import React from 'react';
 import './Image.scss';
-// const { ipcRenderer } = require('electron');
 import { ipcRenderer } from 'electron';
 
 function handleZoom(src) {
