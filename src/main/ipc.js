@@ -133,6 +133,6 @@ module.exports = function () {
   app.on('browser-window-focus', () => {
     app.setBadgeCount(0);
     unread = 0;
-    // send('browser-window-focus');
+    send('browser-window-focus');
   });
 };

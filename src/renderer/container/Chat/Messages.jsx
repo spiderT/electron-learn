@@ -37,13 +37,13 @@ export default function Messages(props) {
       handlePasteFromIpc(arg);
     });
 
-    // // 清除未读数
-    // ipcRenderer.on('browser-window-focus', () => {
-    //   unread = 0;
-    // })
+    // 清除未读数
+    ipcRenderer.on('browser-window-focus', () => {
+      unread = 0;
+    })
   }, [])
 
-  socket.onmessage = async (event) => {
+  socket.onmessage = (event) => {
     const msg = JSON.parse(event.data);
     if (msg.fromId !== TO_ID) {
       return
@@ -52,12 +52,12 @@ export default function Messages(props) {
     handleMsg(msg.type, msg.content, 'receive');
 
     if (document.hidden) {
-      await createNativeNotification(msg);
+      // createNativeNotification(msg);
       // createHtmlNotification(msg) 
 
-      // unread += 1;
-      // app.setBadgeCount(unread);
-      // handleNativeNoti(msg);
+      unread += 1;
+      app.setBadgeCount(unread);
+      handleNativeNoti(msg);
     }
   };
 
