@@ -116,7 +116,7 @@ function close() {
 }
 
 function send(channel, ...args) {
-  win.webContents.send(channel, ...args);
+  win && win.webContents.send(channel, ...args);
 }
 
 module.exports = {

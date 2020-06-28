@@ -62,12 +62,15 @@ function captureScreen() {
 ipcMain.on('clip-page', (event, { type, msg }) => {
   if (type === 'close') {
     if (capWin) {
+      // todo 为了解决全屏问题
+      capWin.setSimpleFullScreen(false);
       // 解决图片自动粘贴问题
       setTimeout(function () {
         capWin.close();
         capWin = null;
       }, 0);
     }
+
     // 进程间转发
     // }else if(type === 'paste'){
     //     console.log('paste22')

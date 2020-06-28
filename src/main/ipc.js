@@ -2,8 +2,9 @@ const { ipcMain, dialog, BrowserWindow, app, Notification } = require('electron'
 const fs = require('fs');
 const path = require('path');
 const mineType = require('mime-types');
+let unread = 0;
 
-const { createLoginWindow, close } = require('./windows');
+const { createLoginWindow, close, send } = require('./windows');
 let picWin, settingWin;
 
 module.exports = function () {
@@ -81,6 +82,8 @@ module.exports = function () {
   // 收到消息 msg-receive
   ipcMain.handle('msg-receive', async (event, arg) => {
     console.log('handle msg-receive');
+    unread += 1;
+    app.setBadgeCount(unread);
     const res = new Promise((resolve, reject) => {
       const notification = new Notification({
         title: arg.title,
@@ -124,5 +127,12 @@ module.exports = function () {
     close();
     settingWin.destroy();
     createLoginWindow();
+  });
+
+  // 清除未读数
+  app.on('browser-window-focus', () => {
+    app.setBadgeCount(0);
+    unread = 0;
+    // send('browser-window-focus');
   });
 };

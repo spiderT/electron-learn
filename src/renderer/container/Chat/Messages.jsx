@@ -21,18 +21,13 @@ socket.onclose = (event) => {
   console.log('onclose');
 };
 
-app.on('browser-window-focus', () => {
-  unread = 0;
-  app.setBadgeCount(unread);
-})
-
 export default function Messages(props) {
   const { msgData = [] } = props;
   const { setMsgData } = useContext(MyContext);
   const [isShowEmoji, toggleShowEmoji] = useState(false);
   const msgBox = React.createRef();
   const contentEditable = React.createRef();
-  const [html, setHtml] = useState('');
+  const [editHtml, setHtml] = useState('');
 
   useEffect(() => {
     setTimeout(() => scrollToView(), 300);
@@ -41,21 +36,29 @@ export default function Messages(props) {
       console.log('paste-pic-from-clipboard');
       handlePasteFromIpc(arg);
     });
+
+    // // 清除未读数
+    // ipcRenderer.on('browser-window-focus', () => {
+    //   unread = 0;
+    // })
   }, [])
 
-  socket.onmessage = (event) => {
+  socket.onmessage = async (event) => {
     const msg = JSON.parse(event.data);
     if (msg.fromId !== TO_ID) {
       return
     }
 
     handleMsg(msg.type, msg.content, 'receive');
-    // createNativeNotification(msg);
-    // createHtmlNotification(msg) 
 
-    unread += 1;
-    app.setBadgeCount(unread);
-    handleNativeNoti(msg);
+    if (document.hidden) {
+      await createNativeNotification(msg);
+      // createHtmlNotification(msg) 
+
+      // unread += 1;
+      // app.setBadgeCount(unread);
+      // handleNativeNoti(msg);
+    }
   };
 
   function createHtmlNotification(msg) {
@@ -98,6 +101,8 @@ export default function Messages(props) {
 
   function onSend(data) {
     handleMsg(1, data);
+    // todo 解决 收到消息，聊天区域没有及时渲染
+    document.getElementsByClassName('list-item')[0].click();
   }
 
   function handleMsg(msgType, data, type) {
@@ -115,7 +120,7 @@ export default function Messages(props) {
     msgData.push(msg);
     setMsgData(msgData);
     // todo 解决 收到消息，聊天区域没有及时渲染
-    setHtml(html + ' ');
+    setHtml(editHtml + ' ');
     scrollToView();
   }
 
@@ -159,16 +164,16 @@ export default function Messages(props) {
     if (e.keyCode === 13 || e.which === 13) {
       e.preventDefault();
 
-      if (!html || !html.trim() || !window.WebSocket) {
+      if (!editHtml || !editHtml.trim() || !window.WebSocket) {
         return;
       }
       if (socket.readyState === WebSocket.OPEN) {
         // 判断发送文本，还是图片
-        if (html.includes('<img src')) {
-          let imgSrc = getSrcFromImg(html);
+        if (editHtml.includes('<img src')) {
+          let imgSrc = getSrcFromImg(editHtml);
           handleMsg(3, imgSrc)
         } else {
-          handleMsg(1, html)
+          handleMsg(1, editHtml)
         }
         setHtml(' ');
       } else {
@@ -206,7 +211,7 @@ export default function Messages(props) {
 
   function handlePasteFromIpc(arg) {
     console.log('handlePasteFromIpc');
-    const eleHtml = `${html}<img src='${arg}'/>`;
+    const eleHtml = `${editHtml}<img src='${arg}'/>`;
     setHtml(eleHtml);
   }
 
@@ -228,7 +233,7 @@ export default function Messages(props) {
         reader.onload = (e) => {
           const imgPath = e.target.result;
           imgs.src = imgPath;
-          const eleHtml = `${html}<img src='${imgPath}'/>`;
+          const eleHtml = `${editHtml}<img src='${imgPath}'/>`;
           setHtml(eleHtml);
         };
         reader.readAsDataURL(blob);
@@ -265,7 +270,7 @@ export default function Messages(props) {
         </div>
         <ContentEditable
           innerRef={contentEditable}
-          html={html}
+          html={editHtml}
           className="edit-div"
           disabled={false}
           onChange={handleChange}
