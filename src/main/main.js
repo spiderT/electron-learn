@@ -41,7 +41,6 @@ if (!gotTheLock) {
     const win = createWindow();
     setTray();
     handleIPC();
-    // 升级包1.0.1的功能
     handleDownload(win);
   });
 

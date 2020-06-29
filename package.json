@@ -69,8 +69,7 @@
     "productName": "spiderchat",
     "files": [
       "build/**/*",
-      "src",
-      "main.js"
+      "src"
     ],
     "directories": {
       "output": "dist"

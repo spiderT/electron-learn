@@ -29,8 +29,8 @@ function createLoginWindow() {
 // 登录
 ipcMain.on('login-error', (event, arg) => {
   console.log('login-error');
-  // todo 未生效？？?
-  loginWin.flashFrame(true);
+  // // todo 未生效？？?
+  // loginWin.flashFrame(true);
 });
 
 ipcMain.on('login-success', (event, arg) => {
