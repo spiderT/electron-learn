@@ -28,7 +28,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "concurrently": "^5.2.0",
     "css-loader": "^3.5.3",
-    "electron": "^9.0.3",
+    "electron": "^9.3.1",
     "electron-builder": "^22.6.1",
     "electron-fix": "^1.1.2",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
