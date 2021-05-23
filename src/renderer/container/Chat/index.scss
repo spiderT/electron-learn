@@ -211,12 +211,16 @@
   .chat-wrap .search,
   .chat-container,
   .edit-div {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 1);
+  }
+  .chat-wrap .search input {
+    background-color: rgba(0, 0, 0, 0.2);
   }
   .list-item {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 1);
+    border-bottom: none;
     &:first-child {
-      background-color: rgba(0, 0, 0, 0.9);
+      background-color: rgba(0, 0, 0, 0.7);
     }
   }
   .edit-div,
@@ -224,11 +228,15 @@
   .list-item .name {
     color: #fff;
   }
-  .search {
-    border-right: 1px solid #ccc;
-  }
-  .chat-container, .msg-text{
+  .chat-container,
+  .msg-text {
     color: #000;
+  }
+  .avatar,
+  .message-wrap,
+  .list-wrap,
+  .search {
+    border: none;
   }
 }
 
@@ -244,7 +252,8 @@
     .head {
       font-size: 12px;
     }
-    .msg-text, .edit-div{
+    .msg-text,
+    .edit-div {
       font-size: 10px;
     }
   }
@@ -262,7 +271,8 @@
     .head {
       font-size: 14px;
     }
-    .msg-text, .edit-div{
+    .msg-text,
+    .edit-div {
       font-size: 12px;
     }
   }
@@ -280,7 +290,8 @@
     .head {
       font-size: 16px;
     }
-    .msg-text, .edit-div{
+    .msg-text,
+    .edit-div {
       font-size: 14px;
     }
   }
@@ -298,7 +309,8 @@
     .head {
       font-size: 18px;
     }
-    .msg-text, .edit-div{
+    .msg-text,
+    .edit-div {
       font-size: 16px;
     }
   }
@@ -316,7 +328,8 @@
     .head {
       font-size: 20px;
     }
-    .msg-text, .edit-div{
+    .msg-text,
+    .edit-div {
       font-size: 18px;
     }
   }

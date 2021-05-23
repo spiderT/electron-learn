@@ -18,6 +18,8 @@ function createLoginWindow() {
     frame: false,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     },
     resizable: false,
   });
@@ -54,6 +56,8 @@ function createWindow() {
     height: 0,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     },
     minWidth: 800,
     minHeight: 600,

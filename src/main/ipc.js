@@ -60,6 +60,8 @@ module.exports = function () {
       resizable: false,
       webPreferences: {
         nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
       },
     });
     global.sharedObject.picId = picWin.webContents.id;
@@ -110,6 +112,8 @@ module.exports = function () {
       titleBarStyle: 'hiddenInset',
       webPreferences: {
         nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
       },
     });
 
