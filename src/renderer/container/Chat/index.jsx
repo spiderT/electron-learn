@@ -29,9 +29,7 @@ ipcRenderer.on('change-mode', (e, arg) => {
 })
 
 function Chat() {
-
     const [msgData, setMsgData] = useState([]);
-
     return (
         <MyContext.Provider value={{ setMsgData }}>
             <div className="right-wrap">

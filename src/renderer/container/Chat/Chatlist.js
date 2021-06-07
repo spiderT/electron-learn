@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { MyContext } from '../../context-manager';
+import { SPIDER_MAN } from '../../constants';
 
 import './index.scss';
 
@@ -88,13 +89,13 @@ export default function Chatlist(props) {
         </div>
         <div className="info">
           <p className="name">{user.name}</p>
-          {user.avatar === 'zhizhuxia' ? (
+          {user.avatar === SPIDER_MAN ? (
             <p className="message">{renderCurMsg(user)}</p>
           ) : (
             <p className="message">{`您已添加了${user.name}，现在可以开始聊天了。`}</p>
           )}
         </div>
-        <div className="time">28/06/21</div>
+        <div className="time">11/06/21</div>
       </div>
     );
   }
@@ -109,7 +110,7 @@ export default function Chatlist(props) {
   }
 
   function getMsg(user) {
-    if (user.avatar !== 'zhizhuxia') {
+    if (user.avatar !== SPIDER_MAN) {
       return;
     }
     fetchData();

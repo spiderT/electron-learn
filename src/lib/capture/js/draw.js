@@ -60,6 +60,9 @@ class Draw {
     //创建新的canvas上下文作为存储，方便取出里面的rgba信息
     this.$bgCanvas = document.createElement('canvas');
     this.$bgCtx = this.$bgCanvas.getContext('2d');
+    // 拿到原图后，再加截屏遮罩
+    const mask = document.querySelector('#mask');
+    mask.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
 
     //新建一个图片，用来放进canvas存图片数据
     const imgCanvas = await new Promise((resolve) => {

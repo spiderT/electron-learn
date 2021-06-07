@@ -2,13 +2,14 @@ import React from 'react';
 import Text from './Text';
 import Tip from './Tip';
 import Image from './Image.jsx';
+import { USER_NAME } from '../../constants';
 import './index.scss';
 
 const AvatarRender = (msg) => {
   return (
     <img
       className="chat-avatar"
-      src={require(`../../../resources/images/users/${msg.fromId === 'ivy' ? 'user' : msg.fromId}.png`)}
+      src={require(`../../../resources/images/users/${msg.fromId === USER_NAME ? 'user' : msg.fromId}.png`)}
     />
   );
 };
@@ -31,7 +32,7 @@ const MsgRender = (msg) => {
   }
 
   return (
-    <div key={msg.id} className={`msg-item clearfix ${msg.type !== 2 ? (msg.fromId === 'ivy' ? 'right' : 'left') : ''}`}>
+    <div key={msg.id} className={`msg-item clearfix ${msg.type !== 2 ? (msg.fromId === USER_NAME ? 'right' : 'left') : ''}`}>
       {msg.type !== 2 ? AvatarRender(msg) : null}
       {content}
     </div>

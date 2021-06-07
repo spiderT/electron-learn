@@ -1,4 +1,4 @@
-const { BrowserWindow, globalShortcut, ipcMain } = require('electron');
+const { BrowserWindow, globalShortcut, ipcMain, app } = require('electron');
 
 const path = require('path');
 let capWin;
@@ -32,8 +32,10 @@ function createCaptureWindow() {
     transparent: true,
     frame: false,
     movable: false,
+    skipTaskbar: true,
+    autoHideMenuBar: true,
     resizable: false,
-    enableLargerThanScreen: true,
+    enableLargerThanScreen: true, // mac
     hasShadow: false,
     webPreferences: {
       nodeIntegration: true,
@@ -42,15 +44,15 @@ function createCaptureWindow() {
     },
   });
 
+  app.dock.hide();
   capWin.setAlwaysOnTop(true, 'screen-saver');
   capWin.setVisibleOnAllWorkspaces(true);
   capWin.setSimpleFullScreen(true);
-  // capWin.setFullScreenable(false)
-
+  // capWin.setFullScreenable(false) // mac
   capWin.loadFile(path.join(__dirname, './index.html'));
 
   // 打开开发者工具
-  // capWin.webContents.openDevTools()
+  // capWin.webContents.openDevTools();
 
   capWin.on('closed', () => {
     capWin = null;

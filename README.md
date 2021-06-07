@@ -2,9 +2,63 @@
 
 官网：https://electronjs.org/
 
+- [electron-learn](#electron-learn)
+  - [1. 本次项目功能点](#1-本次项目功能点)
+    - [目前支持的功能点](#目前支持的功能点)
+    - [使用方式](#使用方式)
+  - [2. electron相关软件安装](#2-electron相关软件安装)
+    - [nvm 安装](#nvm-安装)
+    - [Node.js/NPM 安装](#nodejsnpm-安装)
+    - [node 安装加速机器](#node-安装加速机器)
+    - [Electron 安装](#electron-安装)
+    - [Electron 加速技巧](#electron-加速技巧)
+    - [常见问题](#常见问题)
+  - [3. electron 原理](#3-electron-原理)
+    - [2.1. 使用 Electron 的 API](#21-使用-electron-的-api)
+    - [3.2. 使用 Node.js 的 API](#32-使用-nodejs-的-api)
+  - [4. electron 常用 api](#4-electron-常用-api)
+    - [4.1. app](#41-app)
+    - [4.2. BrowserWindow](#42-browserwindow)
+    - [4.3. ipcMain 和 ipcRenderer](#43-ipcmain-和-ipcrenderer)
+    - [4.4. Menu/MenuItem(菜单/菜单项)](#44-menumenuitem菜单菜单项)
+    - [4.5. Tray(托盘)](#45-tray托盘)
+    - [4.6. clipboard](#46-clipboard)
+    - [4.7. screen](#47-screen)
+    - [4.8. globalShortcut](#48-globalshortcut)
+    - [4.9. desktopCapturer](#49-desktopcapturer)
+    - [4.10. shell](#410-shell)
+    - [4.11. powerMonitor 电源监视器](#411-powermonitor-电源监视器)
+    - [4.12. nativeTheme 读取并响应Chromium本地色彩主题中的变化](#412-nativetheme-读取并响应chromium本地色彩主题中的变化)
+  - [5. 开机自启动](#5-开机自启动)
+    - [5.1. node-auto-launch](#51-node-auto-launch)
+    - [5.2. app.getLoginItemSettings([options])](#52-appgetloginitemsettingsoptions)
+  - [6. 监控—crashReporter](#6-监控crashreporter)
+  - [7. 打包](#7-打包)
+    - [7.1. electron-builder](#71-electron-builder)
+      - [命令行参数（CLI）](#命令行参数cli)
+  - [8. 集成c++](#8-集成c)
+  - [9. 测试和调试](#9-测试和调试)
+    - [9.1. 调试debug](#91-调试debug)
+    - [9.2. 自动化测试](#92-自动化测试)
+  - [10. 更新](#10-更新)
+  - [11. Electron客户端的安全：从xss到rce](#11-electron客户端的安全从xss到rce)
+  - [12. 浏览器启动客户端](#12-浏览器启动客户端)
+    - [12.1. windows平台](#121-windows平台)
+    - [12.2. mac 平台](#122-mac-平台)
+      - [12.2.1. info.plist](#1221-infoplist)
+    - [12.3. 接收参数](#123-接收参数)
+    - [12.3.1. Windows](#1231-windows)
+    - [12.3.2. MacOS](#1232-macos)
+  - [13. 性能优化](#13-性能优化)
+    - [13.1. 减少包体积大小](#131-减少包体积大小)
+  - [Electron 开发过程中可能会遇到的几个问题和场景。](#electron-开发过程中可能会遇到的几个问题和场景)
+        - [NPM 下载的问题](#npm-下载的问题)
+    - [热重载](#热重载)
+    - [参考资料](#参考资料)
+
 ## 1. 本次项目功能点
 
-模仿微信，做了一个单机版的聊天，因为只有mac，没有Windows机器，以下仅根据mac来开发。 
+模仿微信，做了一个单机版的聊天，因为只有mac，没有Windows机器，以下仅根据mac来开发。  
 
 ![效果图](images/xiaoguo.gif)
 
@@ -45,29 +99,6 @@ npm start
 cd updater-server
 node index.js
 ```
-
-### 参考资料  
-
-1. electron 优化 https://juejin.im/post/5e0010866fb9a015fd69c645  
-
-Electron的主进程阻塞导致UI卡顿的问题 https://zhuanlan.zhihu.com/p/37050595  
-
-2. 打包：mac 文件签名：https://www.cnblogs.com/lovesong/p/11782449.html  
-https://www.cnblogs.com/qirui/p/8327812.html  
-
-3. 集成c++  
- https://www.jianshu.com/p/93ffa05f028f  
- https://blog.csdn.net/wang839305939/article/details/83780789  
- https://www.jianshu.com/p/5a4c7ce2be54  
- https://www.dazhuanlan.com/2019/09/23/5d88a0bc8ec13/  
- https://stackoverflow.com/questions/32986826/calling-node-native-addons-c-in-electron  
-
-4. 奔溃报告上传  https://juejin.im/post/5c5ee47be51d457f95354c82  
- https://www.electronjs.org/docs/api/crash-reporter   
-
-5. debugger https://cloud.tencent.com/developer/section/1116142   
-
-6. 测试和调试 https://www.bookstack.cn/read/electron-v6.0-zh/dda8a7a000404b49.md  
 
 
 ## 2. electron相关软件安装
@@ -116,6 +147,15 @@ npx electron -v (npm > 5.2)
 # 设置ELECTRON_MIRROR
 ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install electron --save- dev
 ```
+
+### 常见问题
+
+> Electron failed to install correctly, please delete node_modules/electron and try installing again  
+
+1. 首先 npm instal或者yarn install
+2. 执行 npm install electron-fix -g
+3. 接着 electron-fix start
+4. 最后再 npm start
 
 ## 3. electron 原理
 
@@ -614,15 +654,13 @@ shell.openExternal('https://github.com')
 
 ```
 
-##### 方法
-
 shell.showItemInFolder(fullPath)  
 fullPath String  
 在文件管理器中显示给定的文件。如果可以, 选中该文件。  
 
-shell.openItem(fullPath)   
+shell.openItem(fullPath)  
 fullPath String  
-返回 Boolean - 文件是否成功打开,以桌面的默认方式打开给定的文件。    
+返回 Boolean - 文件是否成功打开,以桌面的默认方式打开给定的文件。  
 
 shell.beep()  
 播放哔哔的声音.  
@@ -1469,5 +1507,25 @@ init()
 
 
 
+### 参考资料  
 
-### 热更新
+1. electron 优化 https://juejin.im/post/5e0010866fb9a015fd69c645  
+
+Electron的主进程阻塞导致UI卡顿的问题 https://zhuanlan.zhihu.com/p/37050595  
+
+2. 打包：mac 文件签名：https://www.cnblogs.com/lovesong/p/11782449.html  
+https://www.cnblogs.com/qirui/p/8327812.html  
+
+3. 集成c++  
+ https://www.jianshu.com/p/93ffa05f028f  
+ https://blog.csdn.net/wang839305939/article/details/83780789  
+ https://www.jianshu.com/p/5a4c7ce2be54  
+ https://www.dazhuanlan.com/2019/09/23/5d88a0bc8ec13/  
+ https://stackoverflow.com/questions/32986826/calling-node-native-addons-c-in-electron  
+
+4. 奔溃报告上传  https://juejin.im/post/5c5ee47be51d457f95354c82  
+ https://www.electronjs.org/docs/api/crash-reporter   
+
+5. debugger https://cloud.tencent.com/developer/section/1116142   
+
+6. 测试和调试 https://www.bookstack.cn/read/electron-v6.0-zh/dda8a7a000404b49.md  

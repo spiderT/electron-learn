@@ -4,13 +4,15 @@ import MsgRender from '../../components/Message';
 import EmojiPackage from '../../components/EmojiPackage';
 import ContentEditable from 'react-contenteditable';
 import { msgBody } from '../../utils';
+import { USER_NAME, SPIDER_MAN } from '../../constants';
 import { MyContext } from '../../context-manager';
 import './index.scss';
+
 let unread = 0;
 const app = remote.app;
 
-const TO_ID = 'zhizhuxia';
-const FROM_ID = 'ivy';
+const TO_ID = SPIDER_MAN;
+const FROM_ID = USER_NAME;
 ipcRenderer.setMaxListeners(100);
 
 const socket = new WebSocket('ws://localhost:8080/ws');
@@ -52,7 +54,7 @@ export default function Messages(props) {
     handleMsg(msg.type, msg.content, 'receive');
 
     if (document.hidden) {
-      // createNativeNotification(msg);
+      createNativeNotification(msg);
       // createHtmlNotification(msg) 
 
       unread += 1;
@@ -106,6 +108,7 @@ export default function Messages(props) {
   }
 
   function handleMsg(msgType, data, type) {
+    console.log('handleMsg', msgType, data, type)
     if (!data) {
       return
     }
@@ -117,8 +120,7 @@ export default function Messages(props) {
       socket.send(JSON.stringify(msg));
       addMsg(msg)
     }
-    msgData.push(msg);
-    setMsgData(msgData);
+    setMsgData(pre => [...pre, msg]);
     // todo 解决 收到消息，聊天区域没有及时渲染
     setHtml(editHtml + ' ');
     scrollToView();
