@@ -29,7 +29,7 @@ module.exports = (win) =>
     }
 
     // 设置下载目录，阻止系统dialog的出现
-    item.setSavePath(savePath);
+    // item.setSavePath(savePath);
 
     // 通知渲染进程，有一个新的下载任务
     win.webContents.send('new-download-item', {

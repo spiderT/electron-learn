@@ -59,7 +59,7 @@ export default function Messages(props) {
 
       unread += 1;
       app.setBadgeCount(unread);
-      handleNativeNoti(msg);
+      // handleNativeNoti(msg);
     }
   };
 

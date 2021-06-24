@@ -860,6 +860,16 @@ See all options. Option files to indicate which files should be packed in the fi
 }
 ```
 
+#### 打包中遇到的问题
+
+1. electron-builder打包不成功解决方法  
+
+参考：https://blog.csdn.net/weixin_41779718/article/details/106562736  
+
+2. 证书签名问题： Error signing Distribution iOS app “unable to build chain to self-signed root for signer”
+
+参考：https://stackoverflow.com/questions/65996659/error-signing-distribution-ios-app-unable-to-build-chain-to-self-signed-root-fo  
+
 #### 命令行参数（CLI）
 
 - Commands(命令):

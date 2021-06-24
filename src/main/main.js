@@ -35,13 +35,13 @@ if (!gotTheLock) {
   });
 
   app.on('ready', () => {
-    // 模拟crash
-    // process.crash();
     createLoginWindow();
     const win = createWindow();
     setTray();
     handleIPC();
     handleDownload(win);
+    // 模拟crash
+    // process.crash();
   });
 
   app.on('activate', show);

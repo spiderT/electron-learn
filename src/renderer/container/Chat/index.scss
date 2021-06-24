@@ -72,6 +72,7 @@
     width: 44px;
     height: 44px;
     overflow: hidden;
+    background: #fff;
     img {
       width: 44px;
       height: 44px;
@@ -210,17 +211,18 @@
   .right-wrap,
   .chat-wrap .search,
   .chat-container,
+  .user-wrap,
   .edit-div {
-    background-color: rgba(0, 0, 0, 1);
+    background-color: rgba(0, 0, 0, 0.8);
   }
   .chat-wrap .search input {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgb(44, 44, 44);
   }
   .list-item {
-    background-color: rgba(0, 0, 0, 1);
+    background-color: rgba(0, 0, 0, 0.9);
     border-bottom: none;
     &:first-child {
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.1);
     }
   }
   .edit-div,

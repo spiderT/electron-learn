@@ -95,7 +95,7 @@ export default function Chatlist(props) {
             <p className="message">{`您已添加了${user.name}，现在可以开始聊天了。`}</p>
           )}
         </div>
-        <div className="time">11/06/21</div>
+        <div className="time">2021/06/25</div>
       </div>
     );
   }
