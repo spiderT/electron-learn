@@ -1533,7 +1533,7 @@ https://www.cnblogs.com/qirui/p/8327812.html
  https://www.dazhuanlan.com/2019/09/23/5d88a0bc8ec13/  
  https://stackoverflow.com/questions/32986826/calling-node-native-addons-c-in-electron  
 
-4. 奔溃报告上传  https://juejin.im/post/5c5ee47be51d457f95354c82  
+4. 崩溃报告上传  https://juejin.im/post/5c5ee47be51d457f95354c82  
  https://www.electronjs.org/docs/api/crash-reporter   
 
 5. debugger https://cloud.tencent.com/developer/section/1116142   

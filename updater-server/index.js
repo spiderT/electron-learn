@@ -9,11 +9,9 @@ const multer = require('koa-multer');
 const upload = multer({ dest: 'crash/' });
 
 router.post('/crash', upload.single('upload_file_minidump'), (ctx) => {
-  ctx.body = {
-    code: 1,
-    data: 'done',
-  };
-  console.log('crash', ctx.req);
+  console.log('file', ctx.req.file);
+	console.log('body', ctx.req.body);
+	ctx.body = '上传成功';
   // todo 存DB
 });
 
