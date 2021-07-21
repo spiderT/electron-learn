@@ -6,8 +6,8 @@ import './index.scss';
 
 const users = [
   {
-    name: '蜘蛛侠',
-    avatar: 'zhizhuxia',
+    name: 'ivy',
+    avatar: 'user',
   },
   {
     name: '小丑',

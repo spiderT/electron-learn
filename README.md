@@ -35,6 +35,7 @@
   - [6. 监控—crashReporter](#6-监控crashreporter)
   - [7. 打包](#7-打包)
     - [7.1. electron-builder](#71-electron-builder)
+      - [打包中遇到的问题](#打包中遇到的问题)
       - [命令行参数（CLI）](#命令行参数cli)
   - [8. 集成c++](#8-集成c)
   - [9. 测试和调试](#9-测试和调试)
@@ -53,6 +54,7 @@
     - [13.1. 减少包体积大小](#131-减少包体积大小)
   - [Electron 开发过程中可能会遇到的几个问题和场景。](#electron-开发过程中可能会遇到的几个问题和场景)
         - [NPM 下载的问题](#npm-下载的问题)
+        - [electron-builder  mac permission denied](#electron-builder--mac-permission-denied)
     - [热重载](#热重载)
     - [参考资料](#参考资料)
 
@@ -1309,6 +1311,10 @@ electron_mirror=http://npm.taobao.org/mirrors/electron/
 ```
 
 2. 直接去淘宝镜像文件库找到对应的文件并下载，放到指定的目录下，electron 的淘宝镜像地址。下载完之后放到指定的文件。
+
+##### electron-builder  mac permission denied
+
+解决方法：https://github.com/electron-userland/electron-builder/issues/3324  
 
 
 ### 热重载

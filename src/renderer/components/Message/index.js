@@ -32,7 +32,7 @@ const MsgRender = (msg) => {
   }
 
   return (
-    <div key={msg.id} className={`msg-item clearfix ${msg.type !== 2 ? (msg.fromId === USER_NAME ? 'right' : 'left') : ''}`}>
+    <div key={msg.id} className={`msg-item clearfix ${msg.type !== 2 ? (msg.fromId === USER_NAME ? 'left' : 'right') : ''}`}>
       {msg.type !== 2 ? AvatarRender(msg) : null}
       {content}
     </div>

@@ -48,8 +48,8 @@
     <script type="text/javascript">
       let socket;
 
-      const FROM_ID = 'zhizhuxia';
-      const TO_ID = 'ivy';
+      const FROM_ID = 'ivy';
+      const TO_ID = 'zhizhuxia';
 
       function createMsgbody(content) {
         return JSON.stringify({
@@ -66,11 +66,11 @@
         const contentText = type === 3 ? '<img src=' + content + '>' : content;
         if (fromId === FROM_ID) {
           return `<div class="right">
-              ${contentText}<span class="name">spider</span>
+              ${contentText}<span class="name">ivy</span>
             </div>`;
         } else {
           return `<div class="left">
-              <span class="name">ivy</span>${contentText}
+              <span class="name">spider</span>${contentText}
             </div>`;
         }
       }

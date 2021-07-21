@@ -11,8 +11,8 @@ import './index.scss';
 let unread = 0;
 const app = remote.app;
 
-const TO_ID = SPIDER_MAN;
-const FROM_ID = USER_NAME;
+const TO_ID = USER_NAME;
+const FROM_ID = SPIDER_MAN;
 ipcRenderer.setMaxListeners(100);
 
 const socket = new WebSocket('ws://localhost:8080/ws');
