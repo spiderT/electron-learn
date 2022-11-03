@@ -35,6 +35,7 @@
   - [6. 监控—crashReporter](#6-监控crashreporter)
   - [7. 打包](#7-打包)
     - [7.1. electron-builder](#71-electron-builder)
+      - [打包中遇到的问题](#打包中遇到的问题)
       - [命令行参数（CLI）](#命令行参数cli)
   - [8. 集成c++](#8-集成c)
   - [9. 测试和调试](#9-测试和调试)
@@ -81,9 +82,8 @@ git clone https://github.com/spiderT/electron-learn.git
 cd electron-learn
 npm install
 
-// 消息存储服务端 koa+mongodb, 需要事先安装配置mongodb
-git clone https://github.com/spiderT/koa-mongodb-learn.git
-cd koa-mongodb-learn
+// （可选）消息存储服务端 koa+mongodb, 需要事先安装配置mongodb
+cd koa-mongodb
 npm install
 node index.js
 
